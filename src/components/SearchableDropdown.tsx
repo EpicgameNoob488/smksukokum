@@ -1,0 +1,153 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, ChevronDown, X } from 'lucide-react';
+import { cn } from '../lib/utils';
+
+interface SearchableDropdownProps {
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder?: string;
+  allowCustom?: boolean;
+  className?: string;
+  disabled?: boolean;
+}
+
+export default function SearchableDropdown({
+  value,
+  onChange,
+  options,
+  placeholder = 'Select...',
+  allowCustom = true,
+  className = '',
+  disabled = false
+}: SearchableDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filteredOptions = options.filter(opt => 
+    opt.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchTerm('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelect = (option: string) => {
+    onChange(option);
+    setIsOpen(false);
+    setSearchTerm('');
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange('');
+    inputRef.current?.focus();
+  };
+
+  const handleInputClick = () => {
+    if (!disabled) {
+      setIsOpen(true);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className={cn('relative', className)}>
+      <div
+        onClick={handleInputClick}
+        className={cn(
+          'w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer transition-all',
+          'focus-within:ring-2 focus-within:ring-red-200 focus-within:border-transparent',
+          isOpen && 'ring-2 ring-red-200 border-transparent',
+          disabled && 'opacity-50 cursor-not-allowed bg-slate-50'
+        )}
+      >
+        {isOpen ? (
+          <div className="flex items-center gap-2">
+            <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={placeholder}
+              className="flex-1 text-sm font-bold bg-transparent outline-none"
+              style={{ color: '#2B3674' }}
+              autoFocus
+            />
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <span 
+              className={cn(
+                'text-sm font-bold',
+                value ? 'text-[#2B3674]' : 'text-slate-400'
+              )}
+            >
+              {value || placeholder}
+            </span>
+            <div className="flex items-center gap-1">
+              {value && (
+                <X 
+                  className="w-4 h-4 text-slate-400 hover:text-slate-600" 
+                  onClick={handleClear}
+                />
+              )}
+              <ChevronDown className="w-4 h-4 text-slate-400" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {isOpen && (
+        <div 
+          className="absolute z-50 w-full mt-1 bg-white rounded-xl border border-slate-200 shadow-lg max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-150"
+        >
+          {filteredOptions.length === 0 && !allowCustom ? (
+            <div className="px-4 py-3 text-sm text-slate-400 italic">
+              No options found
+            </div>
+          ) : (
+            <>
+              {filteredOptions.map((option, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleSelect(option)}
+                  className={cn(
+                    'px-4 py-2.5 cursor-pointer transition-colors',
+                    'text-sm font-medium',
+                    option === value 
+                      ? 'bg-red-50 text-red-600 font-bold' 
+                      : 'hover:bg-slate-50 text-[#2B3674]'
+                  )}
+                >
+                  {option}
+                </div>
+              ))}
+              
+              {allowCustom && searchTerm && !filteredOptions.includes(searchTerm) && (
+                <div
+                  onClick={() => handleSelect(searchTerm)}
+                  className="px-4 py-2.5 cursor-pointer hover:bg-slate-50 border-t border-slate-100"
+                >
+                  <span className="text-sm text-slate-500">
+                    Add: <span className="font-bold text-[#2B3674]">"{searchTerm}"</span>
+                  </span>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,26 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+.vercel
+
+# Backup folders
+.backup/
+src/components/backup/
+
+# Other projects
+sm-konven-student-roster/
+
+# OpenCode
+.opencode/
+ui-ux-pro-max-skill/
+
+# Misc
+AGENTS.md
+*.mjs
+converstaion/
+supabase/.temp/
