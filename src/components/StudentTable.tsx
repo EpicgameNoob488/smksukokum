@@ -321,39 +321,48 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
-              <SearchableDropdown
-                className="w-full max-w-[240px]"
-                value={uniformFilter}
-                onChange={(value) => setUniformFilter(value || 'All Units')}
-                options={availableUniforms}
-                placeholder="All Units"
-                textSize="xs"
-                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-              />
+              <div className="relative">
+                <SearchableDropdown
+                  className="w-full max-w-[240px]"
+                  value={uniformFilter}
+                  onChange={(value) => setUniformFilter(value || 'All Units')}
+                  options={availableUniforms}
+                  placeholder="All Units"
+                  textSize="xs"
+                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Club/Persatuan</label>
-              <SearchableDropdown
-                className="w-full max-w-[240px]"
-                value={clubFilter}
-                onChange={(value) => setClubFilter(value || 'All Clubs')}
-                options={availableClubs}
-                placeholder="All Clubs"
-                textSize="xs"
-                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-              />
+              <div className="relative">
+                <SearchableDropdown
+                  className="w-full max-w-[240px]"
+                  value={clubFilter}
+                  onChange={(value) => setClubFilter(value || 'All Clubs')}
+                  options={availableClubs}
+                  placeholder="All Clubs"
+                  textSize="xs"
+                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Sukan/Permainan</label>
-              <SearchableDropdown
-                className="w-full max-w-[240px]"
-                value={sportFilter}
-                onChange={(value) => setSportFilter(value || 'All Sports')}
-                options={availableSports}
-                placeholder="All Sports"
-                textSize="xs"
-                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-              />
+              <div className="relative">
+                <SearchableDropdown
+                  className="w-full max-w-[240px]"
+                  value={sportFilter}
+                  onChange={(value) => setSportFilter(value || 'All Sports')}
+                  options={availableSports}
+                  placeholder="All Sports"
+                  textSize="xs"
+                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>PAJSK Score</label>
