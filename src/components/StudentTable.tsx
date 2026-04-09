@@ -318,11 +318,11 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:[grid-template-columns:0.9fr_0.9fr_0.9fr_0.9fr_1.4fr] gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm animate-in slide-in-from-top duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
               <SearchableDropdown
-                className="w-full"
+                className="w-full max-w-[240px]"
                 value={uniformFilter}
                 onChange={(value) => setUniformFilter(value || 'All Units')}
                 options={availableUniforms}
@@ -334,7 +334,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Club/Persatuan</label>
               <SearchableDropdown
-                className="w-full"
+                className="w-full max-w-[240px]"
                 value={clubFilter}
                 onChange={(value) => setClubFilter(value || 'All Clubs')}
                 options={availableClubs}
@@ -346,7 +346,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Sukan/Permainan</label>
               <SearchableDropdown
-                className="w-full"
+                className="w-full max-w-[240px]"
                 value={sportFilter}
                 onChange={(value) => setSportFilter(value || 'All Sports')}
                 options={availableSports}
@@ -357,34 +357,40 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>PAJSK Score</label>
-              <select 
-                value={scoreFilter}
-                onChange={(e) => setScoreFilter(e.target.value)}
-                className="w-full h-10 px-2.5 py-2 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
-                style={{ color: tokens.colors.textNavy }}
-              >
-                {availableScores.map(opt => (
-                  <option key={opt} value={opt === 'All Scores' ? '' : opt}>
-                    {opt === 'All Scores' ? opt : opt === '80+' ? 'Elite (80+)' : opt === '60-80' ? 'Standard (60-80)' : 'Needs Focus (<60)'}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-1 w-full max-w-[240px] justify-self-start">
-              <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Attendance</label>
-              <div className="flex gap-2 min-w-0">
+              <div className="relative">
                 <select 
-                  value={attendanceFilter}
-                  onChange={(e) => setAttendanceFilter(e.target.value)}
-                  className="flex-1 min-w-0 w-0 h-10 px-2.5 py-2 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  value={scoreFilter}
+                  onChange={(e) => setScoreFilter(e.target.value)}
+                  className="w-full h-10 px-2.5 pr-10 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  {availableAttendances.map(opt => (
-                    <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
-                      {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
+                  {availableScores.map(opt => (
+                    <option key={opt} value={opt === 'All Scores' ? '' : opt}>
+                      {opt === 'All Scores' ? opt : opt === '80+' ? 'Elite (80+)' : opt === '60-80' ? 'Standard (60-80)' : 'Needs Focus (<60)'}
                     </option>
                   ))}
                 </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              </div>
+            </div>
+            <div className="space-y-1 w-full max-w-[240px] justify-self-start">
+              <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Attendance</label>
+              <div className="flex gap-2 min-w-0 justify-end">
+                <div className="relative flex-1 min-w-0">
+                  <select 
+                    value={attendanceFilter}
+                    onChange={(e) => setAttendanceFilter(e.target.value)}
+                    className="w-full h-10 px-2.5 pr-10 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                    style={{ color: tokens.colors.textNavy }}
+                  >
+                    {availableAttendances.map(opt => (
+                      <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
+                        {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
                 <button
                   onClick={() => {
                     resetFilters();
