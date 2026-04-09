@@ -143,7 +143,7 @@ export default function Dashboard({
   // Resolve formClassId to class name (works across years since names are stable)
   const formClassName = React.useMemo(() => {
     if (!formClassId) return null;
-    const cls = (schoolData?.formClasses || []).find(c => c.id === formClassId);
+    const cls = (schoolData?.formClasses || []).find(c => String(c.id) === String(formClassId));
     return cls?.nama_kelas || null;
   }, [formClassId, schoolData?.formClasses]);
 
@@ -167,10 +167,10 @@ export default function Dashboard({
   // Helper to check if user can edit a specific student's class
   const canEditStudent = (studentClassId: string): boolean => {
     if (isAdmin) return true;
-    if (isFormTeacher && studentClassId === formClassId) return true;
+    if (isFormTeacher && String(studentClassId) === String(formClassId)) return true;
     // Fallback: match by class name for cross-year support
     if (isFormTeacher && formClassName) {
-      const studentClass = (schoolData?.formClasses || []).find(c => c.id === studentClassId);
+      const studentClass = (schoolData?.formClasses || []).find(c => String(c.id) === String(studentClassId));
       if (studentClass?.nama_kelas === formClassName) return true;
     }
     return false;
@@ -422,6 +422,29 @@ export default function Dashboard({
 
   const totalTeacherPages = Math.ceil(filteredTeachers.length / TEACHERS_PER_PAGE);
 
+  const getVisiblePages = (current: number, total: number): (number | string)[] => {
+    if (total <= 7) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    
+    const delta = 2;
+    const result: (number | string)[] = [];
+    
+    for (let i = 1; i <= total; i++) {
+      const isFirst = i === 1;
+      const isLast = i === total;
+      const isNearCurrent = i >= current - delta && i <= current + delta;
+      
+      if (isFirst || isLast || isNearCurrent) {
+        result.push(i);
+      } else if (result[result.length - 1] !== '...') {
+        result.push('...');
+      }
+    }
+    
+    return result;
+  };
+
   const paginatedTeachers = React.useMemo(() => {
     const start = (teacherPage - 1) * TEACHERS_PER_PAGE;
     return filteredTeachers.slice(start, start + TEACHERS_PER_PAGE);
@@ -439,7 +462,7 @@ export default function Dashboard({
 
   return (
     <div className="flex h-screen font-sans overflow-hidden" style={{ backgroundColor: tokens.colors.mainBg }}>
-      
+      <div className="flex w-full max-w-[1500px] mx-auto">
        {/* Sidebar */}
        <DashboardSidebar 
          activeTab={activeTab} 
@@ -449,7 +472,7 @@ export default function Dashboard({
        />
 
         {/* Main Content */}
-        <main className="flex-1 flex flex-col overflow-y-auto relative z-10">
+        <main className="flex-1 flex flex-col overflow-y-auto relative z-10 px-4 sm:px-6">
          
          {/* Floating Action Panel (Alert) */}
          {showAlert && (
@@ -482,7 +505,7 @@ export default function Dashboard({
          {/* Global Header & Filters (The Control Deck) - per design_tokens.md */}
         <header className="px-8 py-5 flex flex-col gap-5 bg-white border-b border-slate-200 sticky top-0 z-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-extrabold tracking-tight" style={{ color: tokens.colors.textNavy }}>
+            <h2 className="text-xl font-extrabold tracking-tight" style={{ color: tokens.colors.textNavy }}>
               {activeTab === 'Dashboard' ? 'Activities Overview' : activeTab}
             </h2>
             
@@ -572,7 +595,7 @@ export default function Dashboard({
                 <select 
                   value={dashboardFormFilter}
                   onChange={(e) => setDashboardFormFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
+                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[180px]" 
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option>All Forms</option>
@@ -585,7 +608,7 @@ export default function Dashboard({
                 <select 
                   value={dashboardClassFilter}
                   onChange={(e) => setDashboardClassFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
+                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[200px] truncate" 
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Classes</option>
@@ -596,7 +619,7 @@ export default function Dashboard({
                 <select 
                   value={dashboardPillarFilter}
                   onChange={(e) => setDashboardPillarFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
+                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[140px] max-w-[220px]" 
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Pillars</option>
@@ -1375,21 +1398,35 @@ export default function Dashboard({
                           </button>
                           
                           <div className="flex items-center gap-1">
-                            {Array.from({ length: totalTeacherPages }, (_, i) => i + 1).map(p => (
-                              <button
-                                key={p}
-                                onClick={() => setTeacherPage(p)}
-                                className={cn(
-                                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm font-bold text-sm",
-                                  teacherPage === p 
-                                    ? "text-white" 
-                                    : "bg-white text-slate-600 hover:bg-slate-50"
-                                )}
-                                style={teacherPage === p ? { backgroundColor: tokens.colors.primaryRed } : {}}
-                              >
-                                {p}
-                              </button>
-                            ))}
+                            {getVisiblePages(teacherPage, totalTeacherPages).map((p, idx) => {
+                              if (p === '...') {
+                                return (
+                                  <span 
+                                    key={`ellipsis-${idx}`} 
+                                    className="w-10 h-10 flex items-center justify-center text-sm font-bold"
+                                    style={{ color: tokens.colors.textMuted }}
+                                  >
+                                    ...
+                                  </span>
+                                );
+                              }
+                              
+                              return (
+                                <button
+                                  key={p}
+                                  onClick={() => setTeacherPage(p as number)}
+                                  className={cn(
+                                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm font-bold text-sm",
+                                    teacherPage === p 
+                                      ? "text-white" 
+                                      : "bg-white text-slate-600 hover:bg-slate-50"
+                                  )}
+                                  style={teacherPage === p ? { backgroundColor: tokens.colors.primaryRed } : {}}
+                                >
+                                  {p}
+                                </button>
+                              );
+                            })}
                           </div>
 
                           <button 
@@ -1664,189 +1701,20 @@ export default function Dashboard({
         {/* Students Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Students' && (
           <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
-            {!selectedClass ? (
-              <>
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <h2 className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Student Roster</h2>
-                    <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>View and manage student co-curricular records by class.</p>
-                  </div>
-                    <div className="flex items-center gap-3">
-                      <div className="relative hidden md:block">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                        <input 
-                          type="text" 
-                          placeholder="Search by name or ID..." 
-                          value={studentSearchQuery}
-                          onChange={(e) => setStudentSearchQuery(e.target.value)}
-                          className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-56 font-medium border border-slate-200"
-                          style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
-                        />
-                      </div>
-                      <select 
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(Number(e.target.value))}
-                        className="text-sm font-bold bg-white border border-slate-200 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
-                        style={{ color: tokens.colors.primaryRed }}
-                      >
-                        {availableYears.map(year => (
-                          <option key={year} value={year}>{year}</option>
-                        ))}
-                      </select>
-                     <div className="relative hidden md:block">
-                       <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                       <select 
-                         value={studentFormFilter}
-                         onChange={(e) => setStudentFormFilter(e.target.value)}
-                         className="pl-10 pr-10 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-36 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
-                         style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
-                       >
-                         <option>All Forms</option>
-                         <option>Form 1</option>
-                         <option>Form 2</option>
-                         <option>Form 3</option>
-                         <option>Form 4</option>
-                         <option>Form 5</option>
-                       </select>
-                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                     </div>
-                     <button 
-                       onClick={() => {
-                         setStudentSearchQuery('');
-                         setStudentFormFilter('All Forms');
-                       }}
-                       className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer" 
-                       style={{ color: tokens.colors.textNavy }}
-                     >
-                       Reset
-                     </button>
-                      <button 
-                         onClick={() => {
-                           if (!isAdmin && !isFormTeacher) {
-                             onLoginRequired();
-                             return;
-                           }
-                           // For form teachers, default to their assigned class
-                           const defaultClassId = isFormTeacher && formClassId 
-                             ? formClassId 
-                             : (formTeachersData.length > 0 ? formTeachersData[0].id : '');
-                           setEditModal({ 
-                             isOpen: true, 
-                             type: 'student', 
-                             index: -1, 
-                             data: { 
-                               id: `STU${Date.now()}`, 
-                               name: '', 
-                               surname: '', 
-                               givenName: '', 
-                               classId: defaultClassId, 
-                               uniformUnit: 'Tiada',
-                              club: 'Tiada', 
-                              sport: 'Tiada', 
-                              estimatedPAJSK: 0,
-                              pajskGrade: 'E',
-                              pajskPoint: 0,
-                              pajskGradeLabel: 'Tidak Memuaskan',
-                              pajskBreakdown: {
-                                sukan: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
-                                kelab: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
-                                uniform: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
-                                extraKurikulum: 0
-                              },
-                              attendance: 0, 
-                              rawPenglibatan: {
-                                badan_beruniform: { 
-                                  kehadiran: '0', 
-                                  jawatan: '', 
-                                  peringkat: '', 
-                                  pencapaian: '' 
-                                },
-                                kelab_dan_persatuan: { 
-                                  kehadiran: '0', 
-                                  jawatan: '', 
-                                  peringkat: '', 
-                                  pencapaian: '' 
-                                },
-                                sukan_dan_permainan: { 
-                                  kehadiran: '0', 
-                                  jawatan: '', 
-                                  peringkat: '', 
-                                  pencapaian: '' 
-                                }
-                              }
-                            } 
-                          });
-                        }}
-                        className="px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5 text-white whitespace-nowrap cursor-pointer"
-                        style={{ backgroundColor: tokens.colors.primaryRed }}
-                      >
-                        <Plus className="w-4 h-4" />
-                        Add Student
-                      </button>
-                   </div>
-                </div>
-
-                <div className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
-                  <h3 className="text-lg font-extrabold mb-4" style={{ color: tokens.colors.textNavy }}>Classes Overview</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {formTeachersData.filter(cls => {
-                      if (studentFormFilter !== 'All Forms') {
-                        const formNum = studentFormFilter.split(' ')[1];
-                        if (!cls.name.startsWith(formNum)) return false;
-                      }
-                      if (!studentSearchQuery) return true;
-                      const query = studentSearchQuery.toLowerCase();
-                      const matchesClass = cls.name.toLowerCase().includes(query) || cls.teacher.toLowerCase().includes(query);
-                      const matchesStudents = studentsData.some(s => s.classId === cls.id && (s.name.toLowerCase().includes(query) || s.id.toLowerCase().includes(query)));
-                      return matchesClass || matchesStudents;
-                    }).map((cls, idx) => (
-                      <div 
-                        key={idx} 
-                        onClick={() => setSelectedClass({ id: cls.id, name: cls.name })}
-                        className="rounded-xl p-4 shadow-sm bg-white hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative"
-                      >
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="font-extrabold text-base" style={{ color: tokens.colors.textNavy }}>{cls.name}</h4>
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100" style={{ color: tokens.colors.textMuted }}>
-                            {studentsData.filter(s => s.classId === cls.id).length} Students
-                          </span>
-                        </div>
-                        <div className="mt-auto">
-                          <p className="text-xs font-medium uppercase tracking-wider mb-1" style={{ color: tokens.colors.textMuted }}>Form Teacher</p>
-                          <p className="text-sm font-bold" style={{ color: tokens.colors.textNavy }}>{cls.teacher}</p>
-                        </div>
-                        {isAdmin && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditModal({ isOpen: true, type: 'formTeacher', index: idx, data: { ...cls } });
-                          }}
-                          className="absolute top-3 right-3 p-2 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
-                          style={{ color: tokens.colors.textNavy }}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <StudentTable 
-                classId={selectedClass.id} 
-                className={selectedClass.name} 
-                onBack={() => setSelectedClass(null)}
-                tokens={tokens}
-                studentsData={studentsData}
-                setEditModal={setEditModal}
-                isAdmin={isAdmin}
-                formClassId={formClassId}
-                formClassName={formClassName}
-                selectedYear={selectedYear}
-                currentYear={new Date().getFullYear()}
-              />
-            )}
+            <StudentTable
+              classId={formTeachersData[0]?.id || ''}
+              className="All Students"
+              onBack={() => {}}
+              tokens={tokens}
+              studentsData={studentsData}
+              setEditModal={setEditModal}
+              isAdmin={isAdmin}
+              formClassId={formClassId}
+              formClassName={formClassName}
+              selectedYear={selectedYear}
+              currentYear={new Date().getFullYear()}
+              onYearChange={(year) => setSelectedYear(year)}
+            />
           </div>
         )}
 
@@ -1889,5 +1757,6 @@ export default function Dashboard({
 
       </main>
     </div>
+  </div>
   );
 }

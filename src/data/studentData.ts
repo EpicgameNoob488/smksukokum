@@ -5,6 +5,7 @@ export interface Student {
   id: string;
   name: string;
   classId: string;
+  tahun?: number;
   studentNumber: number | null;
   estimatedPAJSK: number;
   pajskGrade: string;

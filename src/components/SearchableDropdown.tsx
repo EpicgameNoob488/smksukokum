@@ -9,6 +9,8 @@ interface SearchableDropdownProps {
   placeholder?: string;
   allowCustom?: boolean;
   className?: string;
+  controlClassName?: string;
+  textSize?: 'xs' | 'sm';
   disabled?: boolean;
 }
 
@@ -19,6 +21,8 @@ export default function SearchableDropdown({
   placeholder = 'Select...',
   allowCustom = true,
   className = '',
+  controlClassName = 'px-4 py-2.5 border-slate-200 bg-white rounded-xl',
+  textSize = 'sm',
   disabled = false
 }: SearchableDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,14 +69,15 @@ export default function SearchableDropdown({
       <div
         onClick={handleInputClick}
         className={cn(
-          'w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer transition-all',
+          'w-full border cursor-pointer transition-all',
           'focus-within:ring-2 focus-within:ring-red-200 focus-within:border-transparent',
           isOpen && 'ring-2 ring-red-200 border-transparent',
-          disabled && 'opacity-50 cursor-not-allowed bg-slate-50'
+          disabled && 'opacity-50 cursor-not-allowed bg-slate-50',
+          controlClassName
         )}
       >
         {isOpen ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <input
               ref={inputRef}
@@ -80,22 +85,27 @@ export default function SearchableDropdown({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 text-sm font-bold bg-transparent outline-none"
+              className={cn(
+                'flex-1 font-semibold bg-transparent outline-none min-w-0',
+                textSize === 'xs' ? 'text-xs' : 'text-sm'
+              )}
               style={{ color: '#2B3674' }}
               autoFocus
             />
           </div>
         ) : (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2 min-w-0">
             <span 
               className={cn(
-                'text-sm font-bold',
+                'truncate min-w-0',
+                'font-semibold',
+                textSize === 'xs' ? 'text-xs' : 'text-sm',
                 value ? 'text-[#2B3674]' : 'text-slate-400'
               )}
             >
               {value || placeholder}
             </span>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-shrink-0">
               {value && (
                 <X 
                   className="w-4 h-4 text-slate-400 hover:text-slate-600" 
@@ -113,7 +123,7 @@ export default function SearchableDropdown({
           className="absolute z-50 w-full mt-1 bg-white rounded-xl border border-slate-200 shadow-lg max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-150"
         >
           {filteredOptions.length === 0 && !allowCustom ? (
-            <div className="px-4 py-3 text-sm text-slate-400 italic">
+            <div className={cn('px-4 py-3 text-slate-400 italic', textSize === 'xs' ? 'text-xs' : 'text-sm')}>
               No options found
             </div>
           ) : (
@@ -123,8 +133,8 @@ export default function SearchableDropdown({
                   key={index}
                   onClick={() => handleSelect(option)}
                   className={cn(
-                    'px-4 py-2.5 cursor-pointer transition-colors',
-                    'text-sm font-medium',
+                    'px-4 py-2.5 cursor-pointer transition-colors whitespace-normal break-words',
+                    textSize === 'xs' ? 'text-xs font-medium' : 'text-sm font-medium',
                     option === value 
                       ? 'bg-red-50 text-red-600 font-bold' 
                       : 'hover:bg-slate-50 text-[#2B3674]'
@@ -139,7 +149,7 @@ export default function SearchableDropdown({
                   onClick={() => handleSelect(searchTerm)}
                   className="px-4 py-2.5 cursor-pointer hover:bg-slate-50 border-t border-slate-100"
                 >
-                  <span className="text-sm text-slate-500">
+                  <span className={cn(textSize === 'xs' ? 'text-xs text-slate-500' : 'text-sm text-slate-500')}>
                     Add: <span className="font-bold text-[#2B3674]">"{searchTerm}"</span>
                   </span>
                 </div>

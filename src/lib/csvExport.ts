@@ -1,5 +1,6 @@
 export interface CSVColumn<T> {
-  key: keyof T;
+  key?: keyof T;
+  getValue?: (row: T) => string | number | null | undefined;
   label: string;
 }
 
@@ -17,7 +18,7 @@ export function arrayToCSV<T>(data: T[], columns: CSVColumn<T>[]): string {
   // Create data rows
   const rows = data.map(row => {
     return columns.map(col => {
-      const value = row[col.key];
+      const value = col.getValue ? col.getValue(row) : (col.key ? row[col.key] : undefined);
       // Convert value to string and escape quotes
       // Handle arrays by joining with semicolon
       const stringValue = value === null || value === undefined 

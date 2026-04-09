@@ -197,43 +197,43 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
-      <div className="absolute top-0 left-0 w-full h-1/2" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0% 100%)' }}></div>
+return (
+    <div className="min-h-screen flex items-center justify-center p-2" style={{ backgroundColor: tokens.colors.mainBg }}>
+      <div className="absolute top-0 left-0 w-full h-1/3" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 60%, 0% 100%)' }}></div>
       
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="relative w-full max-w-sm bg-white rounded-xl shadow-xl p-4 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
         
         {/* Header */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-md bg-red-50" style={{ color: tokens.colors.primaryRed }}>
-             <User className="w-6 h-6" />
+        <div className="flex flex-col items-center mb-2">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-1 shadow-md bg-red-50" style={{ color: tokens.colors.primaryRed }}>
+              <User className="w-4 h-4" />
           </div>
-          <h1 className="text-xl font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
+          <h1 className="text-sm font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
             Request Access
           </h1>
-          <p className="text-xs font-semibold mt-1 uppercase tracking-widest text-center" style={{ color: tokens.colors.textMuted }}>
+          <p className="text-[10px] font-semibold mt-0.5 uppercase tracking-widest text-center" style={{ color: tokens.colors.textMuted }}>
             {settings.schoolName}
           </p>
         </div>
 
         {/* Success Message */}
         {successMsg && (
-          <div className="mb-4 p-3 rounded-xl flex items-start gap-3 bg-green-50 border border-green-200">
-            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+          <div className="mb-2 p-2 rounded-lg flex items-start gap-2 bg-green-50 border border-green-200">
+            <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm text-green-800 font-medium leading-relaxed">
+              <p className="text-[10px] text-green-800 font-medium leading-relaxed">
                 {successMsg}
               </p>
-              <div className="flex gap-3 mt-2">
+              <div className="flex gap-2 mt-1">
                 <button
                   onClick={onLoginRedirect}
-                  className="text-xs font-bold text-green-700 underline hover:text-green-800"
+                  className="text-[8px] font-bold text-green-700 underline hover:text-green-800"
                 >
                   Go to Login
                 </button>
                 <button
                   onClick={onCancel}
-                  className="text-xs font-bold text-gray-600 hover:text-gray-800"
+                  className="text-[8px] font-bold text-gray-600 hover:text-gray-800"
                 >
                   Back to Home
                 </button>
@@ -244,22 +244,22 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
 
         {/* Duplicate Name Confirmation */}
         {showDuplicateConfirm && (
-          <div className="mb-4 p-3 rounded-xl flex items-start gap-3 bg-amber-50 border border-amber-200">
-            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="mb-2 p-2 rounded-lg flex items-start gap-2 bg-amber-50 border border-amber-200">
+            <AlertTriangle className="w-3 h-3 text-amber-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm text-amber-800 font-medium leading-relaxed">
+              <p className="text-[10px] text-amber-800 font-medium leading-relaxed">
                 {duplicateWarning}
               </p>
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-1 mt-1">
                 <button
                   onClick={handleConfirmDuplicate}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 transition-colors"
+                  className="px-2 py-1 rounded-lg text-[8px] font-bold text-white bg-amber-600 hover:bg-amber-700 transition-colors"
                 >
                   Yes, Continue
                 </button>
                 <button
                   onClick={handleCancelDuplicate}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 transition-colors"
+                  className="px-2 py-1 rounded-lg text-[8px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 transition-colors"
                 >
                   Cancel
                 </button>
@@ -270,9 +270,9 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
 
         {/* Warning Message */}
         {warningMsg && (
-          <div className="mb-4 p-3 rounded-xl flex items-start gap-3 bg-amber-50 border border-amber-200">
-            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-amber-800 font-medium leading-relaxed">
+          <div className="mb-2 p-2 rounded-lg flex items-start gap-2 bg-amber-50 border border-amber-200">
+            <AlertTriangle className="w-3 h-3 text-amber-600 flex-shrink-0 mt-0.5" />
+            <p className="text-[10px] text-amber-800 font-medium leading-relaxed">
               {warningMsg}
             </p>
           </div>
@@ -280,14 +280,14 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
 
         {/* Error Message */}
         {errorMsg && (
-          <div className="mb-4 p-2.5 rounded-lg text-sm font-medium text-red-700 bg-red-50 border border-red-100 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <div className="mb-2 p-1.5 rounded-lg text-[10px] font-medium text-red-700 bg-red-50 border border-red-100 flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3 flex-shrink-0" />
             <div className="flex-1">
               {errorMsg}
               {isAlreadySignedUp && (
                 <button
                   onClick={onLoginRedirect}
-                  className="ml-2 font-bold underline hover:text-red-800"
+                  className="ml-1 font-bold underline hover:text-red-800"
                 >
                   Sign In
                 </button>
@@ -296,49 +296,49 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
           </div>
         )}
 
-        {/* Registration Form */}
+{/* Registration Form */}
         {!successMsg && (
-          <form onSubmit={handleRegister} className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-2">
               <div>
-                <label className="block text-xs font-bold mb-1.5 ml-1" style={{ color: tokens.colors.textNavy }}>
+                <label className="block text-[10px] font-bold mb-1 ml-1" style={{ color: tokens.colors.textNavy }}>
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                    className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
                     placeholder="e.g. Ahmad bin Abu"
                     style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                   />
                 </div>
               </div>
               
-              {/* Similar Names Section */}
+              {/* Similar Names Section - Compact */}
               {(isSearchingNames || similarNames.length > 0) && (
-                <div className="p-3 rounded-xl border animate-in fade-in slide-in-from-top-2 duration-200" 
+                <div className="p-2 rounded-lg border animate-in fade-in slide-in-from-top-2 duration-200" 
                   style={{ backgroundColor: '#FFF7ED', borderColor: '#FED7AA' }}>
                   {isSearchingNames ? (
-                    <div className="flex items-center gap-2 text-xs" style={{ color: tokens.colors.textMuted }}>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Searching for similar names...
+                    <div className="flex items-center gap-1 text-[8px]" style={{ color: tokens.colors.textMuted }}>
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Searching...
                     </div>
                   ) : (
                     <>
-                      <p className="text-xs font-bold mb-2" style={{ color: tokens.colors.textNavy }}>
-                        Similar teachers found in 2025 database:
+                      <p className="text-[8px] font-bold mb-1" style={{ color: tokens.colors.textNavy }}>
+                        Similar teachers found:
                       </p>
-                      <div className="space-y-2">
-                        {similarNames.map((item, idx) => (
+                      <div className="space-y-1">
+                        {similarNames.slice(0, 3).map((item, idx) => (
                           <label 
                             key={idx}
-                            className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+                            className={`flex items-center gap-2 p-1 rounded cursor-pointer transition-colors ${
                               selectedMatch === item.name && !notInList 
-                                ? 'bg-orange-100 border-2' 
-                                : 'bg-white hover:bg-orange-50 border border-transparent'
+                                ? 'bg-orange-100 border' 
+                                : 'bg-white hover:bg-orange-50'
                             }`}
                             style={{ borderColor: selectedMatch === item.name && !notInList ? tokens.colors.primaryRed : undefined }}
                           >
@@ -350,32 +350,20 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
                                 setSelectedMatch(item.name);
                                 setNotInList(false);
                               }}
-                              className="w-4 h-4"
+                              className="w-3 h-3"
                               style={{ accentColor: tokens.colors.primaryRed }}
                             />
-                            <div className="flex-1">
-                              <span className="text-sm font-bold" style={{ color: tokens.colors.textNavy }}>
-                                {item.name}
-                              </span>
-                              <span className="ml-2 text-xs px-2 py-0.5 rounded-full" 
-                                style={{ 
-                                  backgroundColor: item.similarity >= 90 ? '#DCFCE7' : item.similarity >= 80 ? '#FEF3C7' : '#FEE2E2',
-                                  color: item.similarity >= 90 ? '#166534' : item.similarity >= 80 ? '#92400E' : '#991B1B'
-                                }}>
-                                {item.similarity}% match
-                              </span>
-                              <span className="ml-2 text-xs" style={{ color: tokens.colors.textMuted }}>
-                                ({item.source === 'management_team' ? 'Management Team' : item.source === 'form_classes' ? 'Form Teacher' : item.source})
-                              </span>
-                            </div>
+                            <span className="text-[10px] font-bold" style={{ color: tokens.colors.textNavy }}>
+                              {item.name}
+                            </span>
                           </label>
                         ))}
                         
                         <label 
-                          className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+                          className={`flex items-center gap-2 p-1 rounded cursor-pointer transition-colors ${
                             notInList 
-                              ? 'bg-slate-100 border-2' 
-                              : 'bg-white hover:bg-slate-50 border border-transparent'
+                              ? 'bg-slate-100 border' 
+                              : 'bg-white'
                           }`}
                           style={{ borderColor: notInList ? tokens.colors.textMuted : undefined }}
                         >
@@ -387,51 +375,39 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
                               setNotInList(true);
                               setSelectedMatch(null);
                             }}
-                            className="w-4 h-4"
+                            className="w-3 h-3"
                             style={{ accentColor: tokens.colors.textMuted }}
                           />
-                          <span className="text-sm font-medium" style={{ color: tokens.colors.textNavy }}>
-                            I'm not in this list (new teacher)
+                          <span className="text-[10px] font-medium" style={{ color: tokens.colors.textNavy }}>
+                            Not in list
                           </span>
                         </label>
                       </div>
-                      
-                      {selectedMatch && !notInList && (
-                        <p className="text-xs mt-2 p-2 rounded bg-orange-50" style={{ color: '#9A3412' }}>
-                          Selected: <span className="font-bold">{selectedMatch}</span> — This teacher will be linked to your account if approved.
-                        </p>
-                      )}
-                      {notInList && (
-                        <p className="text-xs mt-2 p-2 rounded bg-slate-100" style={{ color: tokens.colors.textMuted }}>
-                          Your request will be reviewed by an administrator for verification.
-                        </p>
-                      )}
                     </>
                   )}
                 </div>
               )}
               
               <div>
-              <label className="block text-xs font-bold mb-1.5 ml-1" style={{ color: tokens.colors.textNavy }}>
+              <label className="block text-[10px] font-bold mb-1 ml-1" style={{ color: tokens.colors.textNavy }}>
                 School Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
-                  placeholder="teacher@smkstursula.edu.my"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  placeholder="teacher@smk.edu.my"
                   style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                 />
               </div>
-              <p className="text-[10px] text-slate-400 mt-1 ml-1">Enter your email address</p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold mb-1.5 ml-1" style={{ color: tokens.colors.textNavy }}>
+              <label className="block text-[10px] font-bold mb-1 ml-1" style={{ color: tokens.colors.textNavy }}>
                 Create Password
               </label>
               <div className="relative">
@@ -440,22 +416,22 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-2.5 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
-                  placeholder="At least 6 characters"
+                  className="w-full pl-8 pr-8 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  placeholder="Min 6 characters"
                   style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" style={{ color: tokens.colors.textMuted }} /> : <Eye className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />}
+                  {showPassword ? <EyeOff className="w-3 h-3" style={{ color: tokens.colors.textMuted }} /> : <Eye className="w-3 h-3" style={{ color: tokens.colors.textMuted }} />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold mb-1.5 ml-1" style={{ color: tokens.colors.textNavy }}>
+              <label className="block text-[10px] font-bold mb-1 ml-1" style={{ color: tokens.colors.textNavy }}>
                 Confirm Password
               </label>
               <div className="relative">
@@ -464,18 +440,18 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
                   placeholder="Re-enter password"
                   style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                 />
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-xs font-bold" style={{ color: tokens.colors.textNavy }}>
+            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200">
+              <p className="text-[10px] font-bold" style={{ color: tokens.colors.textNavy }}>
                 Requesting Role:
               </p>
-              <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.primaryRed }}>
+              <p className="text-[10px] font-medium" style={{ color: tokens.colors.primaryRed }}>
                 Teacher
               </p>
             </div>
@@ -483,14 +459,14 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 py-3 rounded-xl text-white text-sm font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:transform-none"
+              className="w-full mt-1 py-2 rounded-lg text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none"
               style={{ backgroundColor: tokens.colors.primaryRed }}
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-3 h-3 animate-spin" />
               ) : (
                 <>
-                  Submit Request <ArrowRight className="w-4 h-4" />
+                  Submit Request <ArrowRight className="w-3 h-3" />
                 </>
               )}
             </button>
@@ -498,22 +474,22 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
             <button
               type="button"
               onClick={onCancel}
-              className="w-full mt-2 py-3 rounded-xl text-sm font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full mt-1 py-2 rounded-lg text-[10px] font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer"
               style={{ color: tokens.colors.textNavy }}
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-3 h-3" />
               Cancel & Return Home
             </button>
           </form>
         )}
         
-        <div className="mt-6 text-center border-t border-slate-100 pt-5">
-           <p className="text-xs font-medium" style={{ color: tokens.colors.textMuted }}>
-              Already have an account?{' '}
-              <button onClick={onLoginRedirect} className="underline hover:text-red-500 cursor-pointer" style={{ color: tokens.colors.primaryRed }}>
-                Sign In
-              </button>
-            </p>
+        <div className="mt-2 text-center border-t border-slate-100 pt-2">
+           <p className="text-[8px] font-medium" style={{ color: tokens.colors.textMuted }}>
+               Already have an account?{' '}
+               <button onClick={onLoginRedirect} className="underline hover:text-red-500 cursor-pointer" style={{ color: tokens.colors.primaryRed }}>
+                 Sign In
+               </button>
+           </p>
         </div>
       </div>
     </div>

@@ -79,6 +79,7 @@ export function mapStudent(row: any, units: any[], classes: any[]): Student {
     id: String(row.id),
     name: row.nama,
     classId: classId,
+    tahun: row.tahun != null ? Number(row.tahun) : undefined,
     studentNumber: row.student_number,
     estimatedPAJSK: pajskResult.estimatedPAJSK,
     pajskGrade: pajskResult.pajskGrade,
