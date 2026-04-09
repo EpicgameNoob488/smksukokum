@@ -318,7 +318,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm animate-in slide-in-from-top duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
               <SearchableDropdown
@@ -328,7 +328,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableUniforms}
                 placeholder="All Units"
                 textSize="xs"
-                controlClassName="h-10 px-2.5 py-2 bg-slate-50 border-slate-200 rounded-lg flex items-center"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -340,7 +340,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableClubs}
                 placeholder="All Clubs"
                 textSize="xs"
-                controlClassName="h-10 px-2.5 py-2 bg-slate-50 border-slate-200 rounded-lg flex items-center"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -352,7 +352,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableSports}
                 placeholder="All Sports"
                 textSize="xs"
-                controlClassName="h-10 px-2.5 py-2 bg-slate-50 border-slate-200 rounded-lg flex items-center"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -361,7 +361,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={scoreFilter}
                   onChange={(e) => setScoreFilter(e.target.value)}
-                  className="w-full h-10 px-2.5 pr-10 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   {availableScores.map(opt => (
@@ -380,7 +380,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   <select 
                     value={attendanceFilter}
                     onChange={(e) => setAttendanceFilter(e.target.value)}
-                    className="w-full h-10 px-2.5 pr-10 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                    className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
                     style={{ color: tokens.colors.textNavy }}
                   >
                     {availableAttendances.map(opt => (
@@ -396,7 +396,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     resetFilters();
                     setShowFilters(false);
                   }}
-                  className="h-10 min-w-[72px] px-2.5 py-2 rounded-lg text-xs font-semibold border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer whitespace-nowrap"
+                  className="h-10 min-w-[72px] px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   Reset
