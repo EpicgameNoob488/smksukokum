@@ -328,7 +328,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableUniforms}
                 placeholder="All Units"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -340,7 +340,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableClubs}
                 placeholder="All Clubs"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -352,7 +352,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableSports}
                 placeholder="All Sports"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
