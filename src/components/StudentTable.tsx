@@ -384,28 +384,26 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Attendance</label>
-              <div className="flex gap-2 min-w-0 justify-end">
-                <div className="relative flex-1 min-w-0">
-                  <select 
-                    value={attendanceFilter}
-                    onChange={(e) => setAttendanceFilter(e.target.value)}
-                    className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
-                    style={{ color: tokens.colors.textNavy }}
-                  >
-                    {availableAttendances.map(opt => (
-                      <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
-                        {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                </div>
+              <div className="relative min-w-0">
+                <select 
+                  value={attendanceFilter}
+                  onChange={(e) => setAttendanceFilter(e.target.value)}
+                  className="w-full h-10 px-4 pr-28 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  {availableAttendances.map(opt => (
+                    <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
+                      {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <button
                   onClick={() => {
                     resetFilters();
                     setShowFilters(false);
                   }}
-                  className="h-10 min-w-[72px] px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   Reset
