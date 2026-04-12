@@ -244,13 +244,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
     setAvailableAttendances(options.attendances);
   }, [uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
 
-  // Compute all filter options (ignoring current selections) for dropdown
+  // Compute all filter options (ignoring current selections) for dropdown - smart filter by year
   React.useEffect(() => {
-    const allOptions = getAllFilterOptions(classStudents);
+    const yearStudents = classStudents.filter(s => s.tahun === selectedYear);
+    const allOptions = getAllFilterOptions(yearStudents);
     setAllUniforms(allOptions.uniforms);
     setAllClubs(allOptions.clubs);
     setAllSports(allOptions.sports);
-  }, [classStudents]);
+  }, [classStudents, selectedYear]);
 
   const getAttendanceColor = (attendance: number) => {
     if (attendance >= 95) return { bg: tokens.colors.trendGreenBg, text: tokens.colors.trendGreenText };
