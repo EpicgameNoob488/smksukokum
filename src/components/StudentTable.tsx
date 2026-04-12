@@ -616,7 +616,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                           />
                         </td>
                         <td className="px-4 py-4 text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {globalIdx + 1}
+                          {filteredStudents.findIndex(s => s.id === student.id) + 1}
                         </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
