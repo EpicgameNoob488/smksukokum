@@ -584,7 +584,7 @@ export default function Dashboard({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="text-sm font-bold bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
+                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
                   style={{ color: tokens.colors.primaryRed }}
                 >
                   {availableYears.map(year => (
@@ -1132,7 +1132,7 @@ export default function Dashboard({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="text-sm font-bold bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
+                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
                   style={{ color: tokens.colors.primaryRed }}
                 >
                   {availableYears.map(year => (

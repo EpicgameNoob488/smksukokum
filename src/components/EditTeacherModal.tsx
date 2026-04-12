@@ -172,7 +172,7 @@ export default function EditTeacherModal({
                   <select 
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                     style={{ color: tokens.colors.textNavy }}
                   >
                     <option value={2025}>2025</option>
@@ -184,7 +184,7 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.role}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, role: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="Pengetua">Pengetua</option>
@@ -212,7 +212,7 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -226,7 +226,7 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -241,7 +241,7 @@ export default function EditTeacherModal({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value={2025}>2025</option>
@@ -253,7 +253,7 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.name}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, name: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="" disabled>Select a class</option>
@@ -275,7 +275,7 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, teacher: `${givenName} ${surname}`.trim(), name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -289,7 +289,7 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, teacher: `${givenName} ${surname}`.trim(), name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -304,7 +304,7 @@ export default function EditTeacherModal({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value={2025}>2025</option>
@@ -317,7 +317,7 @@ export default function EditTeacherModal({
                   <select 
                     value={editModal.data.name}
                     onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, name: e.target.value } })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                     style={{ color: tokens.colors.textNavy }}
                   >
                     <option value="" disabled>Select a unit</option>
@@ -363,7 +363,7 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.category}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, category: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="Kelab & Persatuan">Kelab & Persatuan</option>
@@ -452,7 +452,7 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -466,7 +466,7 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -477,7 +477,7 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.classId}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classId: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   {allFormClasses.length > 0 ? allFormClasses.map((cls) => (
@@ -537,7 +537,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
@@ -643,7 +643,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
@@ -749,7 +749,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
@@ -836,7 +836,7 @@ export default function EditTeacherModal({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value={2025}>2025</option>
@@ -854,7 +854,7 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -868,7 +868,7 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
                   />
                 </div>
@@ -880,7 +880,7 @@ export default function EditTeacherModal({
                   type="email" 
                   value={editModal.data.email || ''}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, email: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                   style={{ color: tokens.colors.textNavy }}
                   placeholder="teacher@school.edu.my"
                 />
@@ -929,7 +929,7 @@ export default function EditTeacherModal({
                           newRoles[i] = e.target.value;
                           setEditModal({ ...editModal, data: { ...editModal.data, managementRoles: newRoles } });
                         }}
-                        className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                        className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                         style={{ color: tokens.colors.textNavy }}
                       >
                         <option value="" disabled>Select Role</option>
@@ -965,7 +965,7 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.classes[0] || ''}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classes: e.target.value ? [e.target.value] : [] } })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold bg-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">None</option>

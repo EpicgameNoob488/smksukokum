@@ -324,7 +324,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={uniformFilter === 'All Units' ? '' : uniformFilter}
                   onChange={(e) => setUniformFilter(e.target.value || 'All Units')}
-                  className="w-full px-4 py-2.5 pr-28 rounded-xl border border-slate-200 text-sm font-bold bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Units</option>
@@ -335,7 +335,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setUniformFilter('All Units')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
@@ -348,7 +348,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={clubFilter === 'All Clubs' ? '' : clubFilter}
                   onChange={(e) => setClubFilter(e.target.value || 'All Clubs')}
-                  className="w-full px-4 py-2.5 pr-28 rounded-xl border border-slate-200 text-sm font-bold bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Clubs</option>
@@ -359,7 +359,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setClubFilter('All Clubs')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
@@ -372,7 +372,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={sportFilter === 'All Sports' ? '' : sportFilter}
                   onChange={(e) => setSportFilter(e.target.value || 'All Sports')}
-                  className="w-full px-4 py-2.5 pr-28 rounded-xl border border-slate-200 text-sm font-bold bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Sports</option>
@@ -383,7 +383,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setSportFilter('All Sports')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
@@ -396,7 +396,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={scoreFilter}
                   onChange={(e) => setScoreFilter(e.target.value)}
-                  className="w-full px-4 py-2.5 pr-28 rounded-xl border border-slate-200 text-sm font-bold bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   {availableScores.map(opt => (
@@ -408,7 +408,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setScoreFilter('All Scores')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
@@ -421,7 +421,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={attendanceFilter}
                   onChange={(e) => setAttendanceFilter(e.target.value)}
-                  className="w-full px-4 py-2.5 pr-28 rounded-xl border border-slate-200 text-sm font-bold bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   {availableAttendances.map(opt => (
@@ -436,7 +436,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     resetFilters();
                     setShowFilters(false);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />

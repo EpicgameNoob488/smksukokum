@@ -93,16 +93,16 @@ export const DT = {
   },
   // Dropdown/Select component styles (professional dashboard standard)
   dropdown: {
-    // Text styling - professional standard (14px, bold)
+    // Text styling - standard (14px, medium)
     textSize: 'text-sm',
-    fontWeight: 'font-bold',
+    fontWeight: 'font-medium',
     // Container styling
-    padding: 'px-4 py-2.5',
-    radius: 'rounded-xl',
+    padding: 'px-4 py-2',
+    radius: 'rounded-full',
     border: 'border border-slate-200',
     bg: 'bg-white',
     // Focus state - accessible with brand color
-    focus: 'focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent',
+    focus: 'focus:outline-none focus:ring-2 focus:ring-red-200',
     // Icon/chevron styling
     iconSize: 'w-4 h-4',
     iconColor: 'textMuted', // use tokens.colors.textMuted
