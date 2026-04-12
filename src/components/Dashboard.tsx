@@ -63,6 +63,7 @@ export default function Dashboard({
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [showAlert, setShowAlert] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [studentYear, setStudentYear] = useState<number>(2025);
   const [availableYears, setAvailableYears] = useState<number[]>([2025]);
   const [hasDataForYear, setHasDataForYear] = useState<boolean>(true);
   const [managementTeamData, setManagementTeamData] = useState<any[]>([]);
@@ -1711,9 +1712,9 @@ export default function Dashboard({
               isAdmin={isAdmin}
               formClassId={formClassId}
               formClassName={formClassName}
-              selectedYear={selectedYear}
+              selectedYear={studentYear}
               currentYear={new Date().getFullYear()}
-              onYearChange={(year) => setSelectedYear(year)}
+              onYearChange={(year) => setStudentYear(year)}
             />
           </div>
         )}
