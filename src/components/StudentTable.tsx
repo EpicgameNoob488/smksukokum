@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Download, Search, Edit2, ChevronDown, Filter, Plus, Users, BookOpen, Trophy, MoreHorizontal } from 'lucide-react';
+import { ArrowLeft, Download, Search, Edit2, ChevronDown, Filter, Plus, Users, BookOpen, Trophy, MoreHorizontal, X } from 'lucide-react';
 import { Student } from '../data/studentData';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
@@ -335,10 +335,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <button
                   onClick={() => setUniformFilter('All Units')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  Reset
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -359,10 +359,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <button
                   onClick={() => setClubFilter('All Clubs')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  Reset
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -383,10 +383,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <button
                   onClick={() => setSportFilter('All Sports')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  Reset
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -408,10 +408,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <button
                   onClick={() => setScoreFilter('All Scores')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  Reset
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -436,10 +436,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     resetFilters();
                     setShowFilters(false);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  Reset
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
