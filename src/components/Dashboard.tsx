@@ -112,7 +112,6 @@ export default function Dashboard({
             .filter(c => c.tahun === selectedYear)
             .map(mapClass);
           const filteredStudents = schoolData.students
-            .filter(s => s.tahun === studentYear)
             .map(row => mapStudent(row, filteredUnits, filteredClasses));
           
           setManagementTeamData(filteredManagement);

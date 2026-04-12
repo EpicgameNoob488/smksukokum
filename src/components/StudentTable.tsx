@@ -100,6 +100,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   const filteredStudents = React.useMemo(() => {
     return classStudents.filter(s => {
+      // Filter by selected year
+      if (s.tahun !== selectedYear) return false;
+
       const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            s.id.toLowerCase().includes(searchTerm.toLowerCase());
       if (!matchesSearch) return false;
@@ -122,7 +125,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
       return true;
     });
-  }, [classStudents, searchTerm, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
+  }, [classStudents, searchTerm, selectedYear, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
 
   const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
   const paginatedStudents = filteredStudents.slice(
