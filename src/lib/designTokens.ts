@@ -91,4 +91,21 @@ export const DT = {
     normal: 'duration-200',
     slow: 'duration-300',
   },
+  // Dropdown/Select component styles (professional dashboard standard)
+  dropdown: {
+    // Text styling - professional standard (14px, bold)
+    textSize: 'text-sm',
+    fontWeight: 'font-bold',
+    // Container styling
+    padding: 'px-4 py-2.5',
+    radius: 'rounded-xl',
+    border: 'border border-slate-200',
+    bg: 'bg-white',
+    // Focus state - accessible with brand color
+    focus: 'focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent',
+    // Icon/chevron styling
+    iconSize: 'w-4 h-4',
+    iconColor: 'textMuted', // use tokens.colors.textMuted
+    iconPosition: 'absolute right-3 top-1/2 -translate-y-1/2',
+  },
 };
