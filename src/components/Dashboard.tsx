@@ -1296,10 +1296,10 @@ export default function Dashboard({
                       ];
                       exportToCSV(filteredTeachers, columns, `teachers-all-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+                    className="px-4 py-2 bg-white rounded-full text-sm font-bold hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
-                    Export All
+                    Export
                   </button>
                 </div>
                 {filteredTeachers.length === 0 ? (

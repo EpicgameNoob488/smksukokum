@@ -264,7 +264,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <button 
               onClick={() => setShowFilters(!showFilters)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-bold shadow-sm transition-all border flex items-center gap-2",
+                "px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all border flex items-center gap-2",
                 showFilters ? "bg-slate-800 text-white border-slate-800" : "bg-white hover:bg-slate-50 border-slate-200"
               )}
               style={!showFilters ? { color: tokens.colors.textNavy } : {}}
