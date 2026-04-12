@@ -4,7 +4,7 @@ import { Student } from '../data/studentData';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
 import type { CSVColumn } from '../lib/csvExport';
-import { getAvailableFilterOptions, type FilterSelections } from '../lib/filterUtils';
+import { getAvailableFilterOptions, getAllFilterOptions, type FilterSelections } from '../lib/filterUtils';
 
 interface StudentTableProps {
   classId: string;
@@ -86,6 +86,11 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [availableSports, setAvailableSports] = React.useState<string[]>([]);
   const [availableScores, setAvailableScores] = React.useState<string[]>([]);
   const [availableAttendances, setAvailableAttendances] = React.useState<string[]>([]);
+
+  // All filter options (ignoring current selections - for dropdown options)
+  const [allUniforms, setAllUniforms] = React.useState<string[]>([]);
+  const [allClubs, setAllClubs] = React.useState<string[]>([]);
+  const [allSports, setAllSports] = React.useState<string[]>([]);
 
   const classStudents = React.useMemo(() => {
     // Show all students when className indicates "All" or no classId
@@ -239,6 +244,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
     setAvailableAttendances(options.attendances);
   }, [uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
 
+  // Compute all filter options (ignoring current selections) for dropdown
+  React.useEffect(() => {
+    const allOptions = getAllFilterOptions(classStudents);
+    setAllUniforms(allOptions.uniforms);
+    setAllClubs(allOptions.clubs);
+    setAllSports(allOptions.sports);
+  }, [classStudents]);
+
   const getAttendanceColor = (attendance: number) => {
     if (attendance >= 95) return { bg: tokens.colors.trendGreenBg, text: tokens.colors.trendGreenText };
     if (attendance >= 75) return { bg: tokens.colors.warningBg, text: tokens.colors.warningText };
@@ -361,7 +374,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Units</option>
-                  {availableUniforms.filter(u => u !== 'All Units').map(opt => (
+                  {allUniforms.filter(u => u !== 'All Units').map(opt => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
@@ -385,7 +398,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Clubs</option>
-                  {availableClubs.filter(c => c !== 'All Clubs').map(opt => (
+                  {allClubs.filter(c => c !== 'All Clubs').map(opt => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
@@ -409,7 +422,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   style={{ color: tokens.colors.textNavy }}
                 >
                   <option value="">All Sports</option>
-                  {availableSports.filter(s => s !== 'All Sports').map(opt => (
+                  {allSports.filter(s => s !== 'All Sports').map(opt => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>

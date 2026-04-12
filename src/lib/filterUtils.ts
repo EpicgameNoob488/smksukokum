@@ -112,3 +112,41 @@ export function getAvailableFilterOptions(
     attendances
   };
 }
+
+/**
+ * Returns ALL filter options from students (ignoring current selections)
+ * Used for dropdown options to show all available values
+ */
+export function getAllFilterOptions(students: Student[]): AvailableFilterOptions {
+  const uniforms = ['All Units', ...Array.from(
+    new Set(students.map(s => s.uniformUnit).filter(v => v && v !== 'Tiada'))
+  ).sort()];
+
+  const clubs = ['All Clubs', ...Array.from(
+    new Set(students.map(s => s.club).filter(v => v && v !== 'Tiada'))
+  ).sort()];
+
+  const sports = ['All Sports', ...Array.from(
+    new Set(students.map(s => s.sport).filter(v => v && v !== 'Tiada'))
+  ).sort()];
+
+  const scores: string[] = ['All Scores'];
+  const maxScore = Math.max(...students.map(s => s.estimatedPAJSK));
+  if (maxScore >= 80) scores.push('80+');
+  if (maxScore >= 60) scores.push('60-80');
+  if (maxScore < 80) scores.push('<60');
+
+  const attendances: string[] = ['All Attendance'];
+  const maxAttendance = Math.max(...students.map(s => s.attendance));
+  if (maxAttendance >= 95) attendances.push('95%+');
+  if (maxAttendance >= 75) attendances.push('75%+');
+  if (maxAttendance < 95) attendances.push('<75%');
+
+  return {
+    uniforms,
+    clubs,
+    sports,
+    scores,
+    attendances
+  };
+}
