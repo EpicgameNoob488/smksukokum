@@ -332,13 +332,13 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setUniformFilter('All Units')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                 </button>
               </div>
             </div>
@@ -356,13 +356,13 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setClubFilter('All Clubs')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                 </button>
               </div>
             </div>
@@ -380,13 +380,13 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setSportFilter('All Sports')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                 </button>
               </div>
             </div>
@@ -405,13 +405,13 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => setScoreFilter('All Scores')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                 </button>
               </div>
             </div>
@@ -430,7 +430,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
                   onClick={() => {
                     resetFilters();
@@ -439,7 +439,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                 </button>
               </div>
             </div>
