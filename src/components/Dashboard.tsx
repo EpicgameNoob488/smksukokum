@@ -112,7 +112,7 @@ export default function Dashboard({
             .filter(c => c.tahun === selectedYear)
             .map(mapClass);
           const filteredStudents = schoolData.students
-            .filter(s => s.tahun === selectedYear)
+            .filter(s => s.tahun === studentYear)
             .map(row => mapStudent(row, filteredUnits, filteredClasses));
           
           setManagementTeamData(filteredManagement);
@@ -136,7 +136,7 @@ export default function Dashboard({
       // In offline mode, use default data
       setIsLoading(false);
     }
-  }, [schoolData, dataLoading, error, isOfflineMode, selectedYear]);
+  }, [schoolData, dataLoading, error, isOfflineMode, selectedYear, studentYear]);
 
   const isAdmin = userRole === 'admin';
   const isTeacher = userRole === 'teacher';
