@@ -104,7 +104,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   // Smart year filter - only show years that exist in data (min 2025)
   const availableYears = React.useMemo(() => {
-    const yearsInData = new Set(studentsData.map(s => s.tahun).filter(Boolean));
+    const yearsInData = new Set(classStudents.map(s => s.tahun).filter(Boolean));
     const minYear = 2025;
     const maxYear = currentYear;
     const years: number[] = [];
@@ -117,7 +117,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
       return [currentYear, currentYear - 1].filter(y => y >= minYear);
     }
     return years;
-  }, [studentsData, currentYear]);
+  }, [classStudents, currentYear]);
 
   const filteredStudents = React.useMemo(() => {
     let result = classStudents.filter(s => {
