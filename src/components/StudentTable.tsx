@@ -230,15 +230,12 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <div>
               <div className="flex items-center gap-3">
                 <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Student List</h2>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100" style={{ color: tokens.colors.primaryRed }}>
-                  Year {selectedYear}
-                </span>
               </div>
               <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>Viewing all students and their co-curricular details.</p>
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
               <input 
@@ -246,7 +243,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 placeholder="Search student..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-64 font-medium border border-slate-200"
+                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-56 font-medium border border-slate-200"
                 style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
               />
             </div>
