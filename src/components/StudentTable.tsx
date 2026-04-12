@@ -68,12 +68,12 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   // Sorting configuration
   const [sortConfig, setSortConfig] = React.useState<{
-    key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport' | null;
+    key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport' | 'index' | null;
     direction: 'asc' | 'desc';
   }>({ key: null, direction: 'asc' });
 
   // Sort handler
-  const handleSort = (key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport') => {
+  const handleSort = (key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport' | 'index') => {
     setSortConfig(prev => ({
       key,
       direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -142,19 +142,26 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
     // Apply sorting
     if (sortConfig.key) {
-      result = [...result].sort((a, b) => {
-        const aVal = a[sortConfig.key as keyof typeof a];
-        const bVal = b[sortConfig.key as keyof typeof b];
-        if (typeof aVal === 'string' && typeof bVal === 'string') {
-          return sortConfig.direction === 'asc' 
-            ? aVal.localeCompare(bVal) 
-            : bVal.localeCompare(aVal);
-        }
-        if (typeof aVal === 'number' && typeof bVal === 'number') {
-          return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
-        }
-        return 0;
-      });
+      if (sortConfig.key === 'index') {
+        // Sort by original index - ascending gives 1,2,3... descending gives ...3,2,1
+        result = sortConfig.direction === 'asc' 
+          ? [...result] 
+          : [...result].reverse();
+      } else {
+        result = [...result].sort((a, b) => {
+          const aVal = a[sortConfig.key as keyof typeof a];
+          const bVal = b[sortConfig.key as keyof typeof b];
+          if (typeof aVal === 'string' && typeof bVal === 'string') {
+            return sortConfig.direction === 'asc' 
+              ? aVal.localeCompare(bVal) 
+              : bVal.localeCompare(aVal);
+          }
+          if (typeof aVal === 'number' && typeof bVal === 'number') {
+            return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
+          }
+          return 0;
+        });
+      }
     }
 
     return result;
@@ -492,6 +499,18 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <tr style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                   <th className="w-10 px-4 py-3 text-left">
                     <ChevronDown className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('index')}
+                  >
+                    <span className="flex items-center gap-1">
+                      #
+                      {sortConfig.key === 'index' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
                   </th>
                   <th 
                     className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
