@@ -91,6 +91,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [allUniforms, setAllUniforms] = React.useState<string[]>([]);
   const [allClubs, setAllClubs] = React.useState<string[]>([]);
   const [allSports, setAllSports] = React.useState<string[]>([]);
+  const [allScores, setAllScores] = React.useState<string[]>([]);
+  const [allAttendances, setAllAttendances] = React.useState<string[]>([]);
 
   const classStudents = React.useMemo(() => {
     // Show all students when className indicates "All" or no classId
@@ -251,6 +253,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
     setAllUniforms(allOptions.uniforms);
     setAllClubs(allOptions.clubs);
     setAllSports(allOptions.sports);
+    setAllScores(allOptions.scores);
+    setAllAttendances(allOptions.attendances);
   }, [classStudents, selectedYear]);
 
   const getAttendanceColor = (attendance: number) => {
@@ -446,7 +450,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  {availableScores.map(opt => (
+                  {allScores.map(opt => (
                     <option key={opt} value={opt === 'All Scores' ? '' : opt}>
                       {opt === 'All Scores' ? opt : opt === '80+' ? 'Elite (80+)' : opt === '60-80' ? 'Standard (60-80)' : 'Needs Focus (<60)'}
                     </option>
@@ -471,7 +475,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  {availableAttendances.map(opt => (
+                  {allAttendances.map(opt => (
                     <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
                       {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
                     </option>
