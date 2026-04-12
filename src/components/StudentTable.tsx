@@ -4,7 +4,6 @@ import { Student } from '../data/studentData';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
 import type { CSVColumn } from '../lib/csvExport';
-import SearchableDropdown from './SearchableDropdown';
 import { getAvailableFilterOptions, type FilterSelections } from '../lib/filterUtils';
 
 interface StudentTableProps {
@@ -321,56 +320,83 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
-              <div className="relative">
-                <SearchableDropdown
-                  className="w-full max-w-[240px]"
-                  value={uniformFilter}
-                  onChange={(value) => setUniformFilter(value || 'All Units')}
-                  options={availableUniforms}
-                  placeholder="All Units"
-                  textSize="xs"
-                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-                />
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <div className="relative min-w-0">
+                <select 
+                  value={uniformFilter === 'All Units' ? '' : uniformFilter}
+                  onChange={(e) => setUniformFilter(e.target.value || 'All Units')}
+                  className="w-full h-10 px-4 pr-28 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  <option value="">All Units</option>
+                  {availableUniforms.filter(u => u !== 'All Units').map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <button
+                  onClick={() => setUniformFilter('All Units')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  Reset
+                </button>
               </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Club/Persatuan</label>
-              <div className="relative">
-                <SearchableDropdown
-                  className="w-full max-w-[240px]"
-                  value={clubFilter}
-                  onChange={(value) => setClubFilter(value || 'All Clubs')}
-                  options={availableClubs}
-                  placeholder="All Clubs"
-                  textSize="xs"
-                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-                />
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <div className="relative min-w-0">
+                <select 
+                  value={clubFilter === 'All Clubs' ? '' : clubFilter}
+                  onChange={(e) => setClubFilter(e.target.value || 'All Clubs')}
+                  className="w-full h-10 px-4 pr-28 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  <option value="">All Clubs</option>
+                  {availableClubs.filter(c => c !== 'All Clubs').map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <button
+                  onClick={() => setClubFilter('All Clubs')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  Reset
+                </button>
               </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Sukan/Permainan</label>
-              <div className="relative">
-                <SearchableDropdown
-                  className="w-full max-w-[240px]"
-                  value={sportFilter}
-                  onChange={(value) => setSportFilter(value || 'All Sports')}
-                  options={availableSports}
-                  placeholder="All Sports"
-                  textSize="xs"
-                  controlClassName="h-10 px-4 pr-10 py-2 bg-white border border-slate-200 rounded-full flex items-center"
-                />
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <div className="relative min-w-0">
+                <select 
+                  value={sportFilter === 'All Sports' ? '' : sportFilter}
+                  onChange={(e) => setSportFilter(e.target.value || 'All Sports')}
+                  className="w-full h-10 px-4 pr-28 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  <option value="">All Sports</option>
+                  {availableSports.filter(s => s !== 'All Sports').map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <button
+                  onClick={() => setSportFilter('All Sports')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  Reset
+                </button>
               </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>PAJSK Score</label>
-              <div className="relative">
+              <div className="relative min-w-0">
                 <select 
                   value={scoreFilter}
                   onChange={(e) => setScoreFilter(e.target.value)}
-                  className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                  className="w-full h-10 px-4 pr-28 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
                   style={{ color: tokens.colors.textNavy }}
                 >
                   {availableScores.map(opt => (
@@ -379,7 +405,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <button
+                  onClick={() => setScoreFilter('All Scores')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 px-4 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  style={{ color: tokens.colors.textNavy }}
+                >
+                  Reset
+                </button>
               </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
