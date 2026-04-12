@@ -1711,9 +1711,9 @@ export default function Dashboard({
               isAdmin={isAdmin}
               formClassId={formClassId}
               formClassName={formClassName}
-              selectedYear={studentYear}
+              selectedYear={selectedYear}
               currentYear={new Date().getFullYear()}
-              onYearChange={(year) => setStudentYear(year)}
+              onYearChange={(year) => setSelectedYear(year)}
             />
           </div>
         )}
