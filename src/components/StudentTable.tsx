@@ -66,6 +66,20 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [scoreFilter, setScoreFilter] = React.useState('All Scores');
   const [attendanceFilter, setAttendanceFilter] = React.useState('All Attendance');
 
+  // Sorting configuration
+  const [sortConfig, setSortConfig] = React.useState<{
+    key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport' | null;
+    direction: 'asc' | 'desc';
+  }>({ key: null, direction: 'asc' });
+
+  // Sort handler
+  const handleSort = (key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport') => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+
   // Available filter options that update based on current selections
   const [availableUniforms, setAvailableUniforms] = React.useState<string[]>([]);
   const [availableClubs, setAvailableClubs] = React.useState<string[]>([]);
@@ -99,7 +113,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   }, [studentsData, currentYear]);
 
   const filteredStudents = React.useMemo(() => {
-    return classStudents.filter(s => {
+    let result = classStudents.filter(s => {
       // Filter by selected year
       if (s.tahun !== selectedYear) return false;
 
@@ -125,7 +139,26 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
       return true;
     });
-  }, [classStudents, searchTerm, selectedYear, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
+
+    // Apply sorting
+    if (sortConfig.key) {
+      result = [...result].sort((a, b) => {
+        const aVal = a[sortConfig.key as keyof typeof a];
+        const bVal = b[sortConfig.key as keyof typeof b];
+        if (typeof aVal === 'string' && typeof bVal === 'string') {
+          return sortConfig.direction === 'asc' 
+            ? aVal.localeCompare(bVal) 
+            : bVal.localeCompare(aVal);
+        }
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+          return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+        return 0;
+      });
+    }
+
+    return result;
+  }, [classStudents, searchTerm, selectedYear, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter, sortConfig]);
 
   const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
   const paginatedStudents = filteredStudents.slice(
@@ -460,13 +493,78 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   <th className="w-10 px-4 py-3 text-left">
                     <ChevronDown className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>#</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Student</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Attendance</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>PAJSK</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Uniform</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Club</th>
-                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Sport</th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('name')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Student
+                      {sortConfig.key === 'name' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('attendance')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Attendance
+                      {sortConfig.key === 'attendance' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('estimatedPAJSK')}
+                  >
+                    <span className="flex items-center gap-1">
+                      PAJSK
+                      {sortConfig.key === 'estimatedPAJSK' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('uniformUnit')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Uniform
+                      {sortConfig.key === 'uniformUnit' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('club')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Club
+                      {sortConfig.key === 'club' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
+                  <th 
+                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: tokens.colors.textNavy }}
+                    onClick={() => handleSort('sport')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Sport
+                      {sortConfig.key === 'sport' && (
+                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </span>
+                  </th>
                   <th className="px-4 py-3 text-right text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Actions</th>
                 </tr>
               </thead>
