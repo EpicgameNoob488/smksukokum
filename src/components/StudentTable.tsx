@@ -128,9 +128,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                            s.id.toLowerCase().includes(searchTerm.toLowerCase());
       if (!matchesSearch) return false;
 
-      if (uniformFilter !== 'All Units' && s.uniformUnit !== uniformFilter) return false;
-      if (clubFilter !== 'All Clubs' && s.club !== clubFilter) return false;
-      if (sportFilter !== 'All Sports' && s.sport !== sportFilter) return false;
+      if (uniformFilter !== 'All Units' && s.uniformUnit?.trim() !== uniformFilter.trim()) return false;
+      if (clubFilter !== 'All Clubs' && s.club?.trim() !== clubFilter.trim()) return false;
+      if (sportFilter !== 'All Sports' && s.sport?.trim() !== sportFilter.trim()) return false;
 
       if (scoreFilter !== 'All Scores') {
         if (scoreFilter === '80+' && s.estimatedPAJSK < 80) return false;
