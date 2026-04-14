@@ -483,10 +483,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 </select>
                 <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 <button
-                  onClick={() => {
-                    resetFilters();
-                    setShowFilters(false);
-                  }}
+                  onClick={() => setAttendanceFilter('All Attendance')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
