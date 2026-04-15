@@ -13,8 +13,11 @@ export interface Student {
   pajskGradeLabel: string;
   attendance: number;
   uniformUnit: string;
+  uniformUnitCode: string;
   club: string;
+  clubCode: string;
   sport: string;
+  sportCode: string;
   rawPenglibatan?: any;
   pajskBreakdown: {
     sukan: { penglibatan: number; kehadiran: number; pencapaian: number; total: number };
@@ -53,6 +56,16 @@ export function transformStudents(
       const unit = unitMap.get(unitCode);
       return unit ? unit.nama_rasmi : 'Tiada';
     };
+
+    const getUnitCode = (unitCode: string | null): string => {
+      if (!unitCode) return '';
+      const unit = unitMap.get(unitCode);
+      return unit ? unit.unit_code : '';
+    };
+
+    const sportCode = getUnitCode(s.sukan_unit);
+    const clubCode = getUnitCode(s.kelab_unit);
+    const uniformUnitCode = getUnitCode(s.uniform_unit);
 
     const sport = getUnitName(s.sukan_unit);
     const club = getUnitName(s.kelab_unit);
@@ -101,8 +114,11 @@ export function transformStudents(
       pajskGradeLabel: pajskResult.gradeLabel,
       attendance: attendancePercentage,
       uniformUnit: uniformUnit,
+      uniformUnitCode: uniformUnitCode,
       club: club,
+      clubCode: clubCode,
       sport: sport,
+      sportCode: sportCode,
       rawPenglibatan: penglibatan,
       pajskBreakdown: pajskResult.breakdown,
     };

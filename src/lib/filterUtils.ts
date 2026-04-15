@@ -1,40 +1,54 @@
 import { Student } from '../data/studentData';
 
 export interface FilterSelections {
-  uniformUnit: string;
-  club: string;
-  sport: string;
+  uniformUnitCode: string;
+  clubCode: string;
+  sportCode: string;
   scoreRange: string;
   attendanceRange: string;
 }
 
+export interface FilterOption {
+  code: string;
+  name: string;
+}
+
 export interface AvailableFilterOptions {
-  uniforms: string[];
-  clubs: string[];
-  sports: string[];
+  uniforms: FilterOption[];
+  clubs: FilterOption[];
+  sports: FilterOption[];
   scores: string[];
   attendances: string[];
 }
 
 /**
- * Checks if a student matches the current filter selections
+ * Helper to check if a unit code is empty/placeholder
+ */
+export function isEmptyUnitCode(code: string | undefined): boolean {
+  if (!code) return true;
+  const normalized = code.trim().toLowerCase();
+  return ['tiada', '-', 'pindah', ''].includes(normalized);
+}
+
+/**
+ * Checks if a student matches the current filter selections (using codes)
  */
 export function matchesFilterCriteria(
   student: Student,
   selections: FilterSelections
 ): boolean {
-  // Check uniform filter
-  if (selections.uniformUnit !== 'All Units' && student.uniformUnit !== selections.uniformUnit) {
+  // Check uniform filter (by code)
+  if (selections.uniformUnitCode !== '' && student.uniformUnitCode !== selections.uniformUnitCode) {
     return false;
   }
 
-  // Check club filter
-  if (selections.club !== 'All Clubs' && student.club !== selections.club) {
+  // Check club filter (by code)
+  if (selections.clubCode !== '' && student.clubCode !== selections.clubCode) {
     return false;
   }
 
-  // Check sport filter
-  if (selections.sport !== 'All Sports' && student.sport !== selections.sport) {
+  // Check sport filter (by code)
+  if (selections.sportCode !== '' && student.sportCode !== selections.sportCode) {
     return false;
   }
 
@@ -67,28 +81,71 @@ export function matchesFilterCriteria(
 
 /**
  * Calculates available filter options based on current selections and student data
+ * @param students - All students to consider
+ * @param currentSelections - Current filter selections
+ * @param excludeType - Optional: exclude a specific filter type to enable cascading
  */
 export function getAvailableFilterOptions(
   students: Student[],
-  currentSelections: FilterSelections
+  currentSelections: FilterSelections,
+  excludeType?: 'uniform' | 'club' | 'sport'
 ): AvailableFilterOptions {
-  // Start with all students, then filter by active selections
+  // Build filter criteria excluding the current dropdown type for cascading
+  const selectionsToApply: FilterSelections = {
+    uniformUnitCode: excludeType === 'uniform' ? '' : currentSelections.uniformUnitCode,
+    clubCode: excludeType === 'club' ? '' : currentSelections.clubCode,
+    sportCode: excludeType === 'sport' ? '' : currentSelections.sportCode,
+    scoreRange: currentSelections.scoreRange,
+    attendanceRange: currentSelections.attendanceRange,
+  };
+
+  // Filter students by all EXCEPT the excluded type
   const filteredStudents = students.filter(student =>
-    matchesFilterCriteria(student, currentSelections)
+    matchesFilterCriteria(student, selectionsToApply)
   );
 
-  // Extract unique values from filtered students
-  const uniforms = ['All Units', ...Array.from(
-    new Set(filteredStudents.map(s => s.uniformUnit).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  // Extract unique values from filtered students (using codes, filtering empty)
+  const uniformsMap = new Map<string, string>();
+  filteredStudents.forEach(s => {
+    if (!isEmptyUnitCode(s.uniformUnitCode) && s.uniformUnit && s.uniformUnit !== 'Tiada') {
+      uniformsMap.set(s.uniformUnitCode, s.uniformUnit);
+    }
+  });
 
-  const clubs = ['All Clubs', ...Array.from(
-    new Set(filteredStudents.map(s => s.club).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  const clubsMap = new Map<string, string>();
+  filteredStudents.forEach(s => {
+    if (!isEmptyUnitCode(s.clubCode) && s.club && s.club !== 'Tiada') {
+      clubsMap.set(s.clubCode, s.club);
+    }
+  });
 
-  const sports = ['All Sports', ...Array.from(
-    new Set(filteredStudents.map(s => s.sport).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  const sportsMap = new Map<string, string>();
+  filteredStudents.forEach(s => {
+    if (!isEmptyUnitCode(s.sportCode) && s.sport && s.sport !== 'Tiada') {
+      sportsMap.set(s.sportCode, s.sport);
+    }
+  });
+
+  const uniforms: FilterOption[] = [
+    { code: '', name: 'All Units' },
+    ...Array.from(uniformsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
+
+  const clubs: FilterOption[] = [
+    { code: '', name: 'All Clubs' },
+    ...Array.from(clubsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
+
+  const sports: FilterOption[] = [
+    { code: '', name: 'All Sports' },
+    ...Array.from(sportsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
 
   // Calculate available score ranges - check if students exist in each range
   const scores: string[] = ['All Scores'];
@@ -116,17 +173,47 @@ export function getAvailableFilterOptions(
  * Used for dropdown options to show all available values
  */
 export function getAllFilterOptions(students: Student[]): AvailableFilterOptions {
-  const uniforms = ['All Units', ...Array.from(
-    new Set(students.map(s => s.uniformUnit).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  const uniformsMap = new Map<string, string>();
+  students.forEach(s => {
+    if (!isEmptyUnitCode(s.uniformUnitCode) && s.uniformUnit && s.uniformUnit !== 'Tiada') {
+      uniformsMap.set(s.uniformUnitCode, s.uniformUnit);
+    }
+  });
 
-  const clubs = ['All Clubs', ...Array.from(
-    new Set(students.map(s => s.club).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  const clubsMap = new Map<string, string>();
+  students.forEach(s => {
+    if (!isEmptyUnitCode(s.clubCode) && s.club && s.club !== 'Tiada') {
+      clubsMap.set(s.clubCode, s.club);
+    }
+  });
 
-  const sports = ['All Sports', ...Array.from(
-    new Set(students.map(s => s.sport).filter(v => v && v !== 'Tiada'))
-  ).sort()];
+  const sportsMap = new Map<string, string>();
+  students.forEach(s => {
+    if (!isEmptyUnitCode(s.sportCode) && s.sport && s.sport !== 'Tiada') {
+      sportsMap.set(s.sportCode, s.sport);
+    }
+  });
+
+  const uniforms: FilterOption[] = [
+    { code: '', name: 'All Units' },
+    ...Array.from(uniformsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
+
+  const clubs: FilterOption[] = [
+    { code: '', name: 'All Clubs' },
+    ...Array.from(clubsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
+
+  const sports: FilterOption[] = [
+    { code: '', name: 'All Sports' },
+    ...Array.from(sportsMap.entries())
+      .map(([code, name]) => ({ code, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  ];
 
   const scores: string[] = ['All Scores'];
   if (students.some(s => s.estimatedPAJSK >= 80)) scores.push('80+');
