@@ -39,6 +39,11 @@ export function mapStudent(row: any, units: any[], classes: any[]): Student {
     return unit ? unit.name : 'Tiada';
   };
 
+  const getUnitCode = (code: string | null): string => {
+    if (!code) return '';
+    return code;
+  };
+
   const classObj = classes.find(c => c.name.toLowerCase() === row.kelas.toLowerCase());
   const classId = classObj ? classObj.id : row.kelas;
 
@@ -87,8 +92,11 @@ export function mapStudent(row: any, units: any[], classes: any[]): Student {
     pajskGradeLabel: pajskResult.gradeLabel,
     attendance,
     uniformUnit: getUnitName(row.uniform_unit),
+    uniformUnitCode: getUnitCode(row.uniform_unit),
     club: getUnitName(row.kelab_unit),
+    clubCode: getUnitCode(row.kelab_unit),
     sport: getUnitName(row.sukan_unit),
+    sportCode: getUnitCode(row.sukan_unit),
     rawPenglibatan,
     pajskBreakdown: pajskResult.breakdown
   };
