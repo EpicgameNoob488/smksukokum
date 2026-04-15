@@ -1,10 +1,11 @@
 import React from 'react';
-import { ArrowLeft, Download, Search, Edit2, ChevronDown, Filter, Plus, Users, BookOpen, Trophy, MoreHorizontal, X } from 'lucide-react';
+import { ArrowLeft, Download, Search, Edit2, ChevronDown, Filter, Plus, Users, BookOpen, Trophy, MoreHorizontal } from 'lucide-react';
 import { Student } from '../data/studentData';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
 import type { CSVColumn } from '../lib/csvExport';
-import { getAvailableFilterOptions, getAllFilterOptions, type FilterSelections, type FilterOption } from '../lib/filterUtils';
+import SearchableDropdown from './SearchableDropdown';
+import { getAvailableFilterOptions, type FilterSelections } from '../lib/filterUtils';
 
 interface StudentTableProps {
   classId: string;
@@ -60,39 +61,18 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [showFilters, setShowFilters] = React.useState(false);
   const [expandedRowId, setExpandedRowId] = React.useState<string | null>(null);
   
-  const [uniformFilter, setUniformFilter] = React.useState('');
-  const [clubFilter, setClubFilter] = React.useState('');
-  const [sportFilter, setSportFilter] = React.useState('');
+  const [uniformFilter, setUniformFilter] = React.useState('All Units');
+  const [clubFilter, setClubFilter] = React.useState('All Clubs');
+  const [sportFilter, setSportFilter] = React.useState('All Sports');
   const [scoreFilter, setScoreFilter] = React.useState('All Scores');
   const [attendanceFilter, setAttendanceFilter] = React.useState('All Attendance');
 
-  // Sorting configuration
-  const [sortConfig, setSortConfig] = React.useState<{
-    key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport' | null;
-    direction: 'asc' | 'desc';
-  }>({ key: null, direction: 'asc' });
-
-  // Sort handler
-  const handleSort = (key: 'name' | 'attendance' | 'estimatedPAJSK' | 'uniformUnit' | 'club' | 'sport') => {
-    setSortConfig(prev => ({
-      key,
-      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-    }));
-  };
-
   // Available filter options that update based on current selections
-  const [availableUniforms, setAvailableUniforms] = React.useState<FilterOption[]>([]);
-  const [availableClubs, setAvailableClubs] = React.useState<FilterOption[]>([]);
-  const [availableSports, setAvailableSports] = React.useState<FilterOption[]>([]);
+  const [availableUniforms, setAvailableUniforms] = React.useState<string[]>([]);
+  const [availableClubs, setAvailableClubs] = React.useState<string[]>([]);
+  const [availableSports, setAvailableSports] = React.useState<string[]>([]);
   const [availableScores, setAvailableScores] = React.useState<string[]>([]);
   const [availableAttendances, setAvailableAttendances] = React.useState<string[]>([]);
-
-  // All filter options (ignoring current selections - for dropdown options)
-  const [allUniforms, setAllUniforms] = React.useState<FilterOption[]>([]);
-  const [allClubs, setAllClubs] = React.useState<FilterOption[]>([]);
-  const [allSports, setAllSports] = React.useState<FilterOption[]>([]);
-  const [allScores, setAllScores] = React.useState<string[]>([]);
-  const [allAttendances, setAllAttendances] = React.useState<string[]>([]);
 
   const classStudents = React.useMemo(() => {
     // Show all students when className indicates "All" or no classId
@@ -104,7 +84,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   // Smart year filter - only show years that exist in data (min 2025)
   const availableYears = React.useMemo(() => {
-    const yearsInData = new Set(classStudents.map(s => s.tahun).filter(Boolean));
+    const yearsInData = new Set(studentsData.map(s => s.tahun).filter(Boolean));
     const minYear = 2025;
     const maxYear = currentYear;
     const years: number[] = [];
@@ -117,21 +97,17 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
       return [currentYear, currentYear - 1].filter(y => y >= minYear);
     }
     return years;
-  }, [classStudents, currentYear]);
+  }, [studentsData, currentYear]);
 
   const filteredStudents = React.useMemo(() => {
-    let result = classStudents.filter(s => {
-      // Filter by selected year
-      if (s.tahun !== selectedYear) return false;
-
+    return classStudents.filter(s => {
       const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            s.id.toLowerCase().includes(searchTerm.toLowerCase());
       if (!matchesSearch) return false;
 
-      // Filter by codes (not names)
-      if (uniformFilter !== '' && s.uniformUnitCode !== uniformFilter) return false;
-      if (clubFilter !== '' && s.clubCode !== clubFilter) return false;
-      if (sportFilter !== '' && s.sportCode !== sportFilter) return false;
+      if (uniformFilter !== 'All Units' && s.uniformUnit !== uniformFilter) return false;
+      if (clubFilter !== 'All Clubs' && s.club !== clubFilter) return false;
+      if (sportFilter !== 'All Sports' && s.sport !== sportFilter) return false;
 
       if (scoreFilter !== 'All Scores') {
         if (scoreFilter === '80+' && s.estimatedPAJSK < 80) return false;
@@ -147,26 +123,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
       return true;
     });
-
-    // Apply sorting
-    if (sortConfig.key) {
-      result = [...result].sort((a, b) => {
-        const aVal = a[sortConfig.key as keyof typeof a];
-        const bVal = b[sortConfig.key as keyof typeof b];
-        if (typeof aVal === 'string' && typeof bVal === 'string') {
-          return sortConfig.direction === 'asc' 
-            ? aVal.localeCompare(bVal) 
-            : bVal.localeCompare(aVal);
-        }
-        if (typeof aVal === 'number' && typeof bVal === 'number') {
-          return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
-        }
-        return 0;
-      });
-    }
-
-    return result;
-  }, [classStudents, searchTerm, selectedYear, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter, sortConfig]);
+  }, [classStudents, searchTerm, uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
 
   const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
   const paginatedStudents = filteredStudents.slice(
@@ -199,9 +156,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   const resetFilters = () => {
     setSearchTerm('');
-    setUniformFilter('');
-    setClubFilter('');
-    setSportFilter('');
+    setUniformFilter('All Units');
+    setClubFilter('All Clubs');
+    setSportFilter('All Sports');
     setScoreFilter('All Scores');
     setAttendanceFilter('All Attendance');
     setCurrentPage(1);
@@ -214,60 +171,38 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   // Initialize available filter options on mount
   React.useEffect(() => {
     const initialSelections: FilterSelections = {
-      uniformUnitCode: '',
-      clubCode: '',
-      sportCode: '',
+      uniformUnit: 'All Units',
+      club: 'All Clubs',
+      sport: 'All Sports',
       scoreRange: 'All Scores',
       attendanceRange: 'All Attendance'
     };
 
-    // Get available options for each dropdown type (for cascading)
-    const uniformOptions = getAvailableFilterOptions(classStudents, initialSelections, 'uniform');
-    const clubOptions = getAvailableFilterOptions(classStudents, initialSelections, 'club');
-    const sportOptions = getAvailableFilterOptions(classStudents, initialSelections, 'sport');
-    const allOptions = getAllFilterOptions(classStudents.filter(s => s.tahun === selectedYear));
-    
-    setAvailableUniforms(uniformOptions.uniforms);
-    setAvailableClubs(clubOptions.clubs);
-    setAvailableSports(sportOptions.sports);
-    setAvailableScores(allOptions.scores);
-    setAvailableAttendances(allOptions.attendances);
-  }, [classStudents, selectedYear]);
+    const options = getAvailableFilterOptions(classStudents, initialSelections);
+    setAvailableUniforms(options.uniforms);
+    setAvailableClubs(options.clubs);
+    setAvailableSports(options.sports);
+    setAvailableScores(options.scores);
+    setAvailableAttendances(options.attendances);
+  }, [classStudents]);
 
   // Update available filter options when any filter changes
   React.useEffect(() => {
     const currentSelections: FilterSelections = {
-      uniformUnitCode: uniformFilter,
-      clubCode: clubFilter,
-      sportCode: sportFilter,
+      uniformUnit: uniformFilter,
+      club: clubFilter,
+      sport: sportFilter,
       scoreRange: scoreFilter,
       attendanceRange: attendanceFilter
     };
 
-    // Get available options for each dropdown type with cascading
-    const uniformOptions = getAvailableFilterOptions(classStudents, currentSelections, 'uniform');
-    const clubOptions = getAvailableFilterOptions(classStudents, currentSelections, 'club');
-    const sportOptions = getAvailableFilterOptions(classStudents, currentSelections, 'sport');
-    const scoreOptions = getAvailableFilterOptions(classStudents, currentSelections);
-    const attendanceOptions = getAvailableFilterOptions(classStudents, currentSelections);
-    
-    setAvailableUniforms(uniformOptions.uniforms);
-    setAvailableClubs(clubOptions.clubs);
-    setAvailableSports(sportOptions.sports);
-    setAvailableScores(scoreOptions.scores);
-    setAvailableAttendances(attendanceOptions.attendances);
+    const options = getAvailableFilterOptions(classStudents, currentSelections);
+    setAvailableUniforms(options.uniforms);
+    setAvailableClubs(options.clubs);
+    setAvailableSports(options.sports);
+    setAvailableScores(options.scores);
+    setAvailableAttendances(options.attendances);
   }, [uniformFilter, clubFilter, sportFilter, scoreFilter, attendanceFilter]);
-
-  // Compute all filter options (ignoring current selections) for dropdown - smart filter by year
-  React.useEffect(() => {
-    const yearStudents = classStudents.filter(s => s.tahun === selectedYear);
-    const allOptions = getAllFilterOptions(yearStudents);
-    setAllUniforms(allOptions.uniforms);
-    setAllClubs(allOptions.clubs);
-    setAllSports(allOptions.sports);
-    setAllScores(allOptions.scores);
-    setAllAttendances(allOptions.attendances);
-  }, [classStudents, selectedYear]);
 
   const getAttendanceColor = (attendance: number) => {
     if (attendance >= 95) return { bg: tokens.colors.trendGreenBg, text: tokens.colors.trendGreenText };
@@ -293,12 +228,15 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <div>
               <div className="flex items-center gap-3">
                 <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Student List</h2>
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100" style={{ color: tokens.colors.primaryRed }}>
+                  Year {selectedYear}
+                </span>
               </div>
               <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>Viewing all students and their co-curricular details.</p>
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
               <input 
@@ -306,7 +244,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 placeholder="Search student..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-52 font-medium border border-slate-200"
+                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-64 font-medium border border-slate-200"
                 style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
               />
             </div>
@@ -327,7 +265,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <button 
               onClick={() => setShowFilters(!showFilters)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all border flex items-center gap-2",
+                "px-4 py-2 rounded-full text-sm font-bold shadow-sm transition-all border flex items-center gap-2",
                 showFilters ? "bg-slate-800 text-white border-slate-800" : "bg-white hover:bg-slate-50 border-slate-200"
               )}
               style={!showFilters ? { color: tokens.colors.textNavy } : {}}
@@ -383,123 +321,85 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
-              <div className="relative min-w-0">
-                <select 
-                  value={uniformFilter}
-                  onChange={(e) => setUniformFilter(e.target.value)}
-                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <option value="">All Units</option>
-                  {allUniforms.filter(u => u.code !== '').map(opt => (
-                    <option key={opt.code} value={opt.code}>{opt.name}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                <button
-                  onClick={() => setUniformFilter('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                </button>
-              </div>
+              <SearchableDropdown
+                className="w-full max-w-[240px]"
+                value={uniformFilter}
+                onChange={(value) => setUniformFilter(value || 'All Units')}
+                options={availableUniforms.map(u => u.name)}
+                placeholder="All Units"
+                textSize="xs"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+              />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Club/Persatuan</label>
-              <div className="relative min-w-0">
-                <select 
-                  value={clubFilter}
-                  onChange={(e) => setClubFilter(e.target.value)}
-                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <option value="">All Clubs</option>
-                  {allClubs.filter(c => c.code !== '').map(opt => (
-                    <option key={opt.code} value={opt.code}>{opt.name}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                <button
-                  onClick={() => setClubFilter('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                </button>
-              </div>
+              <SearchableDropdown
+                className="w-full max-w-[240px]"
+                value={clubFilter}
+                onChange={(value) => setClubFilter(value || 'All Clubs')}
+                options={availableClubs.map(c => c.name)}
+                placeholder="All Clubs"
+                textSize="xs"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+              />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Sukan/Permainan</label>
-              <div className="relative min-w-0">
-                <select 
-                  value={sportFilter}
-                  onChange={(e) => setSportFilter(e.target.value)}
-                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <option value="">All Sports</option>
-                  {allSports.filter(s => s.code !== '').map(opt => (
-                    <option key={opt.code} value={opt.code}>{opt.name}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                <button
-                  onClick={() => setSportFilter('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                </button>
-              </div>
+              <SearchableDropdown
+                className="w-full max-w-[240px]"
+                value={sportFilter}
+                onChange={(value) => setSportFilter(value || 'All Sports')}
+                options={availableSports.map(s => s.name)}
+                placeholder="All Sports"
+                textSize="xs"
+                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+              />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>PAJSK Score</label>
-              <div className="relative min-w-0">
+              <div className="relative">
                 <select 
                   value={scoreFilter}
                   onChange={(e) => setScoreFilter(e.target.value)}
-                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
+                  className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  {allScores.map(opt => (
+                  {availableScores.map(opt => (
                     <option key={opt} value={opt === 'All Scores' ? '' : opt}>
                       {opt === 'All Scores' ? opt : opt === '80+' ? 'Elite (80+)' : opt === '60-80' ? 'Standard (60-80)' : 'Needs Focus (<60)'}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                <button
-                  onClick={() => setScoreFilter('All Scores')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                </button>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
               </div>
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Attendance</label>
-              <div className="relative min-w-0">
-                <select 
-                  value={attendanceFilter}
-                  onChange={(e) => setAttendanceFilter(e.target.value)}
-                  className="w-full px-4 py-2 pr-28 rounded-full border border-slate-200 text-sm font-medium bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  {allAttendances.map(opt => (
-                    <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
-                      {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-16 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
+              <div className="flex gap-2 min-w-0 justify-end">
+                <div className="relative flex-1 min-w-0">
+                  <select 
+                    value={attendanceFilter}
+                    onChange={(e) => setAttendanceFilter(e.target.value)}
+                    className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
+                    style={{ color: tokens.colors.textNavy }}
+                  >
+                    {availableAttendances.map(opt => (
+                      <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
+                        {opt === 'All Attendance' ? opt : opt === '95%+' ? 'Excellent (95%+)' : opt === '75%+' ? 'Good (75%+)' : 'Needs Focus (<75%)'}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
                 <button
-                  onClick={() => setAttendanceFilter('All Attendance')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-2 rounded-full text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => {
+                    resetFilters();
+                    setShowFilters(false);
+                  }}
+                  className="h-10 min-w-[72px] px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
                   style={{ color: tokens.colors.textNavy }}
                 >
-                  <X className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
+                  Reset
                 </button>
               </div>
             </div>
@@ -521,78 +421,12 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     <ChevronDown className="w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>#</th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('name')}
-                  >
-                    <span className="flex items-center gap-1">
-                      Student
-                      {sortConfig.key === 'name' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('attendance')}
-                  >
-                    <span className="flex items-center gap-1">
-                      Attendance
-                      {sortConfig.key === 'attendance' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('estimatedPAJSK')}
-                  >
-                    <span className="flex items-center gap-1">
-                      PAJSK
-                      {sortConfig.key === 'estimatedPAJSK' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('uniformUnit')}
-                  >
-                    <span className="flex items-center gap-1">
-                      Uniform
-                      {sortConfig.key === 'uniformUnit' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('club')}
-                  >
-                    <span className="flex items-center gap-1">
-                      Club
-                      {sortConfig.key === 'club' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ color: tokens.colors.textNavy }}
-                    onClick={() => handleSort('sport')}
-                  >
-                    <span className="flex items-center gap-1">
-                      Sport
-                      {sortConfig.key === 'sport' && (
-                        <span className="text-[10px]">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
-                      )}
-                    </span>
-                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Student</th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Attendance</th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>PAJSK</th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Uniform</th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Club</th>
+                  <th className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Sport</th>
                   <th className="px-4 py-3 text-right text-xs font-extrabold uppercase tracking-wider" style={{ color: tokens.colors.textNavy }}>Actions</th>
                 </tr>
               </thead>
@@ -625,7 +459,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                           />
                         </td>
                         <td className="px-4 py-4 text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {filteredStudents.findIndex(s => s.id === student.id) + 1}
+                          {globalIdx + 1}
                         </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
