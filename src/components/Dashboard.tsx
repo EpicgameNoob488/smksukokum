@@ -841,7 +841,7 @@ export default function Dashboard({
         />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }} 
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.subject);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}%${hint}`, name];
@@ -897,7 +897,7 @@ export default function Dashboard({
           width={60} 
         />
         <RechartsTooltip cursor={{ fill: tokens.colors.cardOuterBg }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}${hint}`, name];
@@ -1000,7 +1000,7 @@ export default function Dashboard({
           cursor={{ fill: tokens.colors.cardOuterBg }}
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
           itemStyle={{ fontWeight: 700, fontSize: '11px' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const color = props.name.includes('Penyokong') ? tokens.colors.primaryRed : tokens.colors.trendGreenText;
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
@@ -1106,7 +1106,7 @@ export default function Dashboard({
         <YAxis axisLine={false} tickLine={false} tick={{ fill: tokens.colors.textMuted, fontSize: 10, fontWeight: 700 }} />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}${hint}`, name];
