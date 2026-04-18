@@ -371,7 +371,7 @@ export default function Dashboard({
       filtered = filtered.filter(t => 
         t.name.toLowerCase().includes(query) ||
         t.managementRoles.some((r: string) => r.toLowerCase().includes(query)) ||
-        t.classes.some(c => c.toLowerCase().includes(query)) ||
+        t.classes.some((c: string) => c.toLowerCase().includes(query)) ||
         t.kokurikulum.head.some((u: any) => u.name.toLowerCase().includes(query)) ||
         t.kokurikulum.advisor.some((u: any) => u.name.toLowerCase().includes(query))
       );
@@ -381,22 +381,39 @@ export default function Dashboard({
 
   const filteredManagement = React.useMemo(() => {
     let filtered = managementTeamData;
-    if (classFilter || ajktFilter || globalSearch) {
+    if (teacherSearchQuery) {
+      const query = teacherSearchQuery.toLowerCase();
+      filtered = filtered.filter(m => m.name.toLowerCase().includes(query));
+    }
+    if (globalSearch) {
+      const query = globalSearch.toLowerCase();
+      filtered = filtered.filter(m => 
+        m.name.toLowerCase().includes(query) ||
+        m.role.toLowerCase().includes(query)
+      );
+    }
+    if (classFilter || ajktFilter) {
       const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
       filtered = filtered.filter(m => matchingTeacherNames.has(m.name));
     }
-    if (classFilter || ajktFilter) {
-      const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
-      filtered = managementTeamData.filter(m => matchingTeacherNames.has(m.name));
-    }
     return filtered;
-  }, [managementTeamData, classFilter, ajktFilter, globalSearch, filteredTeachers]);
+  }, [managementTeamData, classFilter, ajktFilter, globalSearch, teacherSearchQuery, filteredTeachers]);
 
   const filteredFormTeachers = React.useMemo(() => {
     let filtered = formTeachersData;
-    if (classFilter || ajktFilter) {
-      const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
-      filtered = filtered.filter(f => matchingTeacherNames.has(f.teacher));
+    if (teacherSearchQuery) {
+      const query = teacherSearchQuery.toLowerCase();
+      filtered = filtered.filter(f => 
+        f.name.toLowerCase().includes(query) ||
+        f.teacher.toLowerCase().includes(query)
+      );
+    }
+    if (globalSearch) {
+      const query = globalSearch.toLowerCase();
+      filtered = filtered.filter(f => 
+        f.name.toLowerCase().includes(query) ||
+        f.teacher.toLowerCase().includes(query)
+      );
     }
     if (classFilter) {
       const query = classFilter.toLowerCase();
@@ -405,12 +422,32 @@ export default function Dashboard({
         f.teacher.toLowerCase().includes(query)
       );
     }
+    if (ajktFilter) {
+      const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
+      filtered = filtered.filter(f => matchingTeacherNames.has(f.teacher));
+    }
     return filtered;
-  }, [formTeachersData, classFilter, ajktFilter, globalSearch, filteredTeachers]);
+  }, [formTeachersData, classFilter, ajktFilter, globalSearch, teacherSearchQuery, filteredTeachers]);
 
   const filteredUnits = React.useMemo(() => {
     let filtered = coCurricularUnitsData;
-    if (classFilter || ajktFilter || globalSearch) {
+    if (teacherSearchQuery) {
+      const query = teacherSearchQuery.toLowerCase();
+      filtered = filtered.filter(u => 
+        u.name.toLowerCase().includes(query) ||
+        (u.chief && u.chief.toLowerCase().includes(query)) ||
+        u.advisors.some((a: string) => a.toLowerCase().includes(query))
+      );
+    }
+    if (globalSearch) {
+      const query = globalSearch.toLowerCase();
+      filtered = filtered.filter(u => 
+        u.name.toLowerCase().includes(query) ||
+        (u.chief && u.chief.toLowerCase().includes(query)) ||
+        u.advisors.some((a: string) => a.toLowerCase().includes(query))
+      );
+    }
+    if (classFilter || ajktFilter) {
       const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
       filtered = filtered.filter(u => 
         (u.chief && matchingTeacherNames.has(u.chief)) ||
@@ -418,7 +455,7 @@ export default function Dashboard({
       );
     }
     return filtered;
-  }, [coCurricularUnitsData, classFilter, ajktFilter, globalSearch, filteredTeachers]);
+  }, [coCurricularUnitsData, classFilter, ajktFilter, globalSearch, teacherSearchQuery, filteredTeachers]);
 
   const totalTeacherPages = Math.ceil(filteredTeachers.length / TEACHERS_PER_PAGE);
 
@@ -1118,17 +1155,6 @@ export default function Dashboard({
                 <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>Manage and view teacher co-curricular assignments.</p>
               </div>
               <div className="flex items-center gap-3">
-                <div className="relative hidden md:block">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                  <input 
-                    type="text" 
-                    placeholder="Search teachers..." 
-                    value={teacherSearchQuery}
-                    onChange={(e) => setTeacherSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-44 font-medium border border-slate-200"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
-                  />
-                </div>
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -1561,7 +1587,7 @@ export default function Dashboard({
                     onClick={() => {
                       const exportData = filteredUnits.flatMap(unit => [
                         { unit: unit.name, category: unit.category, role: 'Head', teacher: unit.chief },
-                        ...unit.advisors.map(adv => ({ unit: unit.name, category: unit.category, role: 'Advisor', teacher: adv }))
+                        ...unit.advisors.map((adv: string) => ({ unit: unit.name, category: unit.category, role: 'Advisor', teacher: adv }))
                       ]).filter(item => item.teacher && item.teacher !== '');
                       const columns = [
                         { key: 'unit' as keyof typeof exportData[0], label: 'Unit Name' },
