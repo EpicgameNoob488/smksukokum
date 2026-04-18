@@ -17,6 +17,7 @@ import { useSettings } from '../contexts/SettingsContext';
 import { useNotification } from '../contexts/NotificationContext';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
+import { getAvailableTeacherClasses, getAvailableTeacherRoles } from '../lib/filterUtils';
 import EditTeacherModal from './EditTeacherModal';
 import { DashboardSidebar } from './DashboardSidebar';
 import StudentTable from './StudentTable';
@@ -210,6 +211,7 @@ export default function Dashboard({
   }, [selectedYear]);
 
   const [classFilter, setClassFilter] = useState('');
+  const [studentClassFilter, setStudentClassFilter] = useState('All Students');
   const [globalSearch, setGlobalSearch] = useState('');
   const [studentSearchQuery, setStudentSearchQuery] = useState('');
   const [studentFormFilter, setStudentFormFilter] = useState('All Forms');
@@ -357,10 +359,19 @@ export default function Dashboard({
     let filtered = allTeachers;
     if (classFilter) {
       const query = classFilter.toLowerCase();
-      filtered = filtered.filter(t => t.name.toLowerCase().includes(query));
+      filtered = filtered.filter(t => t.classes.some((c: string) => c.toLowerCase().includes(query)));
     }
     if (ajktFilter) {
-      filtered = filtered.filter(t => t.managementRoles.includes(ajktFilter));
+      const filterLower = ajktFilter.toLowerCase();
+      filtered = filtered.filter(t =>
+        t.managementRoles.some((r: string) => r.toLowerCase() === filterLower) ||
+        t.kokurikulum.head.some((u: any) =>
+          u.category.toLowerCase() === filterLower || u.name.toLowerCase() === filterLower
+        ) ||
+        t.kokurikulum.advisor.some((u: any) =>
+          u.category.toLowerCase() === filterLower || u.name.toLowerCase() === filterLower
+        )
+      );
     }
     if (teacherSearchQuery) {
       const query = teacherSearchQuery.toLowerCase();
@@ -447,7 +458,11 @@ export default function Dashboard({
         u.advisors.some((a: string) => a.toLowerCase().includes(query))
       );
     }
-    if (classFilter || ajktFilter) {
+    if (teacherViewTab === 'Kokurikulum' && ajktFilter) {
+      const filterLower = ajktFilter.trim().toLowerCase();
+      filtered = filtered.filter(u => u.category.trim().toLowerCase() === filterLower);
+    }
+    if (classFilter || (ajktFilter && teacherViewTab !== 'Kokurikulum')) {
       const matchingTeacherNames = new Set(filteredTeachers.map(t => t.name));
       filtered = filtered.filter(u => 
         (u.chief && matchingTeacherNames.has(u.chief)) ||
@@ -455,7 +470,28 @@ export default function Dashboard({
       );
     }
     return filtered;
-  }, [coCurricularUnitsData, classFilter, ajktFilter, globalSearch, teacherSearchQuery, filteredTeachers]);
+  }, [coCurricularUnitsData, classFilter, ajktFilter, teacherViewTab, globalSearch, teacherSearchQuery, filteredTeachers]);
+
+  const availableTeacherClasses = React.useMemo(() => {
+    return getAvailableTeacherClasses(allTeachers, teacherViewTab, ajktFilter);
+  }, [allTeachers, teacherViewTab, ajktFilter]);
+
+  const availableTeacherRoles = React.useMemo(() => {
+    return getAvailableTeacherRoles(allTeachers, teacherViewTab, classFilter);
+  }, [allTeachers, teacherViewTab, classFilter]);
+
+  const availableStudentClasses = React.useMemo(() => {
+    const classes = (schoolData?.formClasses || [])
+      .filter((c: any) => c.tahun === selectedYear)
+      .map((c: any) => c.name)
+      .filter(Boolean);
+    return Array.from(new Set(classes)).sort((a, b) => a.localeCompare(b));
+  }, [schoolData?.formClasses, selectedYear]);
+
+  const selectedStudentClassId = React.useMemo(() => {
+    if (!studentClassFilter || studentClassFilter === 'All Students') return '';
+    return formTeachersData.find((c: any) => c.name === studentClassFilter)?.id || '';
+  }, [formTeachersData, studentClassFilter]);
 
   const totalTeacherPages = Math.ceil(filteredTeachers.length / TEACHERS_PER_PAGE);
 
@@ -490,6 +526,11 @@ export default function Dashboard({
   React.useEffect(() => {
     setTeacherPage(1);
   }, [classFilter, ajktFilter, teacherViewTab, globalSearch, teacherSearchQuery]);
+
+  React.useEffect(() => {
+    setClassFilter('');
+    setAjktFilter('');
+  }, [teacherViewTab]);
 
   React.useEffect(() => {
     if (!isAdmin && teacherViewTab === 'Pending Roles') {
@@ -841,7 +882,7 @@ export default function Dashboard({
         />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }} 
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.subject);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}%${hint}`, name];
@@ -897,7 +938,7 @@ export default function Dashboard({
           width={60} 
         />
         <RechartsTooltip cursor={{ fill: tokens.colors.cardOuterBg }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}${hint}`, name];
@@ -1000,7 +1041,7 @@ export default function Dashboard({
           cursor={{ fill: tokens.colors.cardOuterBg }}
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
           itemStyle={{ fontWeight: 700, fontSize: '11px' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const color = props.name.includes('Penyokong') ? tokens.colors.primaryRed : tokens.colors.trendGreenText;
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
@@ -1106,7 +1147,7 @@ export default function Dashboard({
         <YAxis axisLine={false} tickLine={false} tick={{ fill: tokens.colors.textMuted, fontSize: 10, fontWeight: 700 }} />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number, name: string, props: any) => {
+          formatter={(value: number | undefined, name: string | undefined, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
             return [`${value}${hint}`, name];
@@ -1149,12 +1190,12 @@ export default function Dashboard({
         {/* Teachers Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Teachers' && (
           <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
               <div>
                 <h2 className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Teacher Directory</h2>
                 <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>Manage and view teacher co-curricular assignments.</p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -1179,8 +1220,8 @@ export default function Dashboard({
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Classes</option>
-                    {formTeachersData.map((cls) => (
-                      <option key={cls.id} value={cls.name}>{cls.name}</option>
+                    {availableTeacherClasses.map((cls) => (
+                      <option key={cls} value={cls}>{cls}</option>
                     ))}
                   </select>
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
@@ -1200,18 +1241,9 @@ export default function Dashboard({
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Roles</option>
-                    <option value="Pengetua">Pengetua</option>
-                    <option value="Penolong Kanan Pentadbiran">Penolong Kanan Pentadbiran</option>
-                    <option value="Penolong Kanan Hal Ehwal Murid">Penolong Kanan Hal Ehwal Murid</option>
-                    <option value="Penolong Kanan Kokurikulum">Penolong Kanan Kokurikulum</option>
-                    <option value="Penolong Kanan Petang">Penolong Kanan Petang</option>
-                    <option value="Setiausaha Kokurikulum & Penyelaras PAJSK">Setiausaha Kokurikulum & Penyelaras PAJSK</option>
-                    <option value="Setiausaha Sukan">Setiausaha Sukan</option>
-                    <option value="Setiausaha Sukan (Pembangunan Sekolah)">Setiausaha Sukan (Pembangunan Sekolah)</option>
-                    <option value="Penyelaras PAJSK">Penyelaras PAJSK</option>
-                    <option value="Penyelaras Badan Beruniform & RIMUP / Perpaduan">Penyelaras Badan Beruniform & RIMUP / Perpaduan</option>
-                    <option value="Penyelaras Kelab dan Persatuan">Penyelaras Kelab dan Persatuan</option>
-                    <option value="Penyelaras Sukan dan Permainan">Penyelaras Sukan dan Permainan</option>
+                    {availableTeacherRoles.map((role) => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 </div>
@@ -1259,7 +1291,7 @@ export default function Dashboard({
             </div>
 
             {/* Sub-navigation for Teachers Tab */}
-            <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-6 pb-2">
               {(['Directory', 'Management', 'Classes', 'Kokurikulum', ...(isAdmin ? ['Pending Roles' as const] : [])] as const).map(tab => (
                 <button
                   key={tab}
@@ -1279,7 +1311,7 @@ export default function Dashboard({
                 </button>
               ))}
               {teacherViewTab !== 'Pending Roles' && (
-                <div className="relative w-64 ml-auto">
+                <div className="relative w-full sm:w-64 sm:ml-auto min-w-0">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   <input 
                     type="text"
@@ -1322,10 +1354,10 @@ export default function Dashboard({
                       ];
                       exportToCSV(filteredTeachers, columns, `teachers-all-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-bold hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
-                    Export
+                    Export Teachers
                   </button>
                 </div>
                 {filteredTeachers.length === 0 ? (
@@ -1482,11 +1514,6 @@ export default function Dashboard({
                     <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
                       {filteredManagement.length} Members
                     </span>
-                    {ajktFilter && (
-                      <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
-                        Filtered by: {ajktFilter}
-                      </span>
-                    )}
                   </div>
                   <button 
                     onClick={() => {
@@ -1575,8 +1602,8 @@ export default function Dashboard({
 
             {/* Co-Curricular Advisors */}
             {teacherViewTab === 'Kokurikulum' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
+              <div className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+                <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Co-Curricular Units</h3>
                     <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
@@ -1603,44 +1630,46 @@ export default function Dashboard({
                     Export Kokurikulum
                   </button>
                 </div>
-                {['Kelab & Persatuan', 'Badan Beruniform', 'Sukan dan Permainan'].map(category => {
-                  const unitsInCategory = filteredUnits.filter(u => u.category === category);
-                  if (unitsInCategory.length === 0) return null;
-                  
-                  return (
-                    <div key={category} className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
-                      <h4 className="text-lg font-extrabold mb-4" style={{ color: tokens.colors.textNavy }}>{category}</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {unitsInCategory.map((unit, idx) => (
-                          <div key={idx} className="rounded-2xl p-5 shadow-sm bg-white flex flex-col gap-3 hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
-                            <div className="flex justify-between items-start">
-                              <h5 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{unit.name}</h5>
-                              {isAdmin && (
-                              <button 
-                                onClick={() => setEditModal({ isOpen: true, type: 'unit', index: coCurricularUnitsData.findIndex(u => u.name === unit.name), data: { ...unit, advisors: [...unit.advisors] } })}
-                                className="p-1.5 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
-                                style={{ color: tokens.colors.textNavy }}
-                              >
-                                <Edit2 className="w-3.5 h-3.5" />
-                              </button>
-                              )}
+                <div className="space-y-6">
+                  {['Kelab & Persatuan', 'Badan Beruniform', 'Sukan dan Permainan'].map(category => {
+                    const unitsInCategory = filteredUnits.filter(u => u.category === category);
+                    if (unitsInCategory.length === 0) return null;
+                    
+                    return (
+                      <div key={category}>
+                        <h4 className="text-lg font-extrabold mb-4" style={{ color: tokens.colors.textNavy }}>{category}</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {unitsInCategory.map((unit, idx) => (
+                            <div key={idx} className="rounded-2xl p-5 shadow-sm bg-white flex flex-col gap-3 hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
+                              <div className="flex justify-between items-start">
+                                <h5 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{unit.name}</h5>
+                                {isAdmin && (
+                                <button 
+                                  onClick={() => setEditModal({ isOpen: true, type: 'unit', index: coCurricularUnitsData.findIndex(u => u.name === unit.name), data: { ...unit, advisors: [...unit.advisors] } })}
+                                  className="p-1.5 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
+                                  style={{ color: tokens.colors.textNavy }}
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                </button>
+                                )}
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Head</p>
+                                <p className="text-xs font-bold text-slate-700">{unit.chief}</p>
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Advisors</p>
+                                <p className="text-xs font-medium text-slate-600">
+                                  {unit.advisors.length > 0 ? unit.advisors.join(', ') : '-'}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Head</p>
-                              <p className="text-xs font-bold text-slate-700">{unit.chief}</p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Advisors</p>
-                              <p className="text-xs font-medium text-slate-600">
-                                {unit.advisors.length > 0 ? unit.advisors.join(', ') : '-'}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             )}
 
@@ -1728,11 +1757,14 @@ export default function Dashboard({
         {activeTab === 'Students' && (
           <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
             <StudentTable
-              classId={formTeachersData[0]?.id || ''}
-              className="All Students"
+              classId={selectedStudentClassId}
+              className={studentClassFilter || 'All Students'}
               onBack={() => {}}
               tokens={tokens}
               studentsData={studentsData}
+              studentClassFilter={studentClassFilter}
+              onStudentClassFilterChange={setStudentClassFilter}
+              availableStudentClasses={availableStudentClasses}
               setEditModal={setEditModal}
               isAdmin={isAdmin}
               formClassId={formClassId}
