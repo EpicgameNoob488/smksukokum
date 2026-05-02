@@ -233,3 +233,66 @@ export function getAllFilterOptions(students: Student[]): AvailableFilterOptions
     attendances
   };
 }
+
+interface Teacher {
+  name: string;
+  email: string;
+  managementRoles: string[];
+  classes: string[];
+  kokurikulum: { head: { name: string; category: string }[]; advisor: { name: string; category: string }[] };
+}
+
+type TeacherViewTab = 'management' | 'formTeacher' | 'unit' | 'student' | 'fullTeacher' | null;
+
+export function getAvailableTeacherClasses(
+  allTeachers: Teacher[],
+  teacherViewTab: TeacherViewTab,
+  ajktFilter: string
+): string[] {
+  let filtered = allTeachers;
+
+  if (ajktFilter && ajktFilter !== 'All AJ-KT') {
+    filtered = filtered.filter(t => 
+      t.managementRoles.includes(ajktFilter) ||
+      t.kokurikulum.head.some(h => h.name === ajktFilter) ||
+      t.kokurikulum.advisor.some(a => a.name === ajktFilter)
+    );
+  }
+
+  if (teacherViewTab === 'formTeacher' || teacherViewTab === 'fullTeacher') {
+    const classesSet = new Set<string>();
+    filtered.forEach(t => t.classes.forEach(c => classesSet.add(c)));
+    return ['All Classes', ...Array.from(classesSet).sort((a, b) => a.localeCompare(b))];
+  }
+
+  return ['All Classes'];
+}
+
+export function getAvailableTeacherRoles(
+  allTeachers: Teacher[],
+  teacherViewTab: TeacherViewTab,
+  classFilter: string
+): string[] {
+  let filtered = allTeachers;
+
+  if (classFilter && classFilter !== 'All Classes') {
+    filtered = filtered.filter(t => t.classes.includes(classFilter));
+  }
+
+  if (teacherViewTab === 'management' || teacherViewTab === 'fullTeacher') {
+    const rolesSet = new Set<string>();
+    filtered.forEach(t => t.managementRoles.forEach(r => rolesSet.add(r)));
+    return ['All AJ-KT', ...Array.from(rolesSet).sort((a, b) => a.localeCompare(b))];
+  }
+
+  if (teacherViewTab === 'unit' || teacherViewTab === 'fullTeacher') {
+    const unitsSet = new Set<string>();
+    filtered.forEach(t => {
+      t.kokurikulum.head.forEach(h => unitsSet.add(h.name));
+      t.kokurikulum.advisor.forEach(a => unitsSet.add(a.name));
+    });
+    return ['All AJ-KT', ...Array.from(unitsSet).sort((a, b) => a.localeCompare(b))];
+  }
+
+  return ['All AJ-KT'];
+}
