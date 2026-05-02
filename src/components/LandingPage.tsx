@@ -47,7 +47,7 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
       </nav>
 
 {/* Hero Section */}
-      <main className="relative z-10 flex flex-col items-center justify-center px-2 py-2 text-center max-w-3xl mx-auto">
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-2 py-2 text-center max-w-3xl mx-auto">
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="mb-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/20 shadow-sm">
               <span className="flex h-1 w-1 rounded-full" style={{ backgroundColor: tokens.colors.primaryRed }}></span>
