@@ -1,0 +1,29 @@
+id,unit_code,kategori,nama_rasmi,nama_singkat,chief_teacher,advisors,tahun
+1,SMSU.T.S.600-3/3/1,Kelab & Persatuan,Persatuan Bahasa Melayu,B. Melayu,Fung Chui Jing,"[""Armiati Adamu""]",2025
+2,SMSU.T.S.600-3/3/2,Kelab & Persatuan,Persatuan Bahasa Inggeris,B. Inggeris,Rosemary Chua,"[""Irmawati Abdul Gani""]",2025
+3,SMSU.T.S.600-3/3/3,Kelab & Persatuan,Persatuan Seni Visual,Seni Visual,Rozita Abdul Rasid,"[""Siti Fatimah Jusoh""]",2025
+4,SMSU.T.S.600-3/3/4,Kelab & Persatuan,Persatuan Reka Bentuk dan Teknologi,RBT,LeeCze Yapp,"[""Wong Sui Mei""]",2025
+5,SMSU.T.S.600-3/3/5,Kelab & Persatuan,Persatuan Bahasa Cina,B. Cina,Shang Oi Keun,[],2025
+6,SMSU.T.S.600-3/3/6,Kelab & Persatuan,Kelab Leo,LEO,Wong Sek Li,[],2025
+7,SMSU.T.S.600-3/3/7,Kelab & Persatuan,Persatuan Agama Islam,Agama Islam,Nor Farahiah Ghazali,[],2025
+8,SMSU.T.S.600-3/3/8,Kelab & Persatuan,Persatuan Agama Kristian,Agama Kristian,Elsie Gabriel,[],2025
+9,SMSU.T.S.600-3/3/9,Kelab & Persatuan,Persatuan Agama Buddha,Agama Buddha,Chok Vui Ni,[],2025
+10,SMSU.T.S.600-3/3/10,Kelab & Persatuan,Kelab Seni Tari,Seni Tari,Beatrice Andrew,"[""Nur Syafinah Yahaya""]",2025
+11,SMSU.T.S.600-3/3/11,Kelab & Persatuan,Kelab Rukun Negara,Rukun Negara,Sallina Marup,"[""Hasni Paitola""]",2025
+12,SMSU.T.S.600-3/3/12,Kelab & Persatuan,Kelab Alam Sekitar,Alam Sekitar,Zarina Riba,"[""Lee Pui Yuh""]",2025
+13,SMSU.T.S.600-3/3/13,Kelab & Persatuan,"Persatuan Sains, Teknologi, Kejuruteraan dan Matematik",STEM,Wong Fui Ting,"[""Chang Koo Sing""]",2025
+14,SMSU.T.S.600-3/3/15,Kelab & Persatuan,Kelab Pencegahan Jenayah,Pencegahan Jenayah,Saniah Razi,[],2025
+15,SMSU.T.S.600-3/4/1,Badan Beruniform,Pengakap,Pengakap,Irmawati Abdul Gani,"[""Alimuddin Nunurung"",""Nirwana Palawa"",""Nurrul Adibah Juhuran"",""Rosemary Chua""]",2025
+16,SMSU.T.S.600-3/4/2,Badan Beruniform,Pergerakan Puteri Islam Malaysia,PPIM,Elina Goh,"[""Masliah Manching"",""Nor Farahiah Ghazali"",""Rasmawaty Jamal"",""Sallina Marup""]",2025
+17,SMSU.T.S.600-3/4/3,Badan Beruniform,Kadet Bomba dan Penyelamat,K. Bomba,Chang Koo Sing,"[""Chok Vui Ni"",""Razlee Robinson"",""Suriati Tamjehi"",""Wong Sek Li"",""Zarina Riba""]",2025
+18,SMSU.T.S.600-3/4/4,Badan Beruniform,Kadet Remaja Sekolah,KRS,Aslan Sellang,"[""Alawiah Ariffin"",""Armiati Adamu"",""Beatrice Andrew"",""Shang Oi Keun""]",2025
+19,SMSU.T.S.600-3/4/5,Badan Beruniform,Kadet Polis,K. Polis,Ho Li Lin,"[""Lee Fui Mei"",""M. Fajil Abdul Haman"",""Wong Fui Ting"",""Adonis Joel""]",2025
+20,SMSU.T.S.600-3/4/6,Badan Beruniform,Bulan Sabit Merah Malaysia,BSMM,Lee Pui Yuh,"[""Dolla Chuli"",""Rozita Abdul Rashid"",""Seak Sain Yon"",""Siti Fatimah Jusoh"",""Fung Chui Jing""]",2025
+21,SMSU.T.S.600-3/4/7,Badan Beruniform,Pandu Puteri,Pandu Puteri,Wong Sui Mei,"[""Elsie Gabriel"",""LeeCze Yapp"",""Nur Syafinah Yahaya"",""Saniah Razi""]",2025
+22,SMSU.T.S.600-3/5/5,Sukan dan Permainan,Badminton,Badminton,Dolla Chuli,"[""Seak Sain Yon""]",2025
+23,SMSU.T.S.600-3/5/6,Sukan dan Permainan,Bola Baling,B. Baling,Nurrul Adibah Juhuran,"[""Razlee Robinson""]",2025
+24,SMSU.T.S.600-3/5/7,Sukan dan Permainan,Bola Jaring,B. Jaring,Nirwana Palawa,"[""Adonis Joel""]",2025
+25,SMSU.T.S.600-3/5/8,Sukan dan Permainan,Bola Keranjang,B. Keranjang,Lee Fui Mei,"[""Ho Li Lin""]",2025
+26,SMSU.T.S.600-3/5/9,Sukan dan Permainan,Bola Tampar,B. Tampar,M. Fajil Abdul Haman,"[""Elina Goh""]",2025
+27,SMSU.T.S.600-3/5/10,Sukan dan Permainan,Olahraga,Olahraga,Alimuddin Nunurung,"[""Aslan Sellang""]",2025
+28,SMSU.T.S.600-3/5/11,Sukan dan Permainan,Silat,Silat,Alawiah Ariffin,[],2025

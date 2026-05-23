@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 import { 
   Search, Settings, LayoutDashboard, Users, UserCircle2, 
-  Activity, GraduationCap, TrendingUp, AlertTriangle, Download, Filter, X, Edit2, Save, Plus, Trash2, ChevronDown, LogOut, CheckCircle
+  Activity, GraduationCap, TrendingUp, AlertTriangle, Download, Filter, X, Edit2, Save, Plus, Trash2, ChevronDown, LogOut, CheckCircle, Upload
 } from 'lucide-react';
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { calculateKPIs } from '../lib/kpiCalculations';
@@ -18,10 +18,14 @@ import { useNotification } from '../contexts/NotificationContext';
 import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
 import { getAvailableTeacherClasses, getAvailableTeacherRoles } from '../lib/filterUtils';
+import { getAdvisorUnitsForCurrentUser, UnitAdvisorData } from '../lib/unitAdvisorContext';
+import { computeTeacherTabs } from '../lib/teacherTabLogic';
+import { mapUnitAdvisorRow, fetchTeacherUserIds } from '../lib/dataService';
 import EditTeacherModal from './EditTeacherModal';
 import { DashboardSidebar } from './DashboardSidebar';
 import StudentTable from './StudentTable';
 import NotificationBell from './NotificationBell';
+import ExcelUploadModal from './ExcelUploadModal';
 
 import { tokens, DT } from '../lib/designTokens';
 
@@ -141,6 +145,52 @@ export default function Dashboard({
   const isAdmin = userRole === 'admin';
   const isTeacher = userRole === 'teacher';
 
+  const userId = session?.user?.id;
+  const tahun = selectedYear;
+  const unitAdvisorAssignments = React.useMemo(() => {
+    return (schoolData?.unitAdvisors || []).map(mapUnitAdvisorRow);
+  }, [schoolData?.unitAdvisors]);
+
+  const advisorData: UnitAdvisorData = React.useMemo(() => {
+    return getAdvisorUnitsForCurrentUser(userId, unitAdvisorAssignments, tahun);
+  }, [userId, unitAdvisorAssignments, tahun]);
+
+  const isFormTeacher = !!formClassId;
+  const isUnitAdvisor = advisorData.isUnitAdvisor;
+
+  const teacherTabs = React.useMemo(() => {
+    return computeTeacherTabs({
+      isFormTeacher,
+      isUnitAdvisor,
+      advisorUnits: advisorData.advisorUnits,
+      formClassName,
+      isAdmin,
+    });
+  }, [isFormTeacher, isUnitAdvisor, advisorData.advisorUnits, formClassName, isAdmin]);
+
+  const [teacherSubTab, setTeacherSubTab] = useState<string>(teacherTabs.defaultTab || '');
+  const [showExcelUpload, setShowExcelUpload] = useState(false);
+  const [registeredTeacherIds, setRegisteredTeacherIds] = useState<Array<{ name: string; userId: string }>>([]);
+
+  React.useEffect(() => {
+    if (isAdmin) {
+      fetchTeacherUserIds().then(ids => setRegisteredTeacherIds(ids));
+    }
+  }, [isAdmin]);
+  const [selectedUnitForAdvisor, setSelectedUnitForAdvisor] = useState<string>('');
+
+  React.useEffect(() => {
+    if (advisorData.advisorUnits.length > 0 && !selectedUnitForAdvisor) {
+      setSelectedUnitForAdvisor(advisorData.advisorUnits[0]);
+    }
+  }, [advisorData.advisorUnits, selectedUnitForAdvisor]);
+
+  React.useEffect(() => {
+    if (teacherTabs.defaultTab && !teacherTabs.tabs.includes(teacherSubTab)) {
+      setTeacherSubTab(teacherTabs.defaultTab);
+    }
+  }, [teacherTabs, teacherSubTab]);
+
   // Resolve formClassId to class name (works across years since names are stable)
   const formClassName = React.useMemo(() => {
     if (!formClassId) return null;
@@ -163,7 +213,6 @@ export default function Dashboard({
         .catch((err) => console.error('pendingRoleAssignments: Error =', err));
     }
   }, [isAdmin, userRole, pendingRolesRefreshTrigger]);
-  const isFormTeacher = !!formClassId;
   
   // Helper to check if user can edit a specific student's class
   const canEditStudent = (studentClassId: string): boolean => {
@@ -733,6 +782,26 @@ export default function Dashboard({
         {/* Dashboard Content */}
         {activeTab === 'Dashboard' && (
           <div className="px-10 pb-10 space-y-8 mt-6 animate-in fade-in duration-500">
+            {/* Teacher Sub-Tabs: My Class / My Units */}
+            {teacherTabs.tabs.length > 0 && (
+              <div className="flex gap-2 border-b border-slate-200 pb-2">
+                {teacherTabs.tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setTeacherSubTab(tab)}
+                    className={cn(
+                      "px-4 py-2 text-sm font-bold rounded-t-lg transition-colors cursor-pointer",
+                      teacherSubTab === tab
+                        ? "bg-white border-b-2 border-transparent"
+                        : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                    )}
+                    style={teacherSubTab === tab ? { color: tokens.colors.primaryRed } : {}}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            )}
             
             {/* Hero KPI Strip (The Pulse) - per design_tokens.md */}
             {!hasDataForYear ? (
@@ -1287,6 +1356,16 @@ export default function Dashboard({
                   {teacherViewTab === 'Management' ? 'New Role' : teacherViewTab === 'Kokurikulum' ? 'New Unit' : 'New Teacher'}
                 </button>
                 )}
+                {isAdmin && (
+                <button 
+                  onClick={() => setShowExcelUpload(true)}
+                  className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer flex items-center gap-1.5" 
+                  style={{ color: tokens.colors.primaryRed }}
+                >
+                  <Upload className="w-4 h-4" />
+                  Bulk Assign Units
+                </button>
+                )}
               </div>
             </div>
 
@@ -1753,6 +1832,75 @@ export default function Dashboard({
           </div>
         )}
 
+        {/* My Class Sub-Tab Content */}
+        {activeTab === 'Dashboard' && teacherSubTab === 'My Class' && isFormTeacher && (
+          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+            <StudentTable
+              classId={formClassId}
+              className={formClassName || ''}
+              onBack={() => setTeacherSubTab('')}
+              tokens={tokens}
+              studentsData={studentsData}
+              studentClassFilter={formClassName || ''}
+              onStudentClassFilterChange={() => {}}
+              availableStudentClasses={formClassName ? [{ id: formClassId || '', name: formClassName }] : []}
+              setEditModal={setEditModal}
+              isAdmin={isAdmin}
+              formClassId={formClassId}
+              formClassName={formClassName}
+              selectedYear={selectedYear}
+              currentYear={new Date().getFullYear()}
+              onYearChange={(year) => setSelectedYear(year)}
+            />
+          </div>
+        )}
+
+        {/* My Units Sub-Tab Content */}
+        {activeTab === 'Dashboard' && teacherSubTab === 'My Units' && isUnitAdvisor && (
+          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+            <div className="flex items-center gap-4 mb-4">
+              <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>My Units</h2>
+              <select
+                value={selectedUnitForAdvisor}
+                onChange={(e) => setSelectedUnitForAdvisor(e.target.value)}
+                className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer"
+                style={{ color: tokens.colors.textNavy }}
+              >
+                {advisorData.advisorUnits.map((unitCode) => {
+                  const unit = coCurricularUnitsData.find(u => u.unitCode === unitCode || u.name.toLowerCase().includes(unitCode));
+                  return (
+                    <option key={unitCode} value={unitCode}>
+                      {unit ? unit.name : unitCode}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <StudentTable
+              classId={null}
+              className={selectedUnitForAdvisor}
+              onBack={() => setTeacherSubTab('')}
+              tokens={tokens}
+              studentsData={studentsData}
+              studentClassFilter={selectedUnitForAdvisor}
+              onStudentClassFilterChange={setSelectedUnitForAdvisor}
+              availableStudentClasses={advisorData.advisorUnits.map(code => {
+                const unit = coCurricularUnitsData.find(u => u.unitCode === code || u.name.toLowerCase().includes(code));
+                return { id: code, name: unit ? unit.name : code };
+              })}
+              setEditModal={setEditModal}
+              isAdmin={isAdmin}
+              formClassId={null}
+              formClassName={null}
+              selectedYear={selectedYear}
+              currentYear={new Date().getFullYear()}
+              onYearChange={(year) => setSelectedYear(year)}
+              unitAdvisorMode={true}
+              activeUnitCode={selectedUnitForAdvisor}
+            />
+          </div>
+        )}
+
         {/* Students Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Students' && (
           <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
@@ -1811,6 +1959,28 @@ export default function Dashboard({
           allFormClasses={schoolData?.formClasses || []}
           allUnits={schoolData?.kokurikulumUnits || []}
           selectedYear={selectedYear}
+          restrictedEdit={teacherSubTab === 'My Units'}
+          activeUnitPillar={(() => {
+            if (teacherSubTab !== 'My Units' || !selectedUnitForAdvisor) return null;
+            const unit = coCurricularUnitsData.find(u => u.unitCode === selectedUnitForAdvisor || u.name.toLowerCase().includes(selectedUnitForAdvisor));
+            return unit?.category || null;
+          })()}
+        />
+
+        {/* Excel Bulk Upload Modal */}
+        <ExcelUploadModal
+          isOpen={showExcelUpload}
+          onClose={() => setShowExcelUpload(false)}
+          tokens={tokens}
+          registeredTeachers={registeredTeacherIds}
+          availableUnits={(schoolData?.kokurikulumUnits || []).map(u => ({
+            unit_code: u.unit_code,
+            nama_rasmi: u.nama_rasmi,
+          }))}
+          tahun={selectedYear}
+          onSuccess={() => {
+            refresh();
+          }}
         />
 
       </main>

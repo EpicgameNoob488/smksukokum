@@ -6,13 +6,14 @@ import { exportToCSV } from '../lib/csvExport';
 import type { CSVColumn } from '../lib/csvExport';
 import SearchableDropdown from './SearchableDropdown';
 import { getAvailableFilterOptions, type FilterSelections } from '../lib/filterUtils';
+import { filterStudentsForUnitAdvisor } from '../lib/studentFilterUtils';
 
 interface StudentTableProps {
-  classId: string;
+  classId: string | null;
   className: string;
   onBack: () => void;
   tokens: any;
-  studentsData: Student[];
+  studentsData: any[];
   setEditModal: (modal: any) => void;
   isAdmin?: boolean;
   formClassId?: string | null;
@@ -20,6 +21,8 @@ interface StudentTableProps {
   selectedYear?: number;
   currentYear?: number;
   onYearChange?: (year: number) => void;
+  unitAdvisorMode?: boolean;
+  activeUnitCode?: string;
 }
 
 const STUDENTS_PER_PAGE = 12;
@@ -54,7 +57,7 @@ const DT = {
   },
 };
 
-export default function StudentTable({ classId, className, onBack, tokens, studentsData, setEditModal, isAdmin = false, formClassId, formClassName, selectedYear = 2025, currentYear = 2026, onYearChange }: StudentTableProps) {
+export default function StudentTable({ classId, className, onBack, tokens, studentsData, setEditModal, isAdmin = false, formClassId, formClassName, selectedYear = 2025, currentYear = 2026, onYearChange, unitAdvisorMode = false, activeUnitCode = '' }: StudentTableProps) {
   const isFormTeacher = (!!formClassId && formClassId === classId) || (!!formClassName && formClassName === className);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -75,12 +78,18 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [availableAttendances, setAvailableAttendances] = React.useState<string[]>([]);
 
   const classStudents = React.useMemo(() => {
-    // Show all students when className indicates "All" or no classId
-    if (!classId || className === 'All Students' || className === 'All') {
-      return studentsData;
+    let filtered = studentsData;
+    
+    if (unitAdvisorMode && activeUnitCode) {
+      filtered = filterStudentsForUnitAdvisor(filtered, activeUnitCode);
+    } else if (!classId || className === 'All Students' || className === 'All') {
+      filtered = studentsData;
+    } else {
+      filtered = studentsData.filter(s => s.classId === classId);
     }
-    return studentsData.filter(s => s.classId === classId);
-  }, [studentsData, classId, className]);
+    
+    return filtered;
+  }, [studentsData, classId, className, unitAdvisorMode, activeUnitCode]);
 
   // Smart year filter - only show years that exist in data (min 2025)
   const availableYears = React.useMemo(() => {

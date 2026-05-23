@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_vercel_vercel__list_deployments",
+      "mcp__plugin_vercel_vercel__list_teams",
+      "mcp__plugin_vercel_vercel__list_projects",
+      "Bash(gh repo *)",
+      "Bash(gh pr *)",
+      "Bash(gh api *)",
+      "Bash(gh auth *)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:smksukokum-ehnqawnoe-epicgamenoob488s-projects.vercel.app)",
+      "WebSearch",
+      "WebFetch(domain:smksukokum-1lihk227w-epicgamenoob488s-projects.vercel.app)",
+      "WebFetch(domain:v0.dev)",
+      "Bash(npm run *)",
+      "Bash(npx tsc *)",
+      "Bash(git push *)",
+      "Bash(npx xlsx-cli *)",
+      "Bash(node -e ' *)",
+      "Bash(node *)",
+      "Bash(npm install *)",
+      "Bash(npm list *)",
+      "Bash(npx --yes @anthropic-ai/mcp-browser --version)",
+      "Read(//usr/local/bin/**)",
+      "Read(//home/amd/.claude/plugins/**)",
+      "Bash(claude --version)",
+      "Bash(claude-code --version)",
+      "Bash(claude mcp *)",
+      "Bash(npm search *)",
+      "Bash(pip search *)",
+      "Bash(claude help *)",
+      "Bash(cargo search *)",
+      "Bash(npm info *)",
+      "mcp__puppeteer__puppeteer_navigate",
+      "Bash(sudo apt-get *)",
+      "Bash(ldd /home/amd/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome)",
+      "Bash(sudo -n apt-get install -y --no-install-recommends libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 libpango-1.0-0 libcairo2)",
+      "Bash(apt-get install *)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "chrome-devtools"
+  ]
+}

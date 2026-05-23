@@ -1,0 +1,3 @@
+# Fuzzy Name Matching for Bulk Upload
+
+We are using a fuzzy name matching utility (`findSimilarNames`) rather than strict email or exact string matching to map Excel rows to registered teacher accounts when bulk-assigning Unit Advisors. This introduces a slight risk of false positives, but we decided the flexibility is necessary because teachers often register with slightly different names (e.g., missing titles or middle names) compared to official Excel records. We mitigate this risk by requiring a manual review of a preview table before any data is saved, allowing admins to spot and skip incorrect matches.
