@@ -54,10 +54,33 @@ export interface SchoolData {
   formClasses: FormClass[];
   kokurikulumUnits: KokurikulumUnit[];
   students: StudentRecord[];
+  unitAdvisors: UnitAdvisorRow[];
   metadata: {
     sekolah: string;
     unit: string;
     tahun: number;
+  };
+}
+
+export interface UnitAdvisorRow {
+  id?: string;
+  user_id: string;
+  unit_code: string;
+  tahun: number;
+  created_at?: string;
+}
+
+export interface UnitAdvisorAssignment {
+  userId: string;
+  unitCode: string;
+  tahun: number;
+}
+
+export function mapUnitAdvisorRow(row: UnitAdvisorRow): UnitAdvisorAssignment {
+  return {
+    userId: row.user_id,
+    unitCode: row.unit_code,
+    tahun: row.tahun,
   };
 }
 
@@ -67,11 +90,12 @@ export async function fetchSchoolData(): Promise<SchoolData> {
   }
 
   try {
-    const [managementRes, formClassesRes, unitsRes, studentsRes] = await Promise.all([
+    const [managementRes, formClassesRes, unitsRes, studentsRes, unitAdvisorsRes] = await Promise.all([
       supabase.from('management_team').select('*').order('id'),
       supabase.from('form_classes').select('*').order('nama_kelas'),
       supabase.from('kokurikulum_units').select('*').order('unit_code'),
       supabase.from('students').select('*').order('kelas, student_number'),
+      supabase.from('unit_advisors').select('*').order('user_id'),
     ]);
 
     // Log individual query results for debugging
@@ -80,6 +104,7 @@ export async function fetchSchoolData(): Promise<SchoolData> {
       { table: 'form_classes', error: formClassesRes.error },
       { table: 'kokurikulum_units', error: unitsRes.error },
       { table: 'students', error: studentsRes.error },
+      { table: 'unit_advisors', error: unitAdvisorsRes.error },
     ].filter(e => e.error);
 
      if (errors.length > 0) {
@@ -90,12 +115,14 @@ export async function fetchSchoolData(): Promise<SchoolData> {
     if (formClassesRes.error) throw formClassesRes.error;
     if (unitsRes.error) throw unitsRes.error;
     if (studentsRes.error) throw studentsRes.error;
+    if (unitAdvisorsRes.error) throw unitAdvisorsRes.error;
 
     return {
       managementTeam: managementRes.data || [],
       formClasses: formClassesRes.data || [],
       kokurikulumUnits: unitsRes.data || [],
       students: studentsRes.data || [],
+      unitAdvisors: unitAdvisorsRes.data || [],
       metadata: {
         sekolah: 'SM KONVEN ST. URSULA',
         unit: 'KOKURIKULUM',
@@ -114,6 +141,7 @@ function getOfflineData(): SchoolData {
     formClasses: [],
     kokurikulumUnits: [],
     students: [],
+    unitAdvisors: [],
     metadata: {
       sekolah: importedData.metadata.sekolah,
       unit: importedData.metadata.unit,
@@ -156,4 +184,69 @@ export function transformToPenglibatan(student: StudentRecord) {
   }
 
   return result;
+}
+
+export async function saveUnitAdvisors(
+  userId: string,
+  unitCodes: string[],
+  tahun: number
+): Promise<void> {
+  if (isOfflineMode) return;
+
+  const { error: deleteError } = await supabase
+    .from('unit_advisors')
+    .delete()
+    .eq('user_id', userId)
+    .eq('tahun', tahun);
+
+  if (deleteError) throw deleteError;
+
+  if (unitCodes.length === 0) return;
+
+  const rows = unitCodes.map(code => ({
+    user_id: userId,
+    unit_code: code,
+    tahun,
+  }));
+
+  const { error: insertError } = await supabase
+    .from('unit_advisors')
+    .insert(rows);
+
+  if (insertError) throw insertError;
+}
+
+export async function bulkSaveUnitAdvisors(
+  assignments: Array<{ userId: string; unitCode: string; tahun: number }>
+): Promise<void> {
+  if (isOfflineMode) return;
+  if (assignments.length === 0) return;
+
+  const { error } = await supabase
+    .from('unit_advisors')
+    .upsert(assignments.map(a => ({
+      user_id: a.userId,
+      unit_code: a.unitCode,
+      tahun: a.tahun,
+    })), { onConflict: 'user_id,unit_code,tahun' });
+
+  if (error) throw error;
+}
+
+export async function fetchTeacherUserIds(): Promise<Array<{ name: string; userId: string }>> {
+  if (isOfflineMode) return [];
+
+  const { data, error } = await supabase
+    .from('user_roles')
+    .select('user_id, surname, given_name')
+    .not('surname', 'is', null);
+
+  if (error) return [];
+
+  return data
+    .filter(r => r.surname || r.given_name)
+    .map(r => ({
+      name: `${r.given_name || ''} ${r.surname || ''}`.trim(),
+      userId: r.user_id,
+    }));
 }

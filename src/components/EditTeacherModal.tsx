@@ -2,8 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { X, Plus, Trash2, Save, AlertTriangle, Settings, Loader2 } from 'lucide-react';
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { cn } from '../lib/utils';
+import { getRestrictedFields, FieldPermissions } from '../lib/restrictedEditUtils';
 import SearchableDropdown from './SearchableDropdown';
 import { useSchoolData } from '../contexts/DataContext';
+import { saveUnitAdvisors } from '../lib/dataService';
 
 interface EditTeacherModalProps {
   editModal: any;
@@ -21,6 +23,8 @@ interface EditTeacherModalProps {
   allFormClasses?: any[];
   allUnits?: any[];
   selectedYear?: number;
+  restrictedEdit?: boolean;
+  activeUnitPillar?: string | null;
 }
 
 export default function EditTeacherModal({
@@ -38,9 +42,12 @@ export default function EditTeacherModal({
   isAdmin = false,
   allFormClasses = [],
   allUnits = [],
-  selectedYear: propsSelectedYear
+  selectedYear: propsSelectedYear,
+  restrictedEdit = false,
+  activeUnitPillar = null,
 }: EditTeacherModalProps) {
   const { refresh } = useSchoolData();
+  const fieldPermissions: FieldPermissions = getRestrictedFields({ restricted: restrictedEdit, unitPillar: activeUnitPillar });
   const [isSaving, setIsSaving] = useState(false);
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(
@@ -440,46 +447,58 @@ export default function EditTeacherModal({
                      {selectedYear}
                    </div>
                  )}
+                </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Surname</label>
+                   <input 
+                     type="text" 
+                     value={editModal.data.surname || ''}
+                     onChange={(e) => {
+                       const surname = e.target.value;
+                       const givenName = editModal.data.givenName || '';
+                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
+                     }}
+                     disabled={!fieldPermissions.personalDetails}
+                     className={cn(
+                       "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
+                       !fieldPermissions.personalDetails && "bg-slate-100 cursor-not-allowed opacity-60"
+                     )}
+                     style={{ color: tokens.colors.textNavy }}
+                   />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Given Name</label>
+                   <input 
+                     type="text" 
+                     value={editModal.data.givenName || ''}
+                     onChange={(e) => {
+                       const givenName = e.target.value;
+                       const surname = editModal.data.surname || '';
+                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
+                     }}
+                     disabled={!fieldPermissions.personalDetails}
+                     className={cn(
+                       "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
+                       !fieldPermissions.personalDetails && "bg-slate-100 cursor-not-allowed opacity-60"
+                     )}
+                     style={{ color: tokens.colors.textNavy }}
+                   />
+                 </div>
                </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Surname</label>
-                  <input 
-                    type="text" 
-                    value={editModal.data.surname || ''}
-                    onChange={(e) => {
-                      const surname = e.target.value;
-                      const givenName = editModal.data.givenName || '';
-                      setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Given Name</label>
-                  <input 
-                    type="text" 
-                    value={editModal.data.givenName || ''}
-                    onChange={(e) => {
-                      const givenName = e.target.value;
-                      const surname = editModal.data.surname || '';
-                      setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
-                  />
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Form (Class)</label>
-                <select 
-                  value={editModal.data.classId}
-                  onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classId: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
-                >
+               <div>
+                 <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Form (Class)</label>
+                 <select 
+                   value={editModal.data.classId}
+                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classId: e.target.value } })}
+                   disabled={!fieldPermissions.classAssignment}
+                   className={cn(
+                     "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white",
+                     !fieldPermissions.classAssignment && "bg-slate-100 cursor-not-allowed opacity-60"
+                   )}
+                   style={{ color: tokens.colors.textNavy }}
+                 >
                   {allFormClasses.length > 0 ? allFormClasses.map((cls) => (
                     <option key={cls.id} value={cls.id}>{cls.nama_kelas}</option>
                   )) : formTeachersData.map((cls) => (
@@ -509,7 +528,7 @@ export default function EditTeacherModal({
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3">
+              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.uniformUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.uniformUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
                 <select 
                   value={editModal.data.uniformUnit || 'Tiada'}
@@ -537,6 +556,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
+                  disabled={!fieldPermissions.uniformUnit}
                   className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
@@ -615,7 +635,7 @@ export default function EditTeacherModal({
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3">
+              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.clubUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.clubUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Club / Association</label>
                 <select 
                   value={editModal.data.club || 'Tiada'}
@@ -643,6 +663,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
+                  disabled={!fieldPermissions.clubUnit}
                   className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
@@ -721,7 +742,7 @@ export default function EditTeacherModal({
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3">
+              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.sportUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.sportUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Sport / Game</label>
                 <select 
                   value={editModal.data.sport || 'Tiada'}
@@ -749,6 +770,7 @@ export default function EditTeacherModal({
                       } 
                     });
                   }}
+                  disabled={!fieldPermissions.sportUnit}
                   className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
                   style={{ color: tokens.colors.textNavy }}
                 >
@@ -975,6 +997,57 @@ export default function EditTeacherModal({
                     <option key={cls.id} value={cls.name}>{cls.name}</option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-extrabold uppercase mb-2 flex justify-between items-center" style={{ color: tokens.colors.textMuted }}>
+                  <span className="tracking-[0.3em] flex-1">Unit Advisor Assignments</span>
+                  <div className="relative flex justify-end w-32">
+                    <select 
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const existing = editModal.data.unitAdvisorUnits || [];
+                          if (!existing.includes(e.target.value)) {
+                            setEditModal({ ...editModal, data: { ...editModal.data, unitAdvisorUnits: [...existing, e.target.value] } });
+                          }
+                          e.target.value = '';
+                        }
+                      }}
+                      className="text-xs font-bold bg-transparent border-none focus:ring-0 cursor-pointer appearance-none pr-4 text-right w-full"
+                      style={{ color: tokens.colors.primaryRed, textAlignLast: 'right' }}
+                    >
+                      <option value="">+ Add Unit</option>
+                      {allUnits.length > 0 ? allUnits.map((u, i) => (
+                        <option key={`ua-${i}`} value={u.unit_code}>{u.nama_rasmi}</option>
+                      )) : coCurricularUnitsData.map((u, i) => (
+                        <option key={`ua-${i}`} value={u.code}>{u.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </label>
+                <div className="space-y-2">
+                  {(!editModal.data.unitAdvisorUnits || editModal.data.unitAdvisorUnits.length === 0) && (
+                    <p className="text-xs font-medium italic" style={{ color: tokens.colors.textMuted }}>No unit advisor assignments.</p>
+                  )}
+                  {(editModal.data.unitAdvisorUnits || []).map((unitCode: string, i: number) => {
+                    const unit = (allUnits.length > 0 ? allUnits : coCurricularUnitsData).find(u => (u.unit_code || u.code) === unitCode);
+                    const unitName = unit ? (unit.nama_rasmi || unit.name) : unitCode;
+                    return (
+                      <div key={`ua-${i}`} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span className="text-sm font-medium" style={{ color: tokens.colors.textNavy }}>{unitName}</span>
+                        <button 
+                          onClick={() => {
+                            const newUnits = (editModal.data.unitAdvisorUnits || []).filter((_: any, idx: number) => idx !== i);
+                            setEditModal({ ...editModal, data: { ...editModal.data, unitAdvisorUnits: newUnits } });
+                          }}
+                          className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               
               <div>
@@ -1446,6 +1519,10 @@ export default function EditTeacherModal({
                         teacher_name: newName,
                         tahun: selectedYear
                       });
+                    }
+                    // Save unit advisor assignments
+                    if (editModal.data.userId && editModal.data.unitAdvisorUnits) {
+                      await saveUnitAdvisors(editModal.data.userId, editModal.data.unitAdvisorUnits, selectedYear);
                     }
                   }
                 }

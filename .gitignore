@@ -24,3 +24,28 @@ AGENTS.md
 *.mjs
 converstaion/
 supabase/.temp/
+
+# Backup files
+*.bak
+*.backup
+*.backup-*
+
+# Windows artifacts
+*:Zone.Identifier
+
+# Build artifacts
+tsconfig.tsbuildinfo
+
+# Binary downloads
+*.deb
+wget-log
+
+# Screenshots
+Screenshot*.png
+
+# Misc docs
+grill me unit advisor/
+login flow/
+skills/
+software-*.md
+grillmestur.md
