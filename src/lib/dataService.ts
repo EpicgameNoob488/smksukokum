@@ -115,7 +115,11 @@ export async function fetchSchoolData(): Promise<SchoolData> {
     if (formClassesRes.error) throw formClassesRes.error;
     if (unitsRes.error) throw unitsRes.error;
     if (studentsRes.error) throw studentsRes.error;
-    if (unitAdvisorsRes.error) throw unitAdvisorsRes.error;
+    // unit_advisors is optional in some environments; if the table is missing,
+    // keep loading the core school data instead of falling back to an empty state.
+    if (unitAdvisorsRes.error && (unitAdvisorsRes.error as any).code !== 'PGRST205') {
+      throw unitAdvisorsRes.error;
+    }
 
     return {
       managementTeam: managementRes.data || [],

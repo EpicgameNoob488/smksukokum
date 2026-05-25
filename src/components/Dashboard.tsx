@@ -158,6 +158,13 @@ export default function Dashboard({
   const isFormTeacher = !!formClassId;
   const isUnitAdvisor = advisorData.isUnitAdvisor;
 
+  // Resolve formClassId to class name (works across years since names are stable)
+  const formClassName = React.useMemo(() => {
+    if (!formClassId) return null;
+    const cls = (schoolData?.formClasses || []).find(c => String(c.id) === String(formClassId));
+    return cls?.nama_kelas || null;
+  }, [formClassId, schoolData?.formClasses]);
+
   const teacherTabs = React.useMemo(() => {
     return computeTeacherTabs({
       isFormTeacher,
@@ -190,13 +197,6 @@ export default function Dashboard({
       setTeacherSubTab(teacherTabs.defaultTab);
     }
   }, [teacherTabs, teacherSubTab]);
-
-  // Resolve formClassId to class name (works across years since names are stable)
-  const formClassName = React.useMemo(() => {
-    if (!formClassId) return null;
-    const cls = (schoolData?.formClasses || []).find(c => String(c.id) === String(formClassId));
-    return cls?.nama_kelas || null;
-  }, [formClassId, schoolData?.formClasses]);
 
   // Fetch pending role assignments
   React.useEffect(() => {
