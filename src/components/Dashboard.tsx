@@ -6,7 +6,7 @@ import {
   AreaChart, Area, Cell, Legend
 } from 'recharts';
 import { 
-  Search, Settings, LayoutDashboard, Users, UserCircle2, 
+  Search, Settings, LayoutDashboard, Users, UserCircle2, Menu,
   Activity, GraduationCap, TrendingUp, AlertTriangle, Download, Filter, X, Edit2, Save, Plus, Trash2, ChevronDown, LogOut, CheckCircle, Upload
 } from 'lucide-react';
 import { supabase, isOfflineMode } from '../lib/supabase';
@@ -66,6 +66,7 @@ export default function Dashboard({
   const { data: schoolData, isLoading: dataLoading, error, refresh } = useSchoolData();
   const { pendingRolesRefreshTrigger } = useNotification();
   const [activeTab, setActiveTab] = useState('Dashboard');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
   const [studentYear, setStudentYear] = useState<number>(2025);
@@ -600,22 +601,36 @@ export default function Dashboard({
   }, [isAdmin, teacherViewTab]);
 
   return (
-    <div className="flex h-screen font-sans overflow-hidden" style={{ backgroundColor: tokens.colors.mainBg }}>
-      <div className="flex w-full max-w-[1500px] mx-auto">
-       {/* Sidebar */}
-       <DashboardSidebar 
-         activeTab={activeTab} 
-         setActiveTab={setActiveTab} 
-         settings={settings} 
-         schoolData={schoolData} 
-       />
+    <div className="flex min-h-[100dvh] font-sans" style={{ backgroundColor: tokens.colors.mainBg }}>
+      {/* Mobile sidebar overlay backdrop */}
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
+      <div className="flex w-full max-w-[1500px] mx-auto relative">
+       {/* Sidebar - hidden on mobile, shown as slide-out overlay when toggled */}
+       <div className={cn(
+         "fixed inset-y-0 left-0 z-40 lg:z-20 lg:relative lg:translate-x-0 transition-transform duration-300",
+         mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+       )}>
+        <DashboardSidebar 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          settings={settings} 
+          schoolData={schoolData}
+          onClose={() => setMobileSidebarOpen(false)}
+        />
+       </div>
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-y-auto relative z-10 px-4 sm:px-6">
          
          {/* Floating Action Panel (Alert) */}
          {showAlert && (
-           <div className="bg-red-50 border-b border-red-100 px-10 py-3 flex items-center justify-between animate-in slide-in-from-top">
+           <div className="bg-red-50 border-b border-red-100 px-4 sm:px-6 md:px-10 py-3 flex items-center justify-between animate-in slide-in-from-top">
              <div className="flex items-center gap-3">
                <AlertTriangle className="w-5 h-5 text-red-600" />
                <div>
@@ -635,27 +650,36 @@ export default function Dashboard({
          )}
          
          {/* PAJSK Disclaimer Banner */}
-         <div className="bg-amber-50 border-b border-amber-100 px-10 py-2 flex items-center justify-center gap-2">
+          <div className="bg-amber-50 border-b border-amber-100 px-4 sm:px-6 md:px-10 py-2 flex items-center justify-center gap-2">
            <p className="text-xs font-medium text-amber-800">
              <span className="font-bold">Note:</span> PAJSK scores shown are <span className="italic">estimates</span> based on available data. Official PAJSK scores may differ from KPM's official calculation.
            </p>
          </div>
 
          {/* Global Header & Filters (The Control Deck) - per design_tokens.md */}
-        <header className="px-8 py-5 flex flex-col gap-5 bg-white border-b border-slate-200 sticky top-0 z-10">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-extrabold tracking-tight" style={{ color: tokens.colors.textNavy }}>
-              {activeTab === 'Dashboard' ? 'Activities Overview' : activeTab}
-            </h2>
+         <header className="px-4 sm:px-6 md:px-8 py-4 sm:py-5 flex flex-col gap-4 sm:gap-5 bg-white border-b border-slate-200 sticky top-0 z-10">
+           <div className="flex items-center justify-between">
+             <div className="flex items-center gap-3">
+               <button 
+                 onClick={() => setMobileSidebarOpen(true)}
+                 className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                 aria-label="Open menu"
+               >
+                 <Menu className="w-5 h-5" style={{ color: tokens.colors.textNavy }} />
+               </button>
+               <h2 className="text-lg sm:text-xl font-extrabold tracking-tight" style={{ color: tokens.colors.textNavy }}>
+                 {activeTab === 'Dashboard' ? 'Activities Overview' : activeTab}
+               </h2>
+             </div>
             
             <div className="flex items-center gap-5">
               {activeTab !== 'Students' && activeTab !== 'Teachers' && (
-                <div className="relative hidden md:block">
+                <div className="relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   <input 
                     type="text" 
-                    placeholder="Search student instantly..." 
-                    className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-64 font-medium border border-slate-200"
+                    placeholder="Search..." 
+                    className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-64 font-medium border border-slate-200"
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                   />
                 </div>
@@ -711,12 +735,12 @@ export default function Dashboard({
           {activeTab === 'Dashboard' && (
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="relative hidden md:block mr-2">
+                <div className="relative mr-2">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   <input 
                     type="text" 
-                    placeholder="Search metrics..." 
-                    className="pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-44 font-medium border border-slate-200"
+                    placeholder="Search..." 
+                    className="pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-44 font-medium border border-slate-200"
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                   />
                 </div>
@@ -793,7 +817,7 @@ export default function Dashboard({
 
         {/* Dashboard Content */}
         {activeTab === 'Dashboard' && (
-          <div className="px-10 pb-10 space-y-8 mt-6 animate-in fade-in duration-500">
+          <div className="px-4 sm:px-6 md:px-10 pb-10 space-y-8 mt-6 animate-in fade-in duration-500">
             {/* Teacher Sub-Tabs: My Class / My Units */}
             {teacherTabs.tabs.length > 0 && (
               <div className="flex gap-2 border-b border-slate-200 pb-2">
@@ -1270,7 +1294,7 @@ export default function Dashboard({
 
         {/* Teachers Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Teachers' && (
-          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
             <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
               <div>
                 <h2 className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Teacher Directory</h2>
@@ -1287,7 +1311,7 @@ export default function Dashboard({
                     <option key={year} value={year}>{year}</option>
                   ))}
                 </select>
-                <div className="relative hidden md:block">
+                <div className="relative">
                   <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   <select 
                     value={classFilter}
@@ -1297,7 +1321,7 @@ export default function Dashboard({
                         setAjktFilter("");
                       }
                     }}
-                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-36 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
+                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-36 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Classes</option>
@@ -1308,7 +1332,7 @@ export default function Dashboard({
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
                 </div>
 
-                <div className="relative hidden md:block">
+                <div className="relative">
                   <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
                   <select 
                     value={ajktFilter}
@@ -1318,7 +1342,7 @@ export default function Dashboard({
                         setClassFilter("");
                       }
                     }}
-                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-40 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
+                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-40 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
                     style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Roles</option>
@@ -1864,7 +1888,7 @@ export default function Dashboard({
 
         {/* My Class Sub-Tab Content */}
         {activeTab === 'Dashboard' && teacherSubTab === 'My Class' && isFormTeacher && (
-          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
             <StudentTable
               classId={formClassId}
               className={formClassName || ''}
@@ -1884,7 +1908,7 @@ export default function Dashboard({
 
         {/* My Units Sub-Tab Content */}
         {activeTab === 'Dashboard' && teacherSubTab === 'My Units' && isUnitAdvisor && (
-          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
             <div className="flex items-center gap-4 mb-4">
               <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>My Units</h2>
               <select
@@ -1924,7 +1948,7 @@ export default function Dashboard({
 
         {/* Students Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Students' && (
-          <div className="px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
             <StudentTable
               classId={selectedStudentClassId}
               className={studentClassFilter || 'All Students'}
@@ -1944,7 +1968,7 @@ export default function Dashboard({
 
         {/* Placeholder for other tabs */}
         {activeTab !== 'Dashboard' && activeTab !== 'Teachers' && activeTab !== 'Students' && (
-          <div className="p-10 flex items-center justify-center h-[calc(100vh-8rem)] animate-in fade-in">
+          <div className="p-4 sm:p-6 md:p-10 flex items-center justify-center min-h-[calc(100dvh-8rem)] animate-in fade-in">
             <div className="text-center max-w-md">
               <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm" style={{ backgroundColor: tokens.colors.cardOuterBg, color: tokens.colors.textNavy }}>
                 {(() => {
