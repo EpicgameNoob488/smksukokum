@@ -319,6 +319,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   { getValue: (s) => s.rawPenglibatan?.sukan_dan_permainan?.peringkat || '', label: 'Sport Peringkat' },
                   { getValue: (s) => s.rawPenglibatan?.sukan_dan_permainan?.pencapaian || '', label: 'Sport Pencapaian' },
                   { getValue: (s) => s.rawPenglibatan?.sukan_dan_permainan?.kehadiran || '0', label: 'Sport Kehadiran' },
+                  { getValue: (s) => s.rawPenglibatan?.badan_beruniform?.jenisSkorPenglibatan || '', label: 'Uniform Jenis Skor Penglibatan' },
+                  { getValue: (s) => s.rawPenglibatan?.kelab_dan_persatuan?.jenisSkorPenglibatan || '', label: 'Club Jenis Skor Penglibatan' },
+                  { getValue: (s) => s.rawPenglibatan?.sukan_dan_permainan?.jenisSkorPenglibatan || '', label: 'Sport Jenis Skor Penglibatan' },
                 ];
                 exportToCSV(filteredStudents, columns, `students-${className}-${Date.now()}.csv`);
               }}
@@ -579,6 +582,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                   >
                                     Kehadiran: {student.rawPenglibatan?.badan_beruniform?.kehadiran || '0'}
                                   </span>
+                                  <p>
+                                    <span className="font-medium" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan: </span>
+                                    <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.badan_beruniform?.jenisSkorPenglibatan || '-'}</span>
+                                  </p>
                                 </div>
                               </div>
 
@@ -614,6 +621,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                   >
                                     Kehadiran: {student.rawPenglibatan?.kelab_dan_persatuan?.kehadiran || '0'}
                                   </span>
+                                  <p>
+                                    <span className="font-medium" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan: </span>
+                                    <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.kelab_dan_persatuan?.jenisSkorPenglibatan || '-'}</span>
+                                  </p>
                                 </div>
                               </div>
 
@@ -649,6 +660,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                   >
                                     Kehadiran: {student.rawPenglibatan?.sukan_dan_permainan?.kehadiran || '0'}
                                   </span>
+                                  <p>
+                                    <span className="font-medium" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan: </span>
+                                    <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.sukan_dan_permainan?.jenisSkorPenglibatan || '-'}</span>
+                                  </p>
                                 </div>
                               </div>
                             </div>

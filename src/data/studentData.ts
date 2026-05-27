@@ -84,6 +84,7 @@ export function transformStudents(
         ahli: s.sukan_ahli,
         kehadiran: s.sukan_kehadiran?.toString() || null,
         pencapaian: s.sukan_pencapaian,
+        jenisSkorPenglibatan: s.sukan_jenis_skor_penglibatan || '',
       } : null,
       kelab_dan_persatuan: s.kelab_unit ? {
         unit_code: s.kelab_unit,
@@ -91,6 +92,7 @@ export function transformStudents(
         ahli: s.kelab_ahli,
         kehadiran: s.kelab_kehadiran?.toString() || null,
         pencapaian: s.kelab_pencapaian,
+        jenisSkorPenglibatan: s.kelab_jenis_skor_penglibatan || '',
       } : null,
       badan_beruniform: s.uniform_unit ? {
         unit_code: s.uniform_unit,
@@ -98,6 +100,7 @@ export function transformStudents(
         ahli: s.uniform_ahli,
         kehadiran: s.uniform_kehadiran?.toString() || null,
         pencapaian: s.uniform_pencapaian,
+        jenisSkorPenglibatan: s.uniform_jenis_skor_penglibatan || '',
       } : null,
     };
 

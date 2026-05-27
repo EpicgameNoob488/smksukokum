@@ -573,6 +573,20 @@ export default function EditTeacherModal({
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                     </select>
                   </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan</label>
+                    <select 
+                      value={editModal.data.rawPenglibatan?.badan_beruniform?.jenisSkorPenglibatan || ''} 
+                      onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, badan_beruniform: {...editModal.data.rawPenglibatan?.badan_beruniform, jenisSkorPenglibatan: e.target.value}}}})} 
+                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+                      style={{ color: tokens.colors.textNavy }}
+                    >
+                      <option value="">-</option>
+                      <option value="Penglibatan 1">Penglibatan 1</option>
+                      <option value="Penglibatan 2">Penglibatan 2</option>
+                      <option value="Penglibatan 3">Penglibatan 3</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -680,6 +694,20 @@ export default function EditTeacherModal({
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                     </select>
                   </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan</label>
+                    <select 
+                      value={editModal.data.rawPenglibatan?.kelab_dan_persatuan?.jenisSkorPenglibatan || ''} 
+                      onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, kelab_dan_persatuan: {...editModal.data.rawPenglibatan?.kelab_dan_persatuan, jenisSkorPenglibatan: e.target.value}}}})} 
+                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+                      style={{ color: tokens.colors.textNavy }}
+                    >
+                      <option value="">-</option>
+                      <option value="Penglibatan 1">Penglibatan 1</option>
+                      <option value="Penglibatan 2">Penglibatan 2</option>
+                      <option value="Penglibatan 3">Penglibatan 3</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -785,6 +813,20 @@ export default function EditTeacherModal({
                       style={{ color: tokens.colors.textNavy }}
                     >
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Jenis Skor Penglibatan</label>
+                    <select 
+                      value={editModal.data.rawPenglibatan?.sukan_dan_permainan?.jenisSkorPenglibatan || ''} 
+                      onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, sukan_dan_permainan: {...editModal.data.rawPenglibatan?.sukan_dan_permainan, jenisSkorPenglibatan: e.target.value}}}})} 
+                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+                      style={{ color: tokens.colors.textNavy }}
+                    >
+                      <option value="">-</option>
+                      <option value="Penglibatan 1">Penglibatan 1</option>
+                      <option value="Penglibatan 2">Penglibatan 2</option>
+                      <option value="Penglibatan 3">Penglibatan 3</option>
                     </select>
                   </div>
                 </div>
@@ -1357,6 +1399,9 @@ export default function EditTeacherModal({
                         sukan_ahli: 'Aktif',
                         sukan_kehadiran: parseInt(editModal.data.rawPenglibatan?.sukan_dan_permainan?.kehadiran || '0'),
                         sukan_pencapaian: editModal.data.rawPenglibatan?.sukan_dan_permainan?.pencapaian || '',
+                        uniform_jenis_skor_penglibatan: editModal.data.rawPenglibatan?.badan_beruniform?.jenisSkorPenglibatan || '',
+                        kelab_jenis_skor_penglibatan: editModal.data.rawPenglibatan?.kelab_dan_persatuan?.jenisSkorPenglibatan || '',
+                        sukan_jenis_skor_penglibatan: editModal.data.rawPenglibatan?.sukan_dan_permainan?.jenisSkorPenglibatan || '',
                         tahun: selectedYear
                       };
                       

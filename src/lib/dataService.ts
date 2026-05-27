@@ -47,6 +47,9 @@ export interface StudentRecord {
   uniform_ahli: string | null;
   uniform_kehadiran: number | null;
   uniform_pencapaian: string | null;
+  sukan_jenis_skor_penglibatan: string | null;
+  kelab_jenis_skor_penglibatan: string | null;
+  uniform_jenis_skor_penglibatan: string | null;
 }
 
 export interface SchoolData {
@@ -164,6 +167,7 @@ export function transformToPenglibatan(student: StudentRecord) {
       ahli: student.sukan_ahli,
       kehadiran: student.sukan_kehadiran?.toString() || null,
       pencapaian: student.sukan_pencapaian,
+      jenisSkorPenglibatan: student.sukan_jenis_skor_penglibatan || undefined,
     };
   }
 
@@ -174,6 +178,7 @@ export function transformToPenglibatan(student: StudentRecord) {
       ahli: student.kelab_ahli,
       kehadiran: student.kelab_kehadiran?.toString() || null,
       pencapaian: student.kelab_pencapaian,
+      jenisSkorPenglibatan: student.kelab_jenis_skor_penglibatan || undefined,
     };
   }
 
@@ -184,6 +189,7 @@ export function transformToPenglibatan(student: StudentRecord) {
       ahli: student.uniform_ahli,
       kehadiran: student.uniform_kehadiran?.toString() || null,
       pencapaian: student.uniform_pencapaian,
+      jenisSkorPenglibatan: student.uniform_jenis_skor_penglibatan || undefined,
     };
   }
 

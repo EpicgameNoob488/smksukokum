@@ -39,9 +39,9 @@ export interface Student {
   };
   attendance: number;
   rawPenglibatan: {
-    badan_beruniform: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string };
-    kelab_dan_persatuan: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string };
-    sukan_dan_permainan: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string };
+    badan_beruniform: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string; jenisSkorPenglibatan: string };
+    kelab_dan_persatuan: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string; jenisSkorPenglibatan: string };
+    sukan_dan_permainan: { kehadiran: string; jawatan: string; peringkat: string; pencapaian: string; jenisSkorPenglibatan: string };
   };
 }
 

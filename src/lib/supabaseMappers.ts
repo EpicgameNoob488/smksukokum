@@ -53,21 +53,24 @@ export function mapStudent(row: any, units: any[], classes: any[]): Student {
       jawatan: row.sukan_jawatan || '',
       ahli: row.sukan_ahli || '',
       kehadiran: row.sukan_kehadiran != null ? String(row.sukan_kehadiran) : '0',
-      pencapaian: row.sukan_pencapaian || ''
+      pencapaian: row.sukan_pencapaian || '',
+      jenisSkorPenglibatan: row.sukan_jenis_skor_penglibatan || ''
     },
     kelab_dan_persatuan: {
       unit_code: row.kelab_unit || '',
       jawatan: row.kelab_jawatan || '',
       ahli: row.kelab_ahli || '',
       kehadiran: row.kelab_kehadiran != null ? String(row.kelab_kehadiran) : '0',
-      pencapaian: row.kelab_pencapaian || ''
+      pencapaian: row.kelab_pencapaian || '',
+      jenisSkorPenglibatan: row.kelab_jenis_skor_penglibatan || ''
     },
     badan_beruniform: {
       unit_code: row.uniform_unit || '',
       jawatan: row.uniform_jawatan || '',
       ahli: row.uniform_ahli || '',
       kehadiran: row.uniform_kehadiran != null ? String(row.uniform_kehadiran) : '0',
-      pencapaian: row.uniform_pencapaian || ''
+      pencapaian: row.uniform_pencapaian || '',
+      jenisSkorPenglibatan: row.uniform_jenis_skor_penglibatan || ''
     }
   };
 
