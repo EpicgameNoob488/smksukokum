@@ -56,7 +56,7 @@ export default function App() {
         setFormClassId(data.form_class_id || null);
       }
     } catch (err) {
-      console.error('Error fetching role:', err);
+      console.error('Error fetching role in catch block:', err);
       setUserRole(null);
       setFormClassId(null);
     } finally {

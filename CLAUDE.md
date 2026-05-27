@@ -45,49 +45,6 @@ Charts (Recharts) + KPI Cards + Tables
 4. **Calculations**: `kpiCalculations.ts` (dashboard KPIs, tri-pillar data, leadership density) and `pajskCalculator.ts` (student PAJSK scoring with grade scale)
 5. **Offline Mode**: When Supabase env vars are missing, the app uses local/mock data from `src/data/*`
 
-## Key Files
-
-| Category | File Path |
-|----------|-----------|
-| Root App | `src/App.tsx` — auth flow, role-based access, layout |
-| Dashboard | `src/components/Dashboard.tsx` — main UI (~1900 lines), tabs, filters |
-| Supabase Client | `src/lib/supabase.ts` |
-| Data Service | `src/lib/dataService.ts` |
-| Edge Functions API | `src/lib/api.ts` |
-| Data Context | `src/contexts/DataContext.tsx` |
-| Settings Context | `src/contexts/SettingsContext.tsx` |
-| Notification Context | `src/contexts/NotificationContext.tsx` |
-| Supabase Mappers | `src/lib/supabaseMappers.ts` |
-| KPI Calculations | `src/lib/kpiCalculations.ts` |
-| PAJSK Calculator | `src/lib/pajskCalculator.ts` |
-| Design Tokens | `src/lib/designTokens.ts` |
-| CSV Export | `src/lib/csvExport.ts` |
-| Name Matching | `src/lib/nameMatching.ts` |
-| Utility (cn) | `src/lib/utils.ts` |
-| Type Definitions | `src/types/dashboard.ts` |
-| Auth Pages | `src/components/LoginPage.tsx`, `RegisterPage.tsx`, `ResetPasswordPage.tsx` |
-| Modal Editing | `src/components/EditTeacherModal.tsx` |
-| Student Table | `src/components/StudentTable.tsx` |
-
-## Typical Workflows
-
-1. **Adding a new tab or view**:
-   - Update `navItems` in the relevant component.
-   - Add route-handling logic in `App.tsx` or `Dashboard`.
-   - Create/modify the component rendering the view.
-
-2. **Modifying data fetching**:
-   - Adjust queries in `useSchoolData` (DataContext) or `dataService.ts`.
-   - Update mapper functions in `src/lib/supabaseMappers.ts`.
-
-3. **Changing UI style**:
-   - Edit design tokens in `src/lib/designTokens.ts` or adjust Tailwind classes.
-   - Some components define local `tokens` objects rather than importing from `designTokens.ts` — check both.
-
-4. **Handling role-based access**:
-   - Update `validateRoleAccess` logic in `App.tsx`.
-   - Modify filter logic in `canEditStudent`, `canAddStudent` within `Dashboard`.
-
 ## Testing and Validation
 
 - Run `npm run lint` for TypeScript type correctness.
@@ -101,3 +58,7 @@ Charts (Recharts) + KPI Cards + Tables
 - **Filter Mode Interactions**: Filters affect multiple chart datasets; changing one filter may affect others unexpectedly due to shared state.
 - **Mixed Styling Patterns**: Components use both design token imports and inline style objects. Be aware of both patterns when modifying styles.
 - **Dashboard Size**: `Dashboard.tsx` is ~1900 lines — the largest component. Consider splitting logic when adding significant new features.
+
+## Compact instructions
+
+When compacting, preserve test output, modified file paths, and any build commands used.

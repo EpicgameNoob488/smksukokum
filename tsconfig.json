@@ -24,6 +24,9 @@
     "noEmit": true
   },
   "exclude": [
-    "supabase"
+    "supabase",
+    "smksukokum-fix-backup-20260415",
+    "smksukokum-fix",
+    "src/components/root_*_copy.tsx"
   ]
 }
