@@ -1,14 +1,15 @@
 import { cn } from '../lib/utils';
-import { GraduationCap, LayoutDashboard, Users, UserCircle2 } from 'lucide-react';
+import { GraduationCap, LayoutDashboard, Users, UserCircle2, X } from 'lucide-react';
 
 interface DashboardSidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   settings: any;
   schoolData: any;
+  onClose?: () => void;
 }
 
-export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData }: DashboardSidebarProps) => {
+export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData, onClose }: DashboardSidebarProps) => {
   const iconMap = {
     LayoutDashboard,
     Users,
@@ -31,10 +32,15 @@ export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData
             <GraduationCap className="w-6 h-6" />
           )}
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden flex-1 min-w-0">
           <h1 className="text-[13px] font-extrabold text-white leading-tight tracking-wide truncate" title={settings.schoolName}>{settings.schoolName}</h1>
           <p className="text-[10px] font-semibold text-white/90 uppercase tracking-widest truncate">{schoolData?.metadata.unit || 'KOKURIKULUM'} {schoolData?.metadata.tahun || new Date().getFullYear()}</p>
         </div>
+        {onClose && (
+          <button onClick={onClose} className="lg:hidden p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0" aria-label="Close menu">
+            <X className="w-5 h-5 text-white" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 mt-2 flex flex-col gap-1 px-3">
@@ -44,7 +50,10 @@ export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData
           return (
             <button
               key={item.name}
-              onClick={() => setActiveTab(item.name)}
+              onClick={() => {
+                setActiveTab(item.name);
+                onClose?.();
+              }}
               className={cn(
                 "flex items-center gap-3 px-4 py-2.5 text-[13px] font-bold transition-colors duration-200 w-full text-left cursor-pointer",
                 isActive 

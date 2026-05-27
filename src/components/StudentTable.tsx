@@ -257,7 +257,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 placeholder="Search student..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-64 font-medium border border-slate-200"
+                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-full sm:w-64 font-medium border border-slate-200"
                 style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
               />
             </div>
