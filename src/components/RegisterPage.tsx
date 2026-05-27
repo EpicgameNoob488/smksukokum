@@ -107,7 +107,7 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
         requestType,
         password,
         confirmedDuplicate: true,
-        matchedTeacherName: selectedMatch,
+        matchedTeacherName: selectedMatch ?? undefined,
       });
 
       if (result.error) {
@@ -164,7 +164,7 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
         fullName,
         requestType,
         password,
-        matchedTeacherName: selectedMatch,
+        matchedTeacherName: selectedMatch ?? undefined,
       });
 
       if (result.error) {

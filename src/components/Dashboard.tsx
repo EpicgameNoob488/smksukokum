@@ -63,7 +63,7 @@ export default function Dashboard({
   formClassId?: string | null;
 }) {
   const { settings } = useSettings();
-  const { data: schoolData, isLoading: dataLoading, error } = useSchoolData();
+  const { data: schoolData, isLoading: dataLoading, error, refresh } = useSchoolData();
   const { pendingRolesRefreshTrigger } = useNotification();
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [showAlert, setShowAlert] = useState(false);
@@ -236,10 +236,11 @@ export default function Dashboard({
   const [selectedClass, setSelectedClass] = useState<{ id: string, name: string } | null>(null);
   const [editModal, setEditModal] = useState<{
     isOpen: boolean;
-    type: 'management' | 'formTeacher' | 'unit' | 'student' | 'fullTeacher' | null;
+    type: 'management' | 'unit' | 'student' | 'fullTeacher' | null;
     index: number;
     data: any;
     originalName?: string;
+    source?: 'newTeacher' | 'classCard' | 'pendingRole';
   }>({ isOpen: false, type: null, index: -1, data: null });
 
   // Handle Escape key to return to login (Logout)
@@ -521,13 +522,24 @@ export default function Dashboard({
     return filtered;
   }, [coCurricularUnitsData, classFilter, ajktFilter, teacherViewTab, globalSearch, teacherSearchQuery, filteredTeachers]);
 
+  const mappedTeacherViewTab = React.useMemo((): 'management' | 'formTeacher' | 'unit' | 'student' | 'fullTeacher' | null => {
+    const map: Record<string, 'management' | 'formTeacher' | 'unit' | 'student' | 'fullTeacher' | null> = {
+      'Directory': null,
+      'Management': 'management',
+      'Classes': 'formTeacher',
+      'Kokurikulum': 'unit',
+      'Pending Roles': null,
+    };
+    return map[teacherViewTab] ?? null;
+  }, [teacherViewTab]);
+
   const availableTeacherClasses = React.useMemo(() => {
-    return getAvailableTeacherClasses(allTeachers, teacherViewTab, ajktFilter);
-  }, [allTeachers, teacherViewTab, ajktFilter]);
+    return getAvailableTeacherClasses(allTeachers, mappedTeacherViewTab, ajktFilter);
+  }, [allTeachers, mappedTeacherViewTab, ajktFilter]);
 
   const availableTeacherRoles = React.useMemo(() => {
-    return getAvailableTeacherRoles(allTeachers, teacherViewTab, classFilter);
-  }, [allTeachers, teacherViewTab, classFilter]);
+    return getAvailableTeacherRoles(allTeachers, mappedTeacherViewTab, classFilter);
+  }, [allTeachers, mappedTeacherViewTab, classFilter]);
 
   const availableStudentClasses = React.useMemo(() => {
     const classes = (schoolData?.formClasses || [])
@@ -951,10 +963,10 @@ export default function Dashboard({
         />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }} 
-          formatter={(value: number | undefined, name: string | undefined, props: any) => {
+          formatter={(value, name, props: any) => {
             const opacity = getPillarOpacity(props.payload.subject);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
-            return [`${value}%${hint}`, name];
+            return [`${value ?? 0}%${hint}`, name];
           }}
         />
       </RadarChart>
@@ -1007,10 +1019,10 @@ export default function Dashboard({
           width={60} 
         />
         <RechartsTooltip cursor={{ fill: tokens.colors.cardOuterBg }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number | undefined, name: string | undefined, props: any) => {
+          formatter={(value, name, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
-            return [`${value}${hint}`, name];
+            return [`${value ?? 0}${hint}`, name];
           }}
         />
         <Legend
@@ -1110,11 +1122,11 @@ export default function Dashboard({
           cursor={{ fill: tokens.colors.cardOuterBg }}
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
           itemStyle={{ fontWeight: 700, fontSize: '11px' }}
-          formatter={(value: number | undefined, name: string | undefined, props: any) => {
+          formatter={(value, name, props: any) => {
             const color = props.name.includes('Penyokong') ? tokens.colors.primaryRed : tokens.colors.trendGreenText;
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
-            return [<span style={{ color }}>{Math.abs(value)}{hint}</span>, name];
+            return [<span style={{ color }}>{Math.abs(Number(value) || 0)}{hint}</span>, name];
           }}
         />
         <Legend
@@ -1216,10 +1228,10 @@ export default function Dashboard({
         <YAxis axisLine={false} tickLine={false} tick={{ fill: tokens.colors.textMuted, fontSize: 10, fontWeight: 700 }} />
         <RechartsTooltip 
           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px -2px rgb(0 0 0 / 0.1)' }}
-          formatter={(value: number | undefined, name: string | undefined, props: any) => {
+          formatter={(value, name, props: any) => {
             const opacity = getPillarOpacity(props.payload.name);
             const hint = opacity < 1 && dashboardPillarFilter ? ` (${dashboardPillarFilter} selected)` : '';
-            return [`${value}${hint}`, name];
+            return [`${value ?? 0}${hint}`, name];
           }}
         />
         <Area 
@@ -1339,6 +1351,7 @@ export default function Dashboard({
                         isOpen: true, 
                         type: 'fullTeacher', 
                         index: -1, 
+                        source: 'newTeacher',
                         data: { 
                           name: '', 
                           email: '',
@@ -1666,7 +1679,19 @@ export default function Dashboard({
                     </div>
                     {isAdmin && (
                     <button 
-                      onClick={() => setEditModal({ isOpen: true, type: 'formTeacher', index: idx, data: { ...cls } })}
+                      onClick={() => setEditModal({ 
+                        isOpen: true, 
+                        type: 'fullTeacher', 
+                        index: -1, 
+                        source: 'classCard',
+                        data: {
+                          name: cls.teacher || '',
+                          email: '',
+                          managementRoles: [],
+                          classes: [cls.name],
+                          kokurikulum: { head: [], advisor: [] }
+                        }
+                      })}
                       className="p-2 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
                       style={{ color: tokens.colors.textNavy }}
                     >
@@ -1805,13 +1830,18 @@ export default function Dashboard({
                             setTeacherViewTab('Classes');
                             setEditModal({ 
                               isOpen: true, 
-                              type: 'formTeacher', 
+                              type: 'fullTeacher', 
                               index: -1, 
+                              source: 'pendingRole',
                               data: { 
-                                name: '', 
-                                teacher: teacher.full_name,
+                                name: teacher.full_name,
+                                email: teacher.email || '',
                                 surname: teacher.full_name.split(' ').slice(0, -1).join(' '),
                                 givenName: teacher.full_name.split(' ').slice(-1).join(' '),
+                                managementRoles: [],
+                                classes: [],
+                                kokurikulum: { head: [], advisor: [] },
+                                unitAdvisorUnits: [],
                                 tahun: selectedYear 
                               } 
                             });
@@ -1841,9 +1871,6 @@ export default function Dashboard({
               onBack={() => setTeacherSubTab('')}
               tokens={tokens}
               studentsData={studentsData}
-              studentClassFilter={formClassName || ''}
-              onStudentClassFilterChange={() => {}}
-              availableStudentClasses={formClassName ? [{ id: formClassId || '', name: formClassName }] : []}
               setEditModal={setEditModal}
               isAdmin={isAdmin}
               formClassId={formClassId}
@@ -1882,12 +1909,6 @@ export default function Dashboard({
               onBack={() => setTeacherSubTab('')}
               tokens={tokens}
               studentsData={studentsData}
-              studentClassFilter={selectedUnitForAdvisor}
-              onStudentClassFilterChange={setSelectedUnitForAdvisor}
-              availableStudentClasses={advisorData.advisorUnits.map(code => {
-                const unit = coCurricularUnitsData.find(u => u.unitCode === code || u.name.toLowerCase().includes(code));
-                return { id: code, name: unit ? unit.name : code };
-              })}
               setEditModal={setEditModal}
               isAdmin={isAdmin}
               formClassId={null}
@@ -1910,9 +1931,6 @@ export default function Dashboard({
               onBack={() => {}}
               tokens={tokens}
               studentsData={studentsData}
-              studentClassFilter={studentClassFilter}
-              onStudentClassFilterChange={setStudentClassFilter}
-              availableStudentClasses={availableStudentClasses}
               setEditModal={setEditModal}
               isAdmin={isAdmin}
               formClassId={formClassId}

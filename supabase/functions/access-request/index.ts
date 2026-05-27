@@ -11,6 +11,17 @@ const corsHeaders = {
 const SENDER_EMAIL = 'onboarding@resend.dev'; // Change to your domain email after verification
 const APP_URL = 'http://localhost:3000'; // Change to production URL
 
+// Helper to prevent XSS in email templates
+function escapeHtml(unsafe: string | null | undefined): string {
+  if (!unsafe) return '';
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // Email template functions
 function generateInviteEmailHTML(name: string, role: string): string {
   return `
@@ -25,10 +36,10 @@ function generateInviteEmailHTML(name: string, role: string): string {
         <h1 style="color: white; margin: 0; font-size: 24px;">Welcome to Kokurikulum Dashboard!</h1>
       </div>
       <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e1e1e1;">
-        <p>Dear <strong>${name}</strong>,</p>
+        <p>Dear <strong>${escapeHtml(name)}</strong>,</p>
         <p>You have been invited to join the <strong>Kokurikulum Dashboard</strong> at SM Konven St. Ursula.</p>
         <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0;"><strong>Your Role:</strong> ${role}</p>
+          <p style="margin: 0;"><strong>Your Role:</strong> ${escapeHtml(role)}</p>
         </div>
         <p>Click the button below to set up your password and access the dashboard:</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -56,7 +67,7 @@ function generatePasswordResetEmailHTML(name: string): string {
         <h1 style="color: white; margin: 0; font-size: 24px;">Password Reset</h1>
       </div>
       <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e1e1e1;">
-        <p>Dear <strong>${name}</strong>,</p>
+        <p>Dear <strong>${escapeHtml(name)}</strong>,</p>
         <p>Your password has been reset by an administrator.</p>
         <p>Click the button below to set a new password:</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -83,7 +94,7 @@ function generateRequestConfirmationEmailHTML(name: string): string {
         <h1 style="color: white; margin: 0; font-size: 24px;">Request Received</h1>
       </div>
       <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e1e1e1;">
-        <p>Dear <strong>${name}</strong>,</p>
+        <p>Dear <strong>${escapeHtml(name)}</strong>,</p>
         <p>Your access request has been <strong>received</strong> and is pending admin approval.</p>
         <p>You will receive another email once your request has been reviewed.</p>
         <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 30px 0;">
@@ -106,7 +117,7 @@ function generateRequestApprovedEmailHTML(name: string): string {
         <h1 style="color: white; margin: 0; font-size: 24px;">Request Approved! 🎉</h1>
       </div>
       <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e1e1e1;">
-        <p>Dear <strong>${name}</strong>,</p>
+        <p>Dear <strong>${escapeHtml(name)}</strong>,</p>
         <p>Great news! Your access request has been <strong>approved</strong>.</p>
         <p>You can now log in to the Kokurikulum Dashboard.</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -132,9 +143,9 @@ function generateRequestRejectedEmailHTML(name: string, reason?: string): string
         <h1 style="color: white; margin: 0; font-size: 24px;">Request Update</h1>
       </div>
       <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e1e1e1;">
-        <p>Dear <strong>${name}</strong>,</p>
+        <p>Dear <strong>${escapeHtml(name)}</strong>,</p>
         <p>Unfortunately, your access request has been <strong>rejected</strong>.</p>
-        ${reason ? `<p><strong>Reason:</strong> ${reason}</p>` : ''}
+        ${reason ? `<p><strong>Reason:</strong> ${escapeHtml(reason)}</p>` : ''}
         <p>If you believe this is an error, please contact the school administration.</p>
         <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 30px 0;">
         <p style="color: #999; font-size: 12px; margin: 0;">Kokurikulum Dashboard - SM Konven St. Ursula</p>

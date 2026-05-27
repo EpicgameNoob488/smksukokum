@@ -285,7 +285,7 @@ export function getAvailableTeacherRoles(
     return ['All AJ-KT', ...Array.from(rolesSet).sort((a, b) => a.localeCompare(b))];
   }
 
-  if (teacherViewTab === 'unit' || teacherViewTab === 'fullTeacher') {
+  if (teacherViewTab === 'unit') {
     const unitsSet = new Set<string>();
     filtered.forEach(t => {
       t.kokurikulum.head.forEach(h => unitsSet.add(h.name));

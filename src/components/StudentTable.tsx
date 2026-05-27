@@ -5,7 +5,7 @@ import { cn } from '../lib/utils';
 import { exportToCSV } from '../lib/csvExport';
 import type { CSVColumn } from '../lib/csvExport';
 import SearchableDropdown from './SearchableDropdown';
-import { getAvailableFilterOptions, type FilterSelections } from '../lib/filterUtils';
+import { getAvailableFilterOptions, type FilterSelections, type FilterOption } from '../lib/filterUtils';
 import { filterStudentsForUnitAdvisor } from '../lib/studentFilterUtils';
 
 interface StudentTableProps {
@@ -71,9 +71,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   const [attendanceFilter, setAttendanceFilter] = React.useState('All Attendance');
 
   // Available filter options that update based on current selections
-  const [availableUniforms, setAvailableUniforms] = React.useState<string[]>([]);
-  const [availableClubs, setAvailableClubs] = React.useState<string[]>([]);
-  const [availableSports, setAvailableSports] = React.useState<string[]>([]);
+  const [availableUniforms, setAvailableUniforms] = React.useState<FilterOption[]>([]);
+  const [availableClubs, setAvailableClubs] = React.useState<FilterOption[]>([]);
+  const [availableSports, setAvailableSports] = React.useState<FilterOption[]>([]);
   const [availableScores, setAvailableScores] = React.useState<string[]>([]);
   const [availableAttendances, setAvailableAttendances] = React.useState<string[]>([]);
 
@@ -180,9 +180,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   // Initialize available filter options on mount
   React.useEffect(() => {
     const initialSelections: FilterSelections = {
-      uniformUnit: 'All Units',
-      club: 'All Clubs',
-      sport: 'All Sports',
+      uniformUnitCode: '',
+      clubCode: '',
+      sportCode: '',
       scoreRange: 'All Scores',
       attendanceRange: 'All Attendance'
     };
@@ -197,10 +197,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
 
   // Update available filter options when any filter changes
   React.useEffect(() => {
+    const uniformOption = availableUniforms.find(o => o.name === uniformFilter);
+    const clubOption = availableClubs.find(o => o.name === clubFilter);
+    const sportOption = availableSports.find(o => o.name === sportFilter);
+
     const currentSelections: FilterSelections = {
-      uniformUnit: uniformFilter,
-      club: clubFilter,
-      sport: sportFilter,
+      uniformUnitCode: uniformOption?.code ?? '',
+      clubCode: clubOption?.code ?? '',
+      sportCode: sportOption?.code ?? '',
       scoreRange: scoreFilter,
       attendanceRange: attendanceFilter
     };
@@ -476,7 +480,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                               className={cn("w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold", DT.radius.full)}
                               style={{ backgroundColor: tokens.colors.trendGreenBg, color: tokens.colors.primaryRed }}
                             >
-                              {student.name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                              {student.name.split(' ').filter((n: string): n is string => !!n).map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
                             </div>
                             <div>
                               <p className="text-sm font-bold" style={{ color: tokens.colors.textNavy }}>{student.name}</p>

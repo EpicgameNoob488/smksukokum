@@ -6,6 +6,7 @@ import { getRestrictedFields, FieldPermissions } from '../lib/restrictedEditUtil
 import SearchableDropdown from './SearchableDropdown';
 import { useSchoolData } from '../contexts/DataContext';
 import { saveUnitAdvisors } from '../lib/dataService';
+import { hasTeacherAssignment } from '../lib/teacherAssignmentUtils';
 
 interface EditTeacherModalProps {
   editModal: any;
@@ -157,13 +158,16 @@ export default function EditTeacherModal({
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="text-lg font-extrabold truncate" style={{ color: tokens.colors.textNavy }}>
             {editModal.type === 'management' && (editModal.index === -1 ? 'Add Management Role' : 'Edit Management Role')}
-            {editModal.type === 'formTeacher' && (editModal.index === -1 ? 'Add New Teacher' : 'Edit Form Teacher')}
             {editModal.type === 'unit' && (editModal.index === -1 ? 'Add Co-Curricular Unit' : 'Edit Co-Curricular Unit')}
             {editModal.type === 'student' && (editModal.index === -1 ? 'Add Student Details' : 'Edit Student Details')}
-            {editModal.type === 'fullTeacher' && (editModal.index === -1 ? 'Add New Teacher' : 'Edit Teacher Profile')}
+            {editModal.type === 'fullTeacher' && (
+              editModal.source === 'pendingRole'
+                ? 'Assign Role'
+                : (editModal.index === -1 ? 'Add New Teacher' : 'Edit Teacher Profile')
+            )}
           </h3>
           <button 
-            onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null })}
+            onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined })}
             className="p-2 rounded-full hover:bg-slate-200 transition-colors"
             style={{ color: tokens.colors.textMuted }}
           >
@@ -232,69 +236,6 @@ export default function EditTeacherModal({
                       const givenName = e.target.value;
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-
-          {editModal.type === 'formTeacher' && (
-            <>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Year</label>
-                <select 
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <option value={2025}>2025</option>
-                  <option value={2026}>2026</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Class Name</label>
-                <select 
-                  value={editModal.data.name}
-                  onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, name: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
-                >
-                  <option value="" disabled>Select a class</option>
-                  {allFormClasses.length > 0 ? allFormClasses.map((cls) => (
-                    <option key={cls.id} value={cls.nama_kelas}>{cls.nama_kelas}</option>
-                  )) : formTeachersData.map((cls) => (
-                    <option key={cls.id} value={cls.name}>{cls.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Surname</label>
-                  <input 
-                    type="text" 
-                    value={editModal.data.surname || ''}
-                    onChange={(e) => {
-                      const surname = e.target.value;
-                      const givenName = editModal.data.givenName || '';
-                      setEditModal({ ...editModal, data: { ...editModal.data, surname, teacher: `${givenName} ${surname}`.trim(), name: `${givenName} ${surname}`.trim() } });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Given Name</label>
-                  <input 
-                    type="text" 
-                    value={editModal.data.givenName || ''}
-                    onChange={(e) => {
-                      const givenName = e.target.value;
-                      const surname = editModal.data.surname || '';
-                      setEditModal({ ...editModal, data: { ...editModal.data, givenName, teacher: `${givenName} ${surname}`.trim(), name: `${givenName} ${surname}`.trim() } });
                     }}
                     className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
                     style={{ color: tokens.colors.textNavy }}
@@ -1234,14 +1175,6 @@ export default function EditTeacherModal({
                         await supabase.from('management_team').delete().eq('id', itemToDelete.id);
                       }
                       setManagementTeamData(newData);
-                    } else if (editModal.type === 'formTeacher') {
-                      const newData = [...formTeachersData];
-                      const itemToDelete = newData[editModal.index];
-                      newData.splice(editModal.index, 1);
-                      if (!isOfflineMode && itemToDelete?.id) {
-                        await supabase.from('form_classes').delete().eq('id', itemToDelete.id);
-                      }
-                      setFormTeachersData(newData);
                     } else if (editModal.type === 'unit') {
                       const newData = [...coCurricularUnitsData];
                       const itemToDelete = newData[editModal.index];
@@ -1280,7 +1213,7 @@ export default function EditTeacherModal({
                       await refresh();
                     }
                     
-                    setEditModal({ isOpen: false, type: null, index: -1, data: null });
+                    setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined });
                   } catch (error) {
                     console.error('[EditTeacherModal] Delete error:', error);
                     alert('Failed to delete. Please try again.');
@@ -1301,7 +1234,7 @@ export default function EditTeacherModal({
           </div>
           <div className="flex gap-3">
             <button 
-              onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null })}
+              onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined })}
               className="px-6 py-2.5 rounded-full text-sm font-bold transition-colors hover:bg-slate-200"
               style={{ color: tokens.colors.textNavy }}
             >
@@ -1334,25 +1267,6 @@ export default function EditTeacherModal({
                     if (error) throw error;
                   }
                   setManagementTeamData(newData);
-                } else if (editModal.type === 'formTeacher') {
-                  const updatedData = { ...editModal.data, tahun: selectedYear };
-                  const newData = [...formTeachersData];
-                  if (editModal.index === -1) {
-                    newData.push(updatedData);
-                  } else {
-                    newData[editModal.index] = updatedData;
-                  }
-                  
-                  if (!isOfflineMode) {
-                    const { error } = await supabase.from('form_classes').upsert({
-                       id: editModal.data.id,
-                       nama_kelas: editModal.data.name,
-                       teacher_name: editModal.data.teacher,
-                       tahun: selectedYear
-                    });
-                    if (error) throw error;
-                  }
-                  setFormTeachersData(newData);
                 } else if (editModal.type === 'unit') {
                   const updatedData = { ...editModal.data, tahun: selectedYear };
                   const newData = [...coCurricularUnitsData];
@@ -1455,6 +1369,12 @@ export default function EditTeacherModal({
                    }
                   setStudentsData(newData);
                 } else if (editModal.type === 'fullTeacher') {
+                  if (editModal.source === 'pendingRole' && !hasTeacherAssignment(editModal.data)) {
+                    alert('Please assign at least one role (Management, Form Class, or Unit Advisor) before saving.');
+                    setIsSaving(false);
+                    return;
+                  }
+
                   const originalName = editModal.originalName || editModal.data.name;
                   const newName = editModal.data.name;
   
@@ -1531,7 +1451,7 @@ export default function EditTeacherModal({
                   await refresh();
                 }
                 
-                setEditModal({ isOpen: false, type: null, index: -1, data: null });
+                setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined });
               } catch (err: any) {
                  console.error("Save failed:", err);
                  alert("Failed to save to Supabase: " + err.message);

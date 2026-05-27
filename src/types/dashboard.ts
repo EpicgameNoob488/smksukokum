@@ -47,10 +47,11 @@ export interface Student {
 
 export interface EditModalState {
   isOpen: boolean;
-  type: 'management' | 'formTeacher' | 'unit' | 'student' | 'fullTeacher' | null;
+  type: 'management' | 'unit' | 'student' | 'fullTeacher' | null;
   index: number;
   data: any;
   originalName?: string;
+  source?: 'newTeacher' | 'classCard' | 'pendingRole';
 }
 
 export interface DashboardProps {

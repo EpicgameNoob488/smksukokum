@@ -26,7 +26,12 @@ describe('filterStudentsByUnit', () => {
           ? { kelab_dan_persatuan: { unit_code: 'bm' } }
           : { sukan_dan_permainan: { unit_code: 'bola' } }
       : {},
-    pajskBreakdown: { sukan: 0, kelab: 0, uniform: 0, extraKurikulum: 0 },
+    pajskBreakdown: {
+      sukan: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
+      kelab: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
+      uniform: { penglibatan: 0, kehadiran: 0, pencapaian: 0, total: 0 },
+      extraKurikulum: 0,
+    },
   });
 
   const students = [
