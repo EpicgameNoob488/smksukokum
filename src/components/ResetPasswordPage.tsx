@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { Loader2, Lock, AlertTriangle, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
-
-const tokens = {
-  colors: {
-    primaryRed: '#F04444',
-    mainBg: '#F4F7F6',
-    cardInnerBg: '#FFFFFF',
-    textNavy: '#2B3674',
-    textMuted: '#8F9BBA',
-  }
-};
+import { tokens, DT } from '../lib/designTokens';
 
 interface ResetPasswordPageProps {
   onSuccess: () => void;
@@ -120,9 +111,9 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
       <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
         <div className="absolute top-0 left-0 w-full h-1/2" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0% 100%)' }}></div>
         
-        <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className={`relative w-full max-w-md ${DT.radius.xl} ${DT.shadow.modal} p-10 z-10 animate-in fade-in slide-in-from-bottom-4 ${DT.transition.slower}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
           <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+            <div className={`w-16 h-16 ${DT.radius.full} bg-green-100 flex items-center justify-center mb-4`}>
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
             <h2 className="text-2xl font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
@@ -135,7 +126,7 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
 
           <button
             onClick={onSuccess}
-            className="w-full mt-8 py-3.5 rounded-xl text-white text-sm font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            className={`w-full mt-8 py-3.5 ${DT.radius.md} text-white text-sm font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2`}
             style={{ backgroundColor: tokens.colors.primaryRed }}
           >
             Go to Login <ArrowRight className="w-4 h-4" />
@@ -150,7 +141,7 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
       <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
         <div className="absolute top-0 left-0 w-full h-1/2" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0% 100%)' }}></div>
         
-        <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 z-10">
+        <div className={`relative w-full max-w-md ${DT.radius.xl} ${DT.shadow.modal} p-10 z-10`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
           <div className="flex flex-col items-center text-center">
             <Loader2 className="w-10 h-10 animate-spin mb-4" style={{ color: tokens.colors.primaryRed }} />
             <h2 className="text-xl font-bold" style={{ color: tokens.colors.textNavy }}>
@@ -169,10 +160,10 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
     <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
       <div className="absolute top-0 left-0 w-full h-1/2" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0% 100%)' }}></div>
       
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className={`relative w-full max-w-md ${DT.radius.xl} ${DT.shadow.modal} p-10 z-10 animate-in fade-in slide-in-from-bottom-4 ${DT.transition.slower}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
         
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-red-50" style={{ color: tokens.colors.primaryRed }}>
+          <div className={`w-16 h-16 ${DT.radius.lg} flex items-center justify-center mb-4 ${DT.shadow.md} bg-red-50`} style={{ color: tokens.colors.primaryRed }}>
             <Lock className="w-8 h-8" />
           </div>
           <h1 className="text-2xl font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
@@ -214,9 +205,9 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                className={`w-full pl-10 pr-4 py-3 ${DT.radius.md} text-sm font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                 placeholder="Enter new password"
-                style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
               />
             </div>
             <p className="text-xs mt-1 ml-1" style={{ color: tokens.colors.textMuted }}>
@@ -235,9 +226,9 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                className={`w-full pl-10 pr-4 py-3 ${DT.radius.md} text-sm font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                 placeholder="Confirm new password"
-                style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
               />
             </div>
           </div>
@@ -245,7 +236,7 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full mt-4 py-3.5 rounded-xl text-white text-sm font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:transform-none"
+            className={`w-full mt-4 py-3.5 ${DT.radius.md} text-white text-sm font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:transform-none`}
             style={{ backgroundColor: tokens.colors.primaryRed }}
           >
             {isLoading ? (
@@ -260,8 +251,8 @@ export default function ResetPasswordPage({ onSuccess, onCancel }: ResetPassword
 
         <button
           onClick={onCancel}
-          className="w-full mt-4 py-3.5 rounded-xl text-sm font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
-          style={{ color: tokens.colors.textNavy }}
+          className={`w-full mt-4 py-3.5 ${DT.radius.md} text-sm font-bold border hover:bg-slate-50 transition-all flex items-center justify-center gap-2 cursor-pointer`}
+          style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
         >
           <ArrowLeft className="w-4 h-4" />
           Cancel

@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../lib/api';
 import { Loader2, Mail, User, ArrowRight, ArrowLeft, AlertTriangle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
-
-const tokens = {
-  colors: {
-    primaryRed: '#F04444',
-    mainBg: '#F4F7F6',
-    cardInnerBg: '#FFFFFF',
-    textNavy: '#2B3674',
-    textMuted: '#8F9BBA',
-  }
-};
+import { tokens, DT } from '../lib/designTokens';
 
 interface RegisterPageProps {
   onCancel: () => void;
@@ -201,11 +192,11 @@ return (
     <div className="min-h-screen flex items-center justify-center p-2" style={{ backgroundColor: tokens.colors.mainBg }}>
       <div className="absolute top-0 left-0 w-full h-1/3" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 60%, 0% 100%)' }}></div>
       
-      <div className="relative w-full max-w-sm bg-white rounded-xl shadow-xl p-4 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className={`relative w-full max-w-sm ${DT.radius.md} ${DT.shadow.xl} p-4 z-10 animate-in fade-in slide-in-from-bottom-4 ${DT.transition.slower}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
         
         {/* Header */}
         <div className="flex flex-col items-center mb-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-1 shadow-md bg-red-50" style={{ color: tokens.colors.primaryRed }}>
+          <div className={`w-8 h-8 ${DT.radius.sm} flex items-center justify-center mb-1 ${DT.shadow.md} bg-red-50`} style={{ color: tokens.colors.primaryRed }}>
               <User className="w-4 h-4" />
           </div>
           <h1 className="text-sm font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
@@ -310,9 +301,9 @@ return (
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                    className={`w-full pl-8 pr-3 py-1.5 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                     placeholder="e.g. Ahmad bin Abu"
-                    style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                    style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                   />
                 </div>
               </div>
@@ -399,9 +390,9 @@ return (
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className={`w-full pl-8 pr-3 py-1.5 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                   placeholder="teacher@smk.edu.my"
-                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                 />
               </div>
             </div>
@@ -416,9 +407,9 @@ return (
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-8 pr-8 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className={`w-full pl-8 pr-8 py-1.5 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                   placeholder="Min 6 characters"
-                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                 />
                 <button
                   type="button"
@@ -440,9 +431,9 @@ return (
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className={`w-full pl-8 pr-3 py-1.5 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                   placeholder="Re-enter password"
-                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                 />
               </div>
             </div>
@@ -459,7 +450,7 @@ return (
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-1 py-2 rounded-lg text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none"
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-white text-xs font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none`}
               style={{ backgroundColor: tokens.colors.primaryRed }}
             >
               {isLoading ? (
@@ -474,8 +465,8 @@ return (
             <button
               type="button"
               onClick={onCancel}
-              className="w-full mt-1 py-2 rounded-lg text-[10px] font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer"
-              style={{ color: tokens.colors.textNavy }}
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-[10px] font-bold border hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer`}
+              style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
             >
               <ArrowLeft className="w-3 h-3" />
               Cancel & Return Home

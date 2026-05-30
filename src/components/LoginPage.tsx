@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { Loader2, Lock, Mail, AlertTriangle, ArrowRight, Key, CheckCircle, ArrowLeft } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
-
-const tokens = {
-  colors: {
-    primaryRed: '#F04444',
-    mainBg: '#F4F7F6',
-    cardInnerBg: '#FFFFFF',
-    textNavy: '#2B3674',
-    textMuted: '#8F9BBA',
-  }
-};
+import { tokens, DT } from '../lib/designTokens';
 
 interface LoginPageProps {
   role: 'admin' | 'teacher';
@@ -117,11 +108,11 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-1/3" style={{ backgroundColor: tokens.colors.primaryRed, clipPath: 'polygon(0 0, 100% 0, 100% 60%, 0% 100%)' }}></div>
       
-      <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl p-4 z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className={`relative w-full max-w-sm ${DT.radius.lg} ${DT.shadow.xl} p-4 z-10 animate-in fade-in slide-in-from-bottom-4 ${DT.transition.slower}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
         
         {/* Header Logo Area */}
         <div className="flex flex-col items-center mb-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2 shadow-md bg-red-50" style={{ color: tokens.colors.primaryRed }}>
+          <div className={`w-10 h-10 ${DT.radius.md} flex items-center justify-center mb-2 ${DT.shadow.md} bg-red-50`} style={{ color: tokens.colors.primaryRed }}>
              {isForgotPassword ? <Key className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
           </div>
           <h1 className="text-base font-extrabold text-center tracking-tight" style={{ color: tokens.colors.textNavy }}>
@@ -181,7 +172,7 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
 
             <button
               onClick={handleBackToLogin}
-              className="w-full mt-1 py-2 rounded-lg text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 cursor-pointer"
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-white text-xs font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 cursor-pointer`}
               style={{ backgroundColor: tokens.colors.primaryRed }}
             >
               <ArrowLeft className="w-3 h-3" />
@@ -207,9 +198,9 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
                     required
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                    className={`w-full pl-8 pr-3 py-2 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                     placeholder="your@email.com"
-                    style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                    style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                   />
                 </div>
               </div>
@@ -217,7 +208,7 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
               <button
                 type="submit"
                 disabled={isResetLoading}
-                className="w-full mt-3 py-2 rounded-lg text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none"
+                className={`w-full mt-3 py-2 ${DT.radius.sm} text-white text-xs font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none`}
                 style={{ backgroundColor: tokens.colors.primaryRed }}
               >
                 {isResetLoading ? (
@@ -232,8 +223,8 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
 
             <button
               onClick={handleBackToLogin}
-              className="w-full mt-1 py-2 rounded-lg text-[10px] font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer"
-              style={{ color: tokens.colors.textNavy }}
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-[10px] font-bold border hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer`}
+              style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
             >
               <ArrowLeft className="w-3 h-3" />
               Back to Login
@@ -253,9 +244,9 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className={`w-full pl-8 pr-3 py-2 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                   placeholder={role === 'admin' ? 'admin@smkstursula.edu.my' : 'teacher@smkstursula.edu.my'}
-                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                 />
               </div>
             </div>
@@ -282,9 +273,9 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 rounded-lg text-xs font-medium border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white"
+                  className={`w-full pl-8 pr-3 py-2 ${DT.radius.sm} text-xs font-medium border focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-slate-50 focus:bg-white`}
                   placeholder="••••••••"
-                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                  style={{ color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                 />
               </div>
             </div>
@@ -292,7 +283,7 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-1 py-2 rounded-lg text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none"
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-white text-xs font-bold ${DT.shadow.md} hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1 disabled:opacity-70 disabled:hover:transform-none`}
               style={{ backgroundColor: tokens.colors.primaryRed }}
             >
               {isLoading ? (
@@ -307,8 +298,8 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
             <button
               type="button"
               onClick={onCancel}
-              className="w-full mt-1 py-2 rounded-lg text-[10px] font-bold border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer"
-              style={{ color: tokens.colors.textNavy }}
+              className={`w-full mt-1 py-2 ${DT.radius.sm} text-[10px] font-bold border hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer`}
+              style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
             >
               Cancel & Return Home
             </button>

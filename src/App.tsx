@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, isOfflineMode } from './lib/supabase';
+import { tokens, DT } from './lib/designTokens';
 import { Session } from '@supabase/supabase-js';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { DataProvider } from './contexts/DataContext';
@@ -119,8 +120,8 @@ export default function App() {
 
   if (isInitializing || roleLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F7F6]">
-        <div className="w-8 h-8 border-4 border-[#F04444] border-t-transparent rounded-full animate-spin"></div>
+      <div className={`min-h-screen flex items-center justify-center`} style={{ backgroundColor: tokens.colors.mainBg }}>
+        <div className={`w-8 h-8 border-4 ${DT.radius.full} animate-spin`} style={{ borderColor: tokens.colors.primaryRed, borderTopColor: 'transparent' }}></div>
       </div>
     );
   }
@@ -161,27 +162,29 @@ export default function App() {
       return (
         <DataProvider>
         <SettingsProvider>
-          <div className="min-h-screen flex items-center justify-center bg-[#F4F7F6] p-4">
-            <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center">
-              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+          <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
+            <div className={`${DT.radius.xl} ${DT.shadow.xl} p-8 max-w-md text-center`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+              <div className={`w-16 h-16 ${DT.radius.full} bg-red-100 flex items-center justify-center mx-auto mb-4`}>
                 <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-[#2B3674] mb-2">Not Authorized</h2>
-              <p className="text-[#8F9BBA] mb-6">
+              <h2 className="text-xl font-bold mb-2" style={{ color: tokens.colors.textNavy }}>Not Authorized</h2>
+              <p className="mb-6" style={{ color: tokens.colors.textMuted }}>
                 Your account is not authorized to access this system. Please contact your administrator.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={handleNotAuthorizedGoToTeacher}
-                  className="px-6 py-3 bg-[#F04444] text-white rounded-xl font-bold hover:bg-red-600 transition-colors"
+                  className={`px-6 py-3 text-white ${DT.radius.md} font-bold hover:bg-red-600 transition-colors`}
+                  style={{ backgroundColor: tokens.colors.primaryRed }}
                 >
                   Go to Teacher Portal
                 </button>
                 <button
                   onClick={handleNotAuthorizedBack}
-                  className="px-6 py-3 bg-slate-200 text-[#2B3674] rounded-xl font-bold hover:bg-slate-300 transition-colors"
+                  className={`px-6 py-3 bg-slate-200 ${DT.radius.md} font-bold hover:bg-slate-300 transition-colors`}
+                  style={{ color: tokens.colors.textNavy }}
                 >
                   Back
                 </button>
@@ -207,27 +210,29 @@ export default function App() {
       return (
         <DataProvider>
         <SettingsProvider>
-          <div className="min-h-screen flex items-center justify-center bg-[#F4F7F6] p-4">
-            <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center">
-              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+          <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: tokens.colors.mainBg }}>
+            <div className={`${DT.radius.xl} ${DT.shadow.xl} p-8 max-w-md text-center`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+              <div className={`w-16 h-16 ${DT.radius.full} bg-red-100 flex items-center justify-center mx-auto mb-4`}>
                 <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-[#2B3674] mb-2">Access Denied</h2>
-              <p className="text-[#8F9BBA] mb-6">
+              <h2 className="text-xl font-bold mb-2" style={{ color: tokens.colors.textNavy }}>Access Denied</h2>
+              <p className="mb-6" style={{ color: tokens.colors.textMuted }}>
                 Your account is authorized for Teacher Portal only. Admin access is required for this section.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={handleAccessDeniedGoToTeacher}
-                  className="px-6 py-3 bg-[#F04444] text-white rounded-xl font-bold hover:bg-red-600 transition-colors"
+                  className={`px-6 py-3 text-white ${DT.radius.md} font-bold hover:bg-red-600 transition-colors`}
+                  style={{ backgroundColor: tokens.colors.primaryRed }}
                 >
                   Go to Teacher Portal
                 </button>
                 <button
                   onClick={handleAccessDeniedBack}
-                  className="px-6 py-3 bg-slate-200 text-[#2B3674] rounded-xl font-bold hover:bg-slate-300 transition-colors"
+                  className={`px-6 py-3 bg-slate-200 ${DT.radius.md} font-bold hover:bg-slate-300 transition-colors`}
+                  style={{ color: tokens.colors.textNavy }}
                 >
                   Back
                 </button>

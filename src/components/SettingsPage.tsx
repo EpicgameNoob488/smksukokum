@@ -5,15 +5,7 @@ import { supabase, isOfflineMode } from '../lib/supabase';
 import { api } from '../lib/api';
 import { ArrowLeft, Save, Shield, Users, Building, AlertTriangle, UserPlus, Upload, Loader2, Camera, Check, X, Clock, Key, Eye, EyeOff, Settings as SettingsIcon } from 'lucide-react';
 import NotificationBell from './NotificationBell';
-
-const tokens = {
-  colors: {
-    primaryRed: '#F04444',
-    navy: '#2B3674',
-    textMuted: '#8F9BBA',
-    mainBg: '#F4F7F6',
-  }
-};
+import { tokens, DT } from '../lib/designTokens';
 
 export default function SettingsPage({ onBack, session }: { onBack: () => void, session: any }) {
   const { settings, updateSettings } = useSettings();
@@ -240,18 +232,18 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
   return (
     <div className="min-h-screen pb-12" style={{ backgroundColor: tokens.colors.mainBg }}>
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <header className={`border-b sticky top-0 z-30 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <button 
               onClick={onBack}
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors border border-slate-200"
-              style={{ color: tokens.colors.navy }}
+              className={`w-10 h-10 ${DT.radius.full} flex items-center justify-center hover:bg-slate-50 transition-colors border`}
+              style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-xl font-bold" style={{ color: tokens.colors.navy }}>System Settings</h1>
+              <h1 className="text-xl font-bold" style={{ color: tokens.colors.textNavy }}>System Settings</h1>
               <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Admin Configuration Portal</p>
             </div>
           </div>
@@ -267,41 +259,41 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
         <div className="w-full md:w-64 flex-shrink-0 space-y-2">
           <button 
             onClick={() => setActiveTab('profile')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === 'profile' ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-slate-200/50'}`}
-            style={{ color: activeTab === 'profile' ? tokens.colors.primaryRed : tokens.colors.navy }}
+            className={`w-full flex items-center gap-3 px-4 py-3 ${DT.radius.md} text-sm font-bold transition-all ${activeTab === 'profile' ? `${DT.shadow.sm} ring-1` : 'hover:bg-slate-200/50'}`}
+            style={{ color: activeTab === 'profile' ? tokens.colors.primaryRed : tokens.colors.textNavy, backgroundColor: activeTab === 'profile' ? tokens.colors.cardInnerBg : undefined, borderColor: activeTab === 'profile' ? tokens.colors.lightBorder : undefined }}
           >
             <Building className="w-5 h-5" /> School Profile
           </button>
           <button 
             onClick={() => setActiveTab('security')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === 'security' ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-slate-200/50'}`}
-            style={{ color: activeTab === 'security' ? tokens.colors.primaryRed : tokens.colors.navy }}
+            className={`w-full flex items-center gap-3 px-4 py-3 ${DT.radius.md} text-sm font-bold transition-all ${activeTab === 'security' ? `${DT.shadow.sm} ring-1` : 'hover:bg-slate-200/50'}`}
+            style={{ color: activeTab === 'security' ? tokens.colors.primaryRed : tokens.colors.textNavy, backgroundColor: activeTab === 'security' ? tokens.colors.cardInnerBg : undefined, borderColor: activeTab === 'security' ? tokens.colors.lightBorder : undefined }}
           >
             <Shield className="w-5 h-5" /> Account Security
           </button>
           <button 
             onClick={() => setActiveTab('users')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === 'users' ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-slate-200/50'}`}
-            style={{ color: activeTab === 'users' ? tokens.colors.primaryRed : tokens.colors.navy }}
+            className={`w-full flex items-center gap-3 px-4 py-3 ${DT.radius.md} text-sm font-bold transition-all ${activeTab === 'users' ? `${DT.shadow.sm} ring-1` : 'hover:bg-slate-200/50'}`}
+            style={{ color: activeTab === 'users' ? tokens.colors.primaryRed : tokens.colors.textNavy, backgroundColor: activeTab === 'users' ? tokens.colors.cardInnerBg : undefined, borderColor: activeTab === 'users' ? tokens.colors.lightBorder : undefined }}
           >
             <Users className="w-5 h-5" /> User Management
           </button>
           <button 
             onClick={() => setActiveTab('requests')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === 'requests' ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-slate-200/50'}`}
-            style={{ color: activeTab === 'requests' ? tokens.colors.primaryRed : tokens.colors.navy }}
+            className={`w-full flex items-center gap-3 px-4 py-3 ${DT.radius.md} text-sm font-bold transition-all ${activeTab === 'requests' ? `${DT.shadow.sm} ring-1` : 'hover:bg-slate-200/50'}`}
+            style={{ color: activeTab === 'requests' ? tokens.colors.primaryRed : tokens.colors.textNavy, backgroundColor: activeTab === 'requests' ? tokens.colors.cardInnerBg : undefined, borderColor: activeTab === 'requests' ? tokens.colors.lightBorder : undefined }}
           >
             <Clock className="w-5 h-5" /> Pending Requests
           </button>
         </div>
 
         {/* Form Content Area */}
-        <div className="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className={`flex-1 ${DT.radius.lg} ${DT.shadow.sm} border overflow-hidden`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
           
           {/* Profile Tab */}
           {activeTab === 'profile' && (
             <div className="p-8 animate-in fade-in">
-              <h2 className="text-xl font-bold mb-6" style={{ color: tokens.colors.navy }}>School Profile</h2>
+              <h2 className="text-xl font-bold mb-6" style={{ color: tokens.colors.textNavy }}>School Profile</h2>
               
               <form onSubmit={handleSaveProfile} className="space-y-6 max-w-lg">
                 <div>
@@ -311,16 +303,16 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                     value={schoolName}
                     onChange={(e) => setSchoolName(e.target.value)}
                     required
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none transition-all"
-                    style={{ color: tokens.colors.navy }}
+                    className={`w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-bold focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none transition-all`}
+                    style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold mb-2 ml-1 uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Logo Customization</label>
                    
-                  <div className="flex items-center gap-6 p-4 rounded-xl border border-slate-100 bg-slate-50">
-                    <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-white shadow-sm border border-slate-200 overflow-hidden shrink-0">
+                  <div className={`flex items-center gap-6 p-4 ${DT.radius.md} border bg-slate-50`} style={{ borderColor: tokens.colors.lighterBorder }}>
+                    <div className={`w-16 h-16 ${DT.radius.md} flex items-center justify-center ${DT.shadow.sm} border overflow-hidden shrink-0`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
                        {logoUrl ? (
                          <img src={logoUrl} alt="Logo Preview" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = ''; setLogoUrl(''); }} />
                        ) : (
@@ -339,8 +331,8 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                         <button 
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold hover:bg-slate-50 transition-all cursor-pointer"
-                          style={{ color: tokens.colors.navy }}
+                          className={`flex items-center justify-center gap-2 px-4 py-2 ${DT.radius.md} border text-xs font-bold hover:bg-slate-50 transition-all cursor-pointer`}
+                          style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                         >
                           <Upload className="w-4 h-4" /> Upload School Image
                         </button>
@@ -351,7 +343,8 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                             value={logoUrl}
                             onChange={(e) => setLogoUrl(e.target.value)}
                             placeholder="Or paste image URL (https://...)"
-                            className="w-full px-4 py-2 rounded-lg border border-slate-200 text-[10px] font-medium focus:ring-2 focus:ring-red-100 outline-none bg-white"
+                            className={`w-full px-4 py-2 ${DT.radius.sm} border text-[10px] font-medium focus:ring-2 focus:ring-red-100 outline-none`}
+                            style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg }}
                           />
                         </div>
                       </div>
@@ -363,11 +356,11 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100">
+                <div className="pt-4 border-t" style={{ borderColor: tokens.colors.lighterBorder }}>
                   <button 
                     type="submit"
                     disabled={isSavingProfile}
-                    className="px-6 py-2.5 rounded-xl text-white font-bold text-sm shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
+                    className={`px-6 py-2.5 ${DT.radius.md} text-white font-bold text-sm ${DT.shadow.sm} hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50`}
                     style={{ backgroundColor: tokens.colors.primaryRed }}
                   >
                     {isSavingProfile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
@@ -381,7 +374,7 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
           {/* Security Tab */}
           {activeTab === 'security' && (
             <div className="p-8 animate-in fade-in">
-              <h2 className="text-xl font-bold mb-2" style={{ color: tokens.colors.navy }}>Account Security</h2>
+              <h2 className="text-xl font-bold mb-2" style={{ color: tokens.colors.textNavy }}>Account Security</h2>
               <p className="text-xs font-medium mb-6" style={{ color: tokens.colors.textMuted }}>Logged in as: <span className="font-bold">{session?.user?.email || 'Admin/Developer Bypass'}</span></p>
 
               {isOfflineMode && (
@@ -401,7 +394,8 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                     required
                     placeholder="••••••••"
                     disabled={isOfflineMode}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none transition-all disabled:bg-slate-100 disabled:cursor-not-allowed"
+                    className={`w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-bold focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none transition-all disabled:bg-slate-100 disabled:cursor-not-allowed`}
+                    style={{ borderColor: tokens.colors.lightBorder }}
                   />
                   <p className="text-[10px] mt-1.5 text-slate-500 font-medium ml-1">Must be at least 6 characters long.</p>
                 </div>
@@ -412,12 +406,12 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                   </p>
                 )}
 
-                <div className="pt-4 border-t border-slate-100">
+                <div className="pt-4 border-t" style={{ borderColor: tokens.colors.lighterBorder }}>
                   <button 
                     type="submit"
                     disabled={isSavingSecurity || isOfflineMode}
-                    className="px-6 py-2.5 rounded-xl text-white font-bold text-sm shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
-                    style={{ backgroundColor: tokens.colors.navy }}
+                    className={`px-6 py-2.5 ${DT.radius.md} text-white font-bold text-sm ${DT.shadow.sm} hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50`}
+                    style={{ backgroundColor: tokens.colors.textNavy }}
                   >
                     {isSavingSecurity ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
                     Update Password
@@ -431,7 +425,7 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
           {activeTab === 'users' && (
             <div className="p-8 animate-in fade-in">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold" style={{ color: tokens.colors.navy }}>User Management</h2>
+                <h2 className="text-xl font-bold" style={{ color: tokens.colors.textNavy }}>User Management</h2>
                 <button 
                   onClick={fetchUsers}
                   disabled={isLoadingUsers || isOfflineMode}
@@ -459,9 +453,9 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                   <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
                 </div>
               ) : (
-                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <div className={`border ${DT.radius.md} overflow-hidden`} style={{ borderColor: tokens.colors.lightBorder }}>
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                    <thead className="bg-slate-50 border-b text-slate-500 text-xs uppercase tracking-wider" style={{ borderColor: tokens.colors.lightBorder }}>
                       <tr>
                         <th className="px-4 py-3 font-bold">Name / Email</th>
                         <th className="px-4 py-3 font-bold">Role</th>
@@ -481,11 +475,11 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                           <tr key={user.id} className="hover:bg-slate-50">
                             <td className="px-4 py-4">
                               {user.teacher_name && (
-                                <div className="font-bold" style={{ color: tokens.colors.navy }}>
+                                <div className="font-bold" style={{ color: tokens.colors.textNavy }}>
                                   {user.teacher_name}
                                 </div>
                               )}
-                              <div className="text-sm" style={{ color: user.teacher_name ? tokens.colors.textMuted : tokens.colors.navy }}>
+                              <div className="text-sm" style={{ color: user.teacher_name ? tokens.colors.textMuted : tokens.colors.textNavy }}>
                                 {user.email}
                               </div>
                             </td>
@@ -539,7 +533,7 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
           {activeTab === 'requests' && (
             <div className="p-8 animate-in fade-in">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold" style={{ color: tokens.colors.navy }}>Pending Requests</h2>
+                <h2 className="text-xl font-bold" style={{ color: tokens.colors.textNavy }}>Pending Requests</h2>
                 <button 
                   onClick={fetchPendingRequests}
                   disabled={isLoadingRequests || isOfflineMode}
@@ -575,9 +569,9 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                   <p className="text-xs text-slate-400 mt-1">New teacher registration requests will appear here</p>
                 </div>
               ) : (
-                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <div className={`border ${DT.radius.md} overflow-hidden`} style={{ borderColor: tokens.colors.lightBorder }}>
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                    <thead className="bg-slate-50 border-b text-slate-500 text-xs uppercase tracking-wider" style={{ borderColor: tokens.colors.lightBorder }}>
                       <tr>
                         <th className="px-4 py-3 font-bold text-center">Name</th>
                         <th className="px-4 py-3 font-bold text-center">Email</th>
@@ -589,7 +583,7 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                     <tbody className="divide-y divide-slate-100">
                       {pendingRequests.map((request) => (
                         <tr key={request.id} className="hover:bg-slate-50">
-                          <td className="px-4 py-4 text-center font-bold" style={{ color: tokens.colors.navy }}>
+                          <td className="px-4 py-4 text-center font-bold" style={{ color: tokens.colors.textNavy }}>
                             {request.full_name}
                           </td>
                           <td className="px-4 py-4 text-center text-slate-600">{request.email}</td>
@@ -646,15 +640,15 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
       {/* Password Reset Modal */}
       {resetPasswordModal.open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-slate-100">
+          <div className={`${DT.radius.lg} ${DT.shadow.modal} w-full max-w-md overflow-hidden`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+            <div className="p-6 border-b" style={{ borderColor: tokens.colors.lighterBorder }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-orange-50">
                     <Key className="w-5 h-5 text-orange-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold" style={{ color: tokens.colors.navy }}>Reset Password</h3>
+                    <h3 className="text-lg font-bold" style={{ color: tokens.colors.textNavy }}>Reset Password</h3>
                     <p className="text-xs text-slate-500">{resetPasswordModal.user?.email}</p>
                   </div>
                 </div>
@@ -679,8 +673,8 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                     onChange={(e) => setResetNewPassword(e.target.value)}
                     required
                     placeholder="Enter new password"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-orange-100 focus:border-orange-400 outline-none transition-all pr-12"
-                    style={{ color: tokens.colors.navy }}
+                    className={`w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-medium focus:ring-2 focus:ring-orange-100 focus:border-orange-400 outline-none transition-all pr-12`}
+                    style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                   />
                   <button
                     type="button"
@@ -703,8 +697,8 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                   onChange={(e) => setResetConfirmPassword(e.target.value)}
                   required
                   placeholder="Confirm new password"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-orange-100 focus:border-orange-400 outline-none transition-all"
-                  style={{ color: tokens.colors.navy }}
+                  className={`w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-medium focus:ring-2 focus:ring-orange-100 focus:border-orange-400 outline-none transition-all`}
+                  style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                 />
               </div>
 
@@ -724,15 +718,15 @@ export default function SettingsPage({ onBack, session }: { onBack: () => void, 
                 <button
                   type="button"
                   onClick={closeResetModal}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold hover:bg-slate-50 transition-colors"
-                  style={{ color: tokens.colors.navy }}
+                  className={`flex-1 px-4 py-2.5 ${DT.radius.md} border text-sm font-bold hover:bg-slate-50 transition-colors`}
+                  style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isResettingPassword}
-                  className="flex-1 px-4 py-2.5 rounded-xl text-white text-sm font-bold shadow-sm hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                  className={`flex-1 px-4 py-2.5 ${DT.radius.md} text-white text-sm font-bold ${DT.shadow.sm} hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2`}
                   style={{ backgroundColor: tokens.colors.primaryRed }}
                 >
                   {isResettingPassword ? (
