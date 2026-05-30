@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, CSSProperties } from 'react';
 import { Search, ChevronDown, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -10,6 +10,7 @@ interface SearchableDropdownProps {
   allowCustom?: boolean;
   className?: string;
   controlClassName?: string;
+  controlStyle?: CSSProperties;
   textSize?: 'xs' | 'sm';
   disabled?: boolean;
 }
@@ -22,6 +23,7 @@ export default function SearchableDropdown({
   allowCustom = true,
   className = '',
   controlClassName = 'px-4 py-2.5 border-slate-200 bg-white rounded-xl',
+  controlStyle,
   textSize = 'sm',
   disabled = false
 }: SearchableDropdownProps) {
@@ -75,6 +77,7 @@ export default function SearchableDropdown({
           disabled && 'opacity-50 cursor-not-allowed bg-slate-50',
           controlClassName
         )}
+        style={controlStyle}
       >
         {isOpen ? (
           <div className="flex items-center gap-2 min-w-0">

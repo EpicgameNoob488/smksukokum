@@ -7,6 +7,7 @@ import type { CSVColumn } from '../lib/csvExport';
 import SearchableDropdown from './SearchableDropdown';
 import { getAvailableFilterOptions, type FilterSelections, type FilterOption } from '../lib/filterUtils';
 import { filterStudentsForUnitAdvisor } from '../lib/studentFilterUtils';
+import { DT } from '../lib/designTokens';
 
 interface StudentTableProps {
   classId: string | null;
@@ -26,36 +27,6 @@ interface StudentTableProps {
 }
 
 const STUDENTS_PER_PAGE = 12;
-
-const DT = {
-  radius: {
-    sm: 'rounded-lg',
-    md: 'rounded-xl',
-    lg: 'rounded-2xl',
-    xl: 'rounded-3xl',
-    full: 'rounded-full',
-  },
-  shadow: {
-    sm: 'shadow-sm',
-    md: 'shadow-md',
-    lg: 'shadow-lg',
-    xl: 'shadow-xl',
-    modal: 'shadow-2xl',
-  },
-  spacing: {
-    xs: 'text-[10px]',
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base',
-    xl: 'text-xl',
-    '2xl': 'text-2xl',
-  },
-  transition: {
-    fast: 'duration-150',
-    normal: 'duration-200',
-    slow: 'duration-300',
-  },
-};
 
 export default function StudentTable({ classId, className, onBack, tokens, studentsData, setEditModal, isAdmin = false, formClassId, formClassName, selectedYear = 2025, currentYear = 2026, onYearChange, unitAdvisorMode = false, activeUnitCode = '' }: StudentTableProps) {
   const isFormTeacher = (!!formClassId && formClassId === classId) || (!!formClassName && formClassName === className);
@@ -234,14 +205,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
   };
 
   return (
-    <div className="animate-in slide-in-from-right duration-500">
+    <div className={`animate-in slide-in-from-right ${DT.transition.slower}`}>
       <div className="flex flex-col gap-6 mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div>
               <div className="flex items-center gap-3">
                 <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Student List</h2>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100" style={{ color: tokens.colors.primaryRed }}>
+                <span className={`${DT.radius.full} text-xs font-bold`} style={{ color: tokens.colors.primaryRed, backgroundColor: tokens.colors.cardOuterBg }}>
                   Year {selectedYear}
                 </span>
               </div>
@@ -257,8 +228,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 placeholder="Search student..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-full sm:w-64 font-medium border border-slate-200"
-                style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                className={`pl-10 pr-4 py-2.5 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 transition-all w-full sm:w-64 font-medium border`}
+                style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
               />
             </div>
             <select 
@@ -268,8 +239,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   onYearChange(Number(e.target.value));
                 }
               }}
-              className="text-sm font-bold bg-white border border border-slate-200 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer"
-              style={{ color: tokens.colors.primaryRed }}
+              className={`text-sm font-bold ${DT.radius.full} px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer border`}
+              style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
             >
               {availableYears.map(year => (
                 <option key={year} value={year}>{year}</option>
@@ -278,10 +249,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <button 
               onClick={() => setShowFilters(!showFilters)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-bold shadow-sm transition-all border flex items-center gap-2",
-                showFilters ? "bg-slate-800 text-white border-slate-800" : "bg-white hover:bg-slate-50 border-slate-200"
+                `px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} transition-all border flex items-center gap-2`,
+                showFilters ? "bg-slate-800 text-white border-slate-800" : `hover:bg-slate-50`
               )}
-              style={!showFilters ? { color: tokens.colors.textNavy } : {}}
+              style={!showFilters ? { backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy } : {}}
             >
               <Filter className="w-4 h-4" />
               {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -292,13 +263,14 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 resetFilters();
                 setShowFilters(false);
               }}
-              className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer"
-              style={{ color: tokens.colors.textNavy }}
+              className={`px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} hover:bg-slate-50 transition-colors border cursor-pointer`}
+              style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
             >
               Reset
             </button>
             <button 
               onClick={() => {
+                const columns: CSVColumn<Student>[] = [
                 const columns: CSVColumn<Student>[] = [
                   { key: 'id', label: 'ID' },
                   { key: 'name', label: 'Name' },
@@ -325,7 +297,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 ];
                 exportToCSV(filteredStudents, columns, `students-${className}-${Date.now()}.csv`);
               }}
-              className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer" style={{ color: tokens.colors.textNavy }}
+              className={`px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} hover:bg-slate-50 transition-colors border cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
             >
               <Download className="w-4 h-4 inline-block mr-2" />
               Export
@@ -334,7 +306,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm animate-in slide-in-from-top duration-300">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 2xl:gap-4 p-4 ${DT.radius.lg} border ${DT.shadow.sm} animate-in slide-in-from-top ${DT.transition.slow}`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
               <label className="text-xs font-semibold leading-tight break-words" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
               <SearchableDropdown
@@ -344,7 +316,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableUniforms.map(u => u.name)}
                 placeholder="All Units"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName={`h-10 px-4 py-2 border ${DT.radius.full} flex items-center`}
+                controlStyle={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -356,7 +329,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableClubs.map(c => c.name)}
                 placeholder="All Clubs"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName={`h-10 px-4 py-2 border ${DT.radius.full} flex items-center`}
+                controlStyle={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -368,7 +342,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 options={availableSports.map(s => s.name)}
                 placeholder="All Sports"
                 textSize="xs"
-                controlClassName="h-10 px-4 py-2 bg-white border border-slate-200 rounded-full flex items-center"
+                controlClassName={`h-10 px-4 py-2 border ${DT.radius.full} flex items-center`}
+                controlStyle={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}
               />
             </div>
             <div className="space-y-1 w-full max-w-[240px] justify-self-start">
@@ -377,8 +352,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 <select 
                   value={scoreFilter}
                   onChange={(e) => setScoreFilter(e.target.value)}
-                  className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
-                  style={{ color: tokens.colors.textNavy }}
+                  className={`w-full h-10 px-4 pr-10 ${DT.radius.full} text-xs font-semibold border appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent`}
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   {availableScores.map(opt => (
                     <option key={opt} value={opt === 'All Scores' ? '' : opt}>
@@ -396,8 +371,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                   <select 
                     value={attendanceFilter}
                     onChange={(e) => setAttendanceFilter(e.target.value)}
-                    className="w-full h-10 px-4 pr-10 rounded-full text-xs font-semibold border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent"
-                    style={{ color: tokens.colors.textNavy }}
+                    className={`w-full h-10 px-4 pr-10 ${DT.radius.full} text-xs font-semibold border appearance-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent`}
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     {availableAttendances.map(opt => (
                       <option key={opt} value={opt === 'All Attendance' ? '' : opt}>
@@ -412,8 +387,8 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                     resetFilters();
                     setShowFilters(false);
                   }}
-                  className="h-10 min-w-[72px] px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap"
-                  style={{ color: tokens.colors.textNavy }}
+                  className={`h-10 min-w-[72px] px-4 py-2 ${DT.radius.full} text-xs font-semibold border hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap`}
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   Reset
                 </button>
@@ -423,7 +398,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
         )}
       </div>
 
-      <div className={cn("rounded-2xl p-6 shadow-sm", DT.shadow.sm)} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+      <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
         {filteredStudents.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-sm font-bold" style={{ color: tokens.colors.textMuted }}>No students found matching your search.</p>
@@ -462,7 +437,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                           "cursor-pointer border-b group relative",
                           isEvenRow ? tokens.colors.cardInnerBg : tokens.colors.mainBg,
                           isExpanded ? "border-l-4" : "border-l-4 border-transparent",
-                          "hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200"
+                          "hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}"
                         )}
                         style={{ 
                           borderLeftColor: isExpanded ? tokens.colors.accentNavy : 'transparent'
@@ -480,7 +455,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
                             <div 
-                              className={cn("w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold", DT.radius.full)}
+                              className={`${DT.radius.full} w-10 h-10 flex items-center justify-center text-sm font-extrabold`}
                               style={{ backgroundColor: tokens.colors.trendGreenBg, color: tokens.colors.primaryRed }}
                             >
                               {student.name.split(' ').filter((n: string): n is string => !!n).map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
@@ -493,10 +468,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                         </td>
                         <td className="px-4 py-4">
                           <span 
-                            className={cn("inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold uppercase tracking-wider text-xs", DT.radius.full)}
+                            className={`${DT.radius.full} inline-flex items-center gap-1.5 px-3 py-1 font-bold uppercase tracking-wider text-xs`}
                             style={{ backgroundColor: attendanceColors.bg, color: attendanceColors.text }}
                           >
-                            <span className={cn("w-1.5 h-1.5 rounded-full", DT.radius.full)} style={{ backgroundColor: attendanceColors.text }}></span>
+                            <span className={`w-1.5 h-1.5 ${DT.radius.full}`} style={{ backgroundColor: attendanceColors.text }}></span>
                             {student.attendance}%
                           </span>
                         </td>
@@ -506,9 +481,9 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                               {student.estimatedPAJSK}
                               <span className="text-xs font-medium ml-1" style={{ color: tokens.colors.textMuted }}>/100</span>
                             </span>
-                            <div className="w-16 h-2 rounded-full overflow-hidden" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+                            <div className={`w-16 h-2 ${DT.radius.full} overflow-hidden`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                               <div 
-                                className="h-full rounded-full" 
+                                className={`h-full ${DT.radius.full}`} 
                                 style={{ width: `${student.estimatedPAJSK}%`, backgroundColor: pajskColor }}
                               ></div>
                             </div>
@@ -537,7 +512,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                 const globalIndex = studentsData.findIndex(s => s.id === student.id);
                                 setEditModal({ isOpen: true, type: 'student', index: globalIndex, data: { ...student } });
                               }}
-                              className={cn("p-2 rounded-xl transition-colors", DT.transition.fast)}
+                              className={`p-2 ${DT.radius.md} transition-colors ${DT.transition.fast}`}
                               style={{ color: tokens.colors.primaryRed, backgroundColor: tokens.colors.trendGreenBg }}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -570,7 +545,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.badan_beruniform?.pencapaian || '-'}</span>
                                   </p>
                                   <span 
-                                    className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold mt-1", DT.radius.full)}
+                                    className={`${DT.radius.full} inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold mt-1`}
                                     style={{ 
                                       backgroundColor: Number(student.rawPenglibatan?.badan_beruniform?.kehadiran || 0) >= 10 ? tokens.colors.trendGreenBg :
                                       Number(student.rawPenglibatan?.badan_beruniform?.kehadiran || 0) >= 5 ? tokens.colors.warningBg :
@@ -609,7 +584,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.kelab_dan_persatuan?.pencapaian || '-'}</span>
                                   </p>
                                   <span 
-                                    className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold mt-1", DT.radius.full)}
+                                    className={`${DT.radius.full} inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold mt-1`}
                                     style={{ 
                                       backgroundColor: Number(student.rawPenglibatan?.kelab_dan_persatuan?.kehadiran || 0) >= 10 ? tokens.colors.trendGreenBg :
                                       Number(student.rawPenglibatan?.kelab_dan_persatuan?.kehadiran || 0) >= 5 ? tokens.colors.warningBg :
@@ -648,7 +623,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <span style={{ color: tokens.colors.textNavy }}>{student.rawPenglibatan?.sukan_dan_permainan?.pencapaian || '-'}</span>
                                   </p>
                                   <span 
-                                    className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold mt-1", DT.radius.full)}
+                                    className={`${DT.radius.full} inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold mt-1`}
                                     style={{ 
                                       backgroundColor: Number(student.rawPenglibatan?.sukan_dan_permainan?.kehadiran || 0) >= 10 ? tokens.colors.trendGreenBg :
                                       Number(student.rawPenglibatan?.sukan_dan_permainan?.kehadiran || 0) >= 5 ? tokens.colors.warningBg :
@@ -672,7 +647,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                             <div className="mt-6 pt-6 border-t" style={{ borderColor: tokens.colors.textMuted }}>
                               <h4 className="text-xs font-extrabold uppercase tracking-wider mb-4" style={{ color: tokens.colors.accentNavy }}>PAJSK Breakdown</h4>
                               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="p-3 rounded-xl" style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+                                <div className={`p-3 ${DT.radius.md}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                                   <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Sukan</p>
                                   <div className="space-y-1 text-sm">
                                     <p><span className="font-medium" style={{ color: tokens.colors.textMuted }}>Penglibatan:</span> <span style={{ color: tokens.colors.textNavy }}>{student.pajskBreakdown?.sukan?.penglibatan || 0}</span></p>
@@ -681,7 +656,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <p className="font-bold pt-1 border-t" style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.textMuted }}>Total: {student.pajskBreakdown?.sukan?.total || 0}</p>
                                   </div>
                                 </div>
-                                <div className="p-3 rounded-xl" style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+                                <div className={`p-3 ${DT.radius.md}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                                   <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Kelab</p>
                                   <div className="space-y-1 text-sm">
                                     <p><span className="font-medium" style={{ color: tokens.colors.textMuted }}>Penglibatan:</span> <span style={{ color: tokens.colors.textNavy }}>{student.pajskBreakdown?.kelab?.penglibatan || 0}</span></p>
@@ -690,7 +665,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <p className="font-bold pt-1 border-t" style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.textMuted }}>Total: {student.pajskBreakdown?.kelab?.total || 0}</p>
                                   </div>
                                 </div>
-                                <div className="p-3 rounded-xl" style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+                                <div className={`p-3 ${DT.radius.md}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                                   <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Uniform</p>
                                   <div className="space-y-1 text-sm">
                                     <p><span className="font-medium" style={{ color: tokens.colors.textMuted }}>Penglibatan:</span> <span style={{ color: tokens.colors.textNavy }}>{student.pajskBreakdown?.uniform?.penglibatan || 0}</span></p>
@@ -699,7 +674,7 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                                     <p className="font-bold pt-1 border-t" style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.textMuted }}>Total: {student.pajskBreakdown?.uniform?.total || 0}</p>
                                   </div>
                                 </div>
-                                <div className="p-3 rounded-xl" style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+                                <div className={`p-3 ${DT.radius.md}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                                   <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Extra Kurikulum</p>
                                   <div className="space-y-1 text-sm">
                                     <p className="font-bold pt-4" style={{ color: tokens.colors.textNavy }}>Score: {student.pajskBreakdown?.extraKurikulum || 0}</p>
@@ -728,9 +703,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 className={cn(
-                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm font-bold",
-                  currentPage === 1 ? "bg-slate-100 text-slate-300 cursor-not-allowed" : "bg-white text-slate-600 hover:bg-slate-50"
+                  `w-10 h-10 ${DT.radius.md} flex items-center justify-center transition-all ${DT.shadow.sm} font-bold text-slate-600`,
+                  currentPage === 1 ? "bg-slate-100 text-slate-300 cursor-not-allowed" : "hover:bg-slate-50"
                 )}
+                style={currentPage !== 1 ? { backgroundColor: tokens.colors.cardInnerBg } : {}}
               >
                 <ChevronDown className="w-5 h-5 rotate-90" />
               </button>
@@ -754,12 +730,12 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                       key={p}
                       onClick={() => setCurrentPage(p as number)}
                       className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm font-bold text-sm",
+                        `w-10 h-10 ${DT.radius.md} flex items-center justify-center transition-all ${DT.shadow.sm} font-bold text-sm`,
                         currentPage === p 
                           ? "text-white" 
-                          : "bg-white text-slate-600 hover:bg-slate-50"
+                          : "text-slate-600 hover:bg-slate-50"
                       )}
-                      style={currentPage === p ? { backgroundColor: tokens.colors.primaryRed } : {}}
+                      style={currentPage === p ? { backgroundColor: tokens.colors.primaryRed } : { backgroundColor: tokens.colors.cardInnerBg }}
                     >
                       {p}
                     </button>
@@ -771,9 +747,10 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 className={cn(
-                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm font-bold",
-                  currentPage === totalPages ? "bg-slate-100 text-slate-300 cursor-not-allowed" : "bg-white text-slate-600 hover:bg-slate-50"
+                  `w-10 h-10 ${DT.radius.md} flex items-center justify-center transition-all ${DT.shadow.sm} font-bold text-slate-600`,
+                  currentPage === totalPages ? "bg-slate-100 text-slate-300 cursor-not-allowed" : "hover:bg-slate-50"
                 )}
+                style={currentPage !== totalPages ? { backgroundColor: tokens.colors.cardInnerBg } : {}}
               >
                 <ChevronDown className="w-5 h-5 -rotate-90" />
               </button>
