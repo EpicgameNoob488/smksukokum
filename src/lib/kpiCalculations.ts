@@ -1,4 +1,5 @@
 import { Student } from '../data/studentData';
+import { tokens } from './designTokens';
 
 export function calculateKPIs(students: Student[]) {
   let sukanCount = 0;
@@ -90,12 +91,12 @@ const eliteConversionData = [
   { name: 'Uniform', value: uniformElite }
 ];
 
-const participationMix = [
-    { name: 'Sukan', value: Math.round((sukanCount / total) * 100) || 0, fill: '#F04444' },
-    { name: 'Kelab', value: Math.round((kelabCount / total) * 100) || 0, fill: '#FFB547' },
-    { name: 'Uniform', value: Math.round((uniformCount / total) * 100) || 0, fill: '#2B3674' },
-    { name: 'Leadership', value: Math.round(((sukanLeader + kelabLeader + uniformLeader) / (total * 3)) * 100) || 0, fill: '#059669' },
-    { name: 'Elite', value: Math.round(((sukanElite + kelabElite + uniformElite) / (total * 3)) * 100) || 0, fill: '#EE5D50' }
+  const participationMix = [
+    { name: 'Sukan', value: Math.round((sukanCount / total) * 100) || 0, fill: tokens.colors.primaryRed },
+    { name: 'Kelab', value: Math.round((kelabCount / total) * 100) || 0, fill: tokens.colors.accentYellow },
+    { name: 'Uniform', value: Math.round((uniformCount / total) * 100) || 0, fill: tokens.colors.accentNavy },
+    { name: 'Leadership', value: Math.round(((sukanLeader + kelabLeader + uniformLeader) / (total * 3)) * 100) || 0, fill: tokens.colors.trendGreenText },
+    { name: 'Elite', value: Math.round(((sukanElite + kelabElite + uniformElite) / (total * 3)) * 100) || 0, fill: tokens.colors.chartEliteRed }
   ];
 
   const engagementByCategory = [

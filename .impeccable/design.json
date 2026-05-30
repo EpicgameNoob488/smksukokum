@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-30T00:00:00.000Z",
+  "title": "Design System: SM Konven St. Ursula Kokurikulum Dashboard",
+  "extensions": {
+    "colorMeta": {
+      "primary-red": {
+        "role": "primary",
+        "displayName": "Cardinal Red",
+        "canonical": "oklch(64% 0.22 25)",
+        "tonalRamp": [
+          "oklch(18% 0.08 25)",
+          "oklch(28% 0.14 25)",
+          "oklch(40% 0.18 25)",
+          "oklch(52% 0.21 25)",
+          "oklch(64% 0.22 25)",
+          "oklch(76% 0.18 25)",
+          "oklch(88% 0.10 25)",
+          "oklch(96% 0.03 25)"
+        ]
+      },
+      "text-navy": {
+        "role": "neutral",
+        "displayName": "Midnight Navy",
+        "canonical": "oklch(24% 0.14 264)",
+        "tonalRamp": [
+          "oklch(15% 0.08 264)",
+          "oklch(18% 0.11 264)",
+          "oklch(24% 0.14 264)",
+          "oklch(35% 0.15 264)",
+          "oklch(48% 0.14 264)",
+          "oklch(62% 0.11 264)",
+          "oklch(78% 0.07 264)",
+          "oklch(94% 0.02 264)"
+        ]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "Warm Muted Gray",
+        "canonical": "oklch(58% 0.02 285)",
+        "tonalRamp": [
+          "oklch(18% 0.01 285)",
+          "oklch(32% 0.015 285)",
+          "oklch(45% 0.018 285)",
+          "oklch(58% 0.02 285)",
+          "oklch(70% 0.015 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(92% 0.005 285)",
+          "oklch(98% 0.002 285)"
+        ]
+      },
+      "main-bg": {
+        "role": "neutral",
+        "displayName": "Cool White",
+        "canonical": "oklch(97% 0.005 270)",
+        "tonalRamp": [
+          "oklch(75% 0.03 270)",
+          "oklch(82% 0.025 270)",
+          "oklch(88% 0.02 270)",
+          "oklch(93% 0.012 270)",
+          "oklch(97% 0.005 270)",
+          "oklch(98.5% 0.003 270)",
+          "oklch(99.5% 0.001 270)",
+          "oklch(100% 0 270)"
+        ]
+      },
+      "card-outer-bg": {
+        "role": "neutral",
+        "displayName": "Soft Cool Gray",
+        "canonical": "oklch(95% 0.008 270)",
+        "tonalRamp": [
+          "oklch(72% 0.035 270)",
+          "oklch(80% 0.028 270)",
+          "oklch(86% 0.022 270)",
+          "oklch(91% 0.015 270)",
+          "oklch(95% 0.008 270)",
+          "oklch(97% 0.005 270)",
+          "oklch(99% 0.002 270)",
+          "oklch(100% 0 270)"
+        ]
+      },
+      "card-inner-bg": {
+        "role": "neutral",
+        "displayName": "Pure White",
+        "canonical": "oklch(100% 0 0)",
+        "tonalRamp": [
+          "oklch(78% 0.015 270)",
+          "oklch(85% 0.012 270)",
+          "oklch(91% 0.008 270)",
+          "oklch(95% 0.005 270)",
+          "oklch(98% 0.002 270)",
+          "oklch(99% 0.001 270)",
+          "oklch(99.5% 0 0)",
+          "oklch(100% 0 0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines on the landing page. Used once per page at most."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles and dashboard section headers."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, table headers, modal headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Form labels, descriptive text, data cells. Max line length 65ch for prose."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Pills, badges, navigation labels, metadata, table column headers. Uppercase with wide tracking."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-low",
+        "value": "0 24px 24px rgba(19,31,93,0.03)",
+        "purpose": "Default shadow for data cards and content containers. Barely perceptible lift."
+      },
+      {
+        "name": "ambient-hover",
+        "value": "0 24px 24px rgba(19,31,93,0.08)",
+        "purpose": "Elevated shadow on card hover. Indicates interactivity without a color shift."
+      },
+      {
+        "name": "modal-elevation",
+        "value": "0 25px 50px -12px rgba(0,0,0,0.25)",
+        "purpose": "Dialogs and modals. The deepest layer, used sparingly for true overlay content."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state transitions."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Button hover, focus ring, micro-interactions."
+      },
+      {
+        "name": "duration-normal",
+        "value": "200ms",
+        "purpose": "Card hover, nav transitions, dropdowns."
+      },
+      {
+        "name": "duration-slow",
+        "value": "300ms",
+        "purpose": "Modal open/close, page-level transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main action button. Cardinal Red background with white text, softly rounded.",
+      "html": "<button class=\"ds-btn-primary\">Save Record</button>",
+      "css": ".ds-btn-primary { background: #F04444; color: #ffffff; padding: 10px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: #DC2626; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #FECACA; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Transparent background, navy text, subtle hover fill.",
+      "html": "<button class=\"ds-btn-ghost\">Cancel</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #131f5d; padding: 10px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; border: 1px solid transparent; border-radius: 12px; cursor: pointer; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-ghost:hover { background: rgba(19,31,93,0.05); } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 2px #FECACA; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Content container with soft ambient shadow and generous rounding. White inner on cool gray outer.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Student Performance</h3><p class=\"ds-card-body\">View and manage cocurriculum scores.</p></div>",
+      "css": ".ds-card { background: #ffffff; color: #131f5d; padding: 24px; border-radius: 16px; box-shadow: 0 24px 24px rgba(19,31,93,0.03); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-card:hover { box-shadow: 0 24px 24px rgba(19,31,93,0.08); } .ds-card-title { font-size: 20px; font-weight: 700; line-height: 1.3; margin: 0 0 8px 0; } .ds-card-body { font-size: 14px; font-weight: 500; line-height: 1.6; margin: 0; color: #767681; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Compact search or text input with rounded-full shape and red focus ring.",
+      "html": "<div class=\"ds-input-wrapper\"><svg class=\"ds-input-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input class=\"ds-input\" type=\"text\" placeholder=\"Search students...\" /></div>",
+      "css": ".ds-input-wrapper { position: relative; display: flex; align-items: center; } .ds-input-icon { position: absolute; left: 16px; width: 16px; height: 16px; color: #767681; pointer-events: none; } .ds-input { width: 100%; background: #ffffff; color: #131f5d; padding: 8px 16px 8px 44px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 500; border: 1px solid #e2e8f0; border-radius: 9999px; outline: none; transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1); caret-color: #F04444; } .ds-input::placeholder { color: #767681; } .ds-input:focus { border-color: #F04444; box-shadow: 0 0 0 2px #FECACA; }"
+    },
+    {
+      "name": "Filter Pill",
+      "kind": "chip",
+      "refersTo": "chip-default",
+      "description": "A rounded-full pill for filtering data. White background, optional selected state in red.",
+      "html": "<button class=\"ds-filter-pill\">All Years <svg class=\"ds-filter-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-filter-pill { display: inline-flex; align-items: center; gap: 6px; background: #ffffff; color: #131f5d; padding: 6px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 9999px; cursor: pointer; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-filter-pill:hover { background: #f8fafc; } .ds-filter-pill:focus-visible { outline: none; box-shadow: 0 0 0 2px #FECACA; } .ds-filter-icon { width: 14px; height: 14px; } .ds-filter-pill.is-selected { color: #F04444; border-color: #F04444; }"
+    },
+    {
+      "name": "Sidebar Nav Item",
+      "kind": "nav",
+      "refersTo": "nav-inactive",
+      "description": "Navigation item in the red sidebar. Inactive is transparent white text; active is a white pill with red text.",
+      "html": "<nav class=\"ds-sidebar\"><button class=\"ds-nav-item\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\"/></svg>Dashboard</button><button class=\"ds-nav-item is-active\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\"/></svg>Students</button></nav>",
+      "css": ".ds-sidebar { background: #F04444; padding: 12px; width: 224px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; } .ds-nav-item { display: flex; align-items: center; gap: 12px; width: 100%; background: transparent; color: #ffffff; padding: 10px 16px; font-size: 13px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; text-align: left; transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-nav-item:hover { background: rgba(255,255,255,0.1); } .ds-nav-item.is-active { background: #ffffff; color: #F04444; } .ds-nav-icon { width: 16px; height: 16px; flex-shrink: 0; }"
+    },
+    {
+      "name": "Smart Filter Pill",
+      "kind": "custom",
+      "refersTo": "filter-pill",
+      "description": "A filter pill whose dropdown options are dynamically scoped to the currently selected academic year. Only values with matching students are shown.",
+      "html": "<div class=\"ds-smart-filter\"><span class=\"ds-smart-filter-label\">Year: 2025</span><button class=\"ds-smart-filter-pill\">Uniform Unit: All Units <svg class=\"ds-smart-filter-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg></button></div>",
+      "css": ".ds-smart-filter { display: flex; flex-direction: column; gap: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; } .ds-smart-filter-label { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #767681; } .ds-smart-filter-pill { display: inline-flex; align-items: center; gap: 6px; background: #ffffff; color: #131f5d; padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 9999px; cursor: pointer; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-smart-filter-pill:hover { background: #f8fafc; border-color: #cbd5e1; } .ds-smart-filter-pill:focus-visible { outline: none; box-shadow: 0 0 0 2px #FECACA; } .ds-smart-filter-icon { width: 14px; height: 14px; } .ds-smart-filter-pill.has-value { color: #F04444; border-color: #F04444; }"
+    },
+    {
+      "name": "Table Row",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "A data row in the student or teacher table. Clean, spacious, with muted metadata and clear hierarchy.",
+      "html": "<div class=\"ds-table-row\"><div class=\"ds-table-cell-name\">Ahmad bin Ismail</div><div class=\"ds-table-cell-meta\">Class 5A · 2025</div><div class=\"ds-table-cell-score\">85</div></div>",
+      "css": ".ds-table-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #ffffff; padding: 14px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; border-bottom: 1px solid #f1f4fb; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-table-row:hover { background: #f7f9ff; } .ds-table-cell-name { font-size: 14px; font-weight: 600; color: #131f5d; } .ds-table-cell-meta { font-size: 12px; font-weight: 500; color: #767681; } .ds-table-cell-score { font-size: 14px; font-weight: 700; color: #059669; background: #D1FAE5; padding: 4px 10px; border-radius: 9999px; min-width: 32px; text-align: center; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Trusted Ledger",
+    "overview": "This design system treats the interface as a respectful, clean record-keeping surface. Every screen is a page in a well-kept grade book brought to life: dignified data, warm neutrals, and one confident accent that knows when to speak and when to stay quiet. The tool sits in the corner of a teacher's day — reliable, predictable, and gently warm. It earns its keep by being ignorable.\n\nThe aesthetic philosophy is one of supportive clarity. Every heading, label, and data point says exactly what it means. No branded metaphors, no gamified language, no tonal surprises. The cardinal red and deep indigo palette provides warmth without whimsy. Generous rounded corners and system fonts make the tool feel supportive, not sterile. Restraint is what separates warm from cloying.\n\nThis system explicitly rejects the generic-ed-tech clichés (cartoonish icons, blackboard motifs, childish colors) while also steering clear of cold enterprise-SaaS density. Familiarity and warmth over novelty. The tool should work like every other tool a teacher has used — because it uses the same affordances, the same patterns, the same quiet predictability.",
+    "keyCharacteristics": [
+      "Warmly efficient: friendly like a colleague, not cold like an enterprise tool",
+      "Tactile and friendly: generous rounded corners, soft shadows, clear hover states",
+      "Supportive clarity: every element says exactly what it means",
+      "Familiar first: system fonts, standard controls, platform-native behaviors",
+      "Data with dignity: clean, respectful presentation of student records"
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Cardinal Red is the only accent on primary actions, active navigation, and key highlights. It appears on no more than 10% of any given screen. Its rarity is the point.",
+        "section": "colors"
+      },
+      {
+        "name": "The Size-Contrast Rule",
+        "body": "Hierarchy is created through weight contrast (at least 300 difference between adjacent roles) and case changes, not through font-size jumps alone.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest. Shadows appear only as a response to state (hover, elevation, focus) or to separate distinct layers (cards on panels).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Cardinal Red for primary actions, active navigation states, and key highlights only.",
+      "Do maintain the three-tier surface system: Cool White canvas → Soft Cool Gray panels → Pure White cards.",
+      "Do use generous rounded corners (12px–24px) on cards and containers to reinforce the friendly, tactile feel.",
+      "Do keep labels uppercase with wide letter-spacing (0.15em) at small sizes (10px) for metadata and pills.",
+      "Do use the Smart Filter Pill pattern for year-scoped filtering; it keeps data discovery contextual and prevents empty states.",
+      "Do ensure all interactive elements have visible focus indicators (2px red-200 ring minimum)."
+    ],
+    "donts": [
+      "Don't use generic ed-tech cartoonish icons, blackboard motifs, or childish colors. From PRODUCT.md: avoid the generic-ed-tech cliches.",
+      "Don't create cold enterprise-SaaS density. The tool should feel warm and supportive, not sterile.",
+      "Don't use border-left or border-right greater than 1px as a colored accent on cards, list items, or alerts.",
+      "Don't use gradient text (background-clip: text) or glassmorphism as a default.",
+      "Don't use the hero-metric template (big number, small label, supporting stats, gradient accent).",
+      "Don't create identical card grids with icon + heading + text repeated endlessly.",
+      "Don't reach for a modal as the first solution. Exhaust inline and progressive alternatives first.",
+      "Don't use display fonts for UI labels, buttons, or data.",
+      "Don't reinvent standard affordances for flavor (custom scrollbars, weird form controls, non-standard modals)."
+    ]
+  }
+}

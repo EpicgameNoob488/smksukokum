@@ -1,4 +1,5 @@
 import { cn } from '../lib/utils';
+import { tokens } from '../lib/designTokens';
 import { GraduationCap, LayoutDashboard, Users, UserCircle2, X } from 'lucide-react';
 
 interface DashboardSidebarProps {
@@ -23,9 +24,9 @@ export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData
   ];
 
   return (
-    <aside className="w-56 flex flex-col flex-shrink-0 z-20 shadow-xl" style={{ backgroundColor: '#F04444' }}>
+    <aside className="w-56 flex flex-col flex-shrink-0 z-20 shadow-xl" style={{ backgroundColor: tokens.colors.primaryRed }}>
       <div className="p-5 flex items-center gap-3">
-        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0 overflow-hidden" style={{ color: '#F04444' }}>
+        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0 overflow-hidden" style={{ color: tokens.colors.primaryRed }}>
           {settings.logoUrl ? (
             <img src={settings.logoUrl} alt="Logo" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           ) : (
@@ -60,7 +61,7 @@ export const DashboardSidebar = ({ activeTab, setActiveTab, settings, schoolData
                   ? "rounded-xl mx-1" 
                   : "text-white hover:bg-white/10 mx-1 rounded-xl"
               )}
-              style={isActive ? { backgroundColor: '#F4F7F6', color: '#F04444' } : {}}
+              style={isActive ? { backgroundColor: tokens.colors.cardOuterBg, color: tokens.colors.primaryRed } : {}}
             >
               <Icon className="w-4 h-4" />
               {item.name}

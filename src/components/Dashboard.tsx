@@ -639,7 +639,7 @@ export default function Dashboard({
                </div>
              </div>
              <div className="flex items-center gap-4">
-               <button className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full shadow-sm transition-colors">
+               <button className={`px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold ${DT.radius.full} ${DT.shadow.sm} transition-colors`}>
                  Send Memo to Advisor
                </button>
                <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600">
@@ -657,12 +657,12 @@ export default function Dashboard({
          </div>
 
          {/* Global Header & Filters (The Control Deck) - per design_tokens.md */}
-         <header className="px-4 sm:px-6 md:px-8 py-4 sm:py-5 flex flex-col gap-4 sm:gap-5 bg-white border-b border-slate-200 sticky top-0 z-10">
+          <header className="px-4 sm:px-6 md:px-8 py-4 sm:py-5 flex flex-col gap-4 sm:gap-5 border-b sticky top-0 z-10" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
            <div className="flex items-center justify-between">
              <div className="flex items-center gap-3">
                <button 
                  onClick={() => setMobileSidebarOpen(true)}
-                 className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                 className={`lg:hidden p-2 ${DT.radius.sm} hover:bg-slate-100 transition-colors cursor-pointer`}
                  aria-label="Open menu"
                >
                  <Menu className="w-5 h-5" style={{ color: tokens.colors.textNavy }} />
@@ -679,8 +679,8 @@ export default function Dashboard({
                   <input 
                     type="text" 
                     placeholder="Search..." 
-                    className="pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-64 font-medium border border-slate-200"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+                    className={`pl-10 pr-4 py-2.5 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-64 font-medium border`}
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed, borderColor: tokens.colors.lightBorder }}
                   />
                 </div>
               )}
@@ -700,16 +700,16 @@ export default function Dashboard({
                     <div className="flex items-center gap-2">
                       <button 
                         onClick={onNavigateSettings}
-                        className="w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm border cursor-pointer bg-white hover:bg-slate-50"
-                        style={{ borderColor: tokens.colors.cardOuterBg, color: tokens.colors.textNavy }}
+                        className={`w-10 h-10 ${DT.radius.full} flex items-center justify-center transition-all ${DT.shadow.sm} border cursor-pointer hover:bg-slate-50`}
+                        style={{ borderColor: tokens.colors.cardOuterBg, color: tokens.colors.textNavy, backgroundColor: tokens.colors.cardInnerBg }}
                         title="System Settings"
                       >
                         <Settings className="w-5 h-5" />
                       </button>
                       <button 
                         onClick={onLogout}
-                        className="w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm border cursor-pointer bg-white hover:bg-slate-50"
-                        style={{ borderColor: tokens.colors.cardOuterBg, color: tokens.colors.primaryRed }}
+                        className={`w-10 h-10 ${DT.radius.full} flex items-center justify-center transition-all ${DT.shadow.sm} border cursor-pointer hover:bg-slate-50`}
+                        style={{ borderColor: tokens.colors.cardOuterBg, color: tokens.colors.primaryRed, backgroundColor: tokens.colors.cardInnerBg }}
                         title="Logout (Esc)"
                       >
                         <LogOut className="w-5 h-5" />
@@ -718,7 +718,7 @@ export default function Dashboard({
                   ) : (
                     <button 
                       onClick={onLogout}
-                      className="px-4 py-2 rounded-full flex items-center justify-center transition-all shadow-md text-white text-xs font-bold cursor-pointer hover:scale-105 active:scale-95"
+                      className={`px-4 py-2 ${DT.radius.full} flex items-center justify-center transition-all ${DT.shadow.md} text-white text-xs font-bold cursor-pointer hover:scale-105 active:scale-95`}
                       style={{ 
                         backgroundColor: tokens.colors.primaryRed
                       }}
@@ -740,15 +740,15 @@ export default function Dashboard({
                   <input 
                     type="text" 
                     placeholder="Search..." 
-                    className="pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-44 font-medium border border-slate-200"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
+ className={`pl-10 pr-4 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-44 font-medium border`}
+                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                   />
                 </div>
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
-                  style={{ color: tokens.colors.primaryRed }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
                 >
                   {availableYears.map(year => (
                     <option key={year} value={year}>{year}</option>
@@ -758,8 +758,8 @@ export default function Dashboard({
                 <select 
                   value={dashboardFormFilter}
                   onChange={(e) => setDashboardFormFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[180px]" 
-                  style={{ color: tokens.colors.textNavy }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[180px]`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option>All Forms</option>
                   <option>Form 1</option>
@@ -771,8 +771,8 @@ export default function Dashboard({
                 <select 
                   value={dashboardClassFilter}
                   onChange={(e) => setDashboardClassFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[200px] truncate" 
-                  style={{ color: tokens.colors.textNavy }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[200px] truncate`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="">All Classes</option>
                   {formTeachersData.map((cls, idx) => (
@@ -782,8 +782,8 @@ export default function Dashboard({
                 <select 
                   value={dashboardPillarFilter}
                   onChange={(e) => setDashboardPillarFilter(e.target.value)}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[140px] max-w-[220px]" 
-                  style={{ color: tokens.colors.textNavy }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[140px] max-w-[220px]`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="">All Pillars</option>
                   <option>Kelab & Persatuan</option>
@@ -796,8 +796,8 @@ export default function Dashboard({
                     setDashboardClassFilter('');
                     setDashboardPillarFilter('');
                   }}
-                  className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer" 
-                  style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} hover:bg-slate-50 transition-colors border cursor-pointer`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   Reset
                 </button>
@@ -805,7 +805,7 @@ export default function Dashboard({
               
               {isAdmin && (
               <div className="flex items-center gap-3">
-                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-full text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer" style={{ color: tokens.colors.textNavy }}>
+ <button className={`flex items-center gap-1.5 px-3 py-1.5 border ${DT.radius.full} text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}>
                   <Download className="w-4 h-4" />
                   Export CSV
                 </button>
@@ -817,10 +817,10 @@ export default function Dashboard({
 
         {/* Dashboard Content */}
         {activeTab === 'Dashboard' && (
-          <div className="px-4 sm:px-6 md:px-10 pb-10 space-y-8 mt-6 animate-in fade-in duration-500">
+          <div className={`px-4 sm:px-6 md:px-10 pb-10 space-y-8 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             {/* Teacher Sub-Tabs: My Class / My Units */}
             {teacherTabs.tabs.length > 0 && (
-              <div className="flex gap-2 border-b border-slate-200 pb-2">
+ <div className="flex gap-2 border-b pb-2" style={{ borderColor: tokens.colors.lightBorder }}>
                 {teacherTabs.tabs.map((tab) => (
                   <button
                     key={tab}
@@ -841,26 +841,26 @@ export default function Dashboard({
             
             {/* Hero KPI Strip (The Pulse) - per design_tokens.md */}
             {!hasDataForYear ? (
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+              <div className={`bg-amber-50 border border-amber-200 ${DT.radius.md} p-4 text-center`}>
                 <p className="text-amber-800 font-bold">No data available for {selectedYear}</p>
                 <p className="text-amber-600 text-sm">Please select a different year or add data for {selectedYear}</p>
               </div>
             ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {kpis.map((kpi, idx) => (
-                <div key={idx} className="rounded-2xl p-5 shadow-sm flex flex-col relative overflow-hidden group cursor-pointer hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+                <div key={idx} className={`${DT.radius.lg} p-5 ${DT.shadow.sm} flex flex-col relative overflow-hidden group cursor-pointer hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-[10px] font-extrabold uppercase tracking-widest w-2/3 leading-tight" style={{ color: tokens.colors.textMuted }}>{kpi.title}</h3>
                     {kpi.isWarning ? (
                       <AlertTriangle className="w-5 h-5 animate-pulse" style={{ color: tokens.colors.primaryRed }} />
                     ) : (
-                      <div className="w-2 h-2 rounded-full mt-1" style={{ backgroundColor: kpi.color }}></div>
+                      <div className={`w-2 h-2 ${DT.radius.full} mt-1`} style={{ backgroundColor: kpi.color }}></div>
                     )}
                   </div>
                   <div className="flex items-baseline gap-1 mt-auto">
                     <span className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>{kpi.value}</span>
                     <span className="text-xs font-bold" style={{ color: tokens.colors.textMuted }}>{kpi.unit}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center"
+                    <span className={`text-[10px] font-bold px-2 py-0.5 ${DT.radius.full} flex items-center`}
                       style={{
                         backgroundColor: kpi.trend.startsWith('+') && !kpi.isWarning ? tokens.colors.trendGreenBg : tokens.colors.trendRedBg,
                         color: kpi.trend.startsWith('+') && !kpi.isWarning ? tokens.colors.trendGreenText : tokens.colors.trendRedText
@@ -885,17 +885,17 @@ export default function Dashboard({
     <div className="flex items-center gap-2 flex-wrap">
       <span className="text-xs font-bold" style={{ color: tokens.colors.textMuted }}>Viewing:</span>
       {dashboardPillarFilter && (
-        <span className="px-3 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: tokens.colors.accentOrange }}>
+        <span className={`px-3 py-1 ${DT.radius.full} text-xs font-bold text-white`} style={{ backgroundColor: tokens.colors.accentOrange }}>
           {dashboardPillarFilter}
         </span>
       )}
       {dashboardFormFilter !== 'All Forms' && (
-        <span className="px-3 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: tokens.colors.accentNavy }}>
+        <span className={`px-3 py-1 ${DT.radius.full} text-xs font-bold text-white`} style={{ backgroundColor: tokens.colors.accentNavy }}>
           {dashboardFormFilter}
         </span>
       )}
       {dashboardClassFilter && (
-        <span className="px-3 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: tokens.colors.trendGreenText }}>
+        <span className={`px-3 py-1 ${DT.radius.full} text-xs font-bold text-white`} style={{ backgroundColor: tokens.colors.trendGreenText }}>
           {dashboardClassFilter}
         </span>
       )}
@@ -932,7 +932,7 @@ export default function Dashboard({
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
 {/* Zone A: Tri-Pillar Balance - per design_tokens.md */}
-<div className="rounded-2xl p-6 shadow-sm flex flex-col hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Tri-Pillar Balance</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Distribution of student participation across the three main pillars.</p>
@@ -942,7 +942,7 @@ export default function Dashboard({
       </p>
     )}
   </div>
-  <div className="flex-1 rounded-2xl p-4 shadow-sm relative group" style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
+  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm} relative group`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
     <ResponsiveContainer width="100%" height="100%">
       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={chartData.triPillarData}>
         <PolarGrid stroke={tokens.colors.cardOuterBg} />
@@ -996,8 +996,8 @@ export default function Dashboard({
       </RadarChart>
     </ResponsiveContainer>
                   {/* Action Tooltip Simulation - per ui-ux-pro-max: no scale transforms */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <button className="px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-full shadow-lg whitespace-nowrap cursor-pointer hover:bg-red-700 transition-colors">
+                    <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity ${DT.transition.normal}`}>
+                      <button className={`px-4 py-2 bg-red-600 text-white text-xs font-bold ${DT.radius.full} ${DT.shadow.lg} whitespace-nowrap cursor-pointer hover:bg-red-700 transition-colors`}>
                         Trigger Engagement Campaign
                       </button>
                     </div>
@@ -1005,7 +1005,7 @@ export default function Dashboard({
               </div>
 
 {/* Zone B: Leadership Pipeline */}
-<div className="rounded-2xl p-6 shadow-sm flex flex-col hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Leadership Pipeline</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Ratio of leadership roles to regular members.</p>
@@ -1015,7 +1015,7 @@ export default function Dashboard({
       </p>
     )}
   </div>
-  <div className="flex-1 rounded-2xl p-4 shadow-sm" style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
+  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
     <ResponsiveContainer width="100%" height="100%">
       <BarChart layout="vertical" data={chartData.leadershipDensityData} stackOffset="expand" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
         <XAxis type="number" hide />
@@ -1104,7 +1104,7 @@ export default function Dashboard({
 </div>
 
 {/* Zone C: The "Passive" vs. "Active" Matrix - per design_tokens.md */}
-<div className="rounded-2xl p-6 shadow-sm flex flex-col hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Passive vs. Active Matrix</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Comparison of active participants vs passive members.</p>
@@ -1114,7 +1114,7 @@ export default function Dashboard({
       </p>
     )}
   </div>
-  <div className="flex-1 rounded-2xl p-4 shadow-sm" style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
+  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
     <ResponsiveContainer width="100%" height="100%">
       <BarChart layout="vertical" data={chartData.passiveEngagementData} margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={tokens.colors.cardOuterBg} />
@@ -1208,7 +1208,7 @@ export default function Dashboard({
 </div>
 
 {/* Zone D: Elite Conversion Funnel */}
-<div className="rounded-2xl p-6 shadow-sm flex flex-col hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Elite Conversion Funnel</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Number of students achieving elite status (Johan, Naib Johan, dll).</p>
@@ -1218,7 +1218,7 @@ export default function Dashboard({
       </p>
     )}
   </div>
-  <div className="flex-1 rounded-2xl p-4 shadow-sm" style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
+  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={chartData.eliteConversionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
         <defs>
@@ -1294,7 +1294,7 @@ export default function Dashboard({
 
         {/* Teachers Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Teachers' && (
-          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className={`px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
               <div>
                 <h2 className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Teacher Directory</h2>
@@ -1304,8 +1304,8 @@ export default function Dashboard({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer" 
-                  style={{ color: tokens.colors.primaryRed }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
                 >
                   {availableYears.map(year => (
                     <option key={year} value={year}>{year}</option>
@@ -1321,8 +1321,8 @@ export default function Dashboard({
                         setAjktFilter("");
                       }
                     }}
-                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-36 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
+ className={`pl-10 pr-10 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-36 font-medium border appearance-none cursor-pointer`}
+                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Classes</option>
                     {availableTeacherClasses.map((cls) => (
@@ -1342,8 +1342,8 @@ export default function Dashboard({
                         setClassFilter("");
                       }
                     }}
-                    className="pl-10 pr-10 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-40 font-medium border border-slate-200 appearance-none bg-white cursor-pointer"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
+ className={`pl-10 pr-10 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-40 font-medium border appearance-none cursor-pointer`}
+                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   >
                     <option value="">All Roles</option>
                     {availableTeacherRoles.map((role) => (
@@ -1358,8 +1358,8 @@ export default function Dashboard({
                     setClassFilter('');
                     setAjktFilter('');
                   }}
-                  className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer" 
-                  style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} hover:bg-slate-50 transition-colors border cursor-pointer`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   Reset
                 </button>
@@ -1386,7 +1386,7 @@ export default function Dashboard({
                       });
                     }
                   }}
-                  className="px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5 text-white whitespace-nowrap cursor-pointer"
+                  className={`px-4 py-2 ${DT.radius.full} text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5 text-white whitespace-nowrap cursor-pointer`}
                   style={{ backgroundColor: tokens.colors.primaryRed }}
                 >
                   <Plus className="w-4 h-4" />
@@ -1396,8 +1396,8 @@ export default function Dashboard({
                 {isAdmin && (
                 <button 
                   onClick={() => setShowExcelUpload(true)}
-                  className="px-4 py-2 bg-white rounded-full text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer flex items-center gap-1.5" 
-                  style={{ color: tokens.colors.primaryRed }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-bold ${DT.shadow.sm} hover:bg-slate-50 transition-colors border cursor-pointer flex items-center gap-1.5`} 
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
                 >
                   <Upload className="w-4 h-4" />
                   Bulk Assign Units
@@ -1420,7 +1420,7 @@ export default function Dashboard({
                 >
                   {tab === 'Directory' ? 'All Teachers' : tab === 'Classes' ? 'Form Teachers' : tab === 'Pending Roles' ? 'Pending Roles' : tab}
                   {tab === 'Pending Roles' && pendingRoleAssignments.length > 0 && (
-                    <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-orange-500 text-white">
+                    <span className={`ml-1.5 px-1.5 py-0.5 text-xs ${DT.radius.full} bg-orange-500 text-white`}>
                       {pendingRoleAssignments.length}
                     </span>
                   )}
@@ -1434,8 +1434,8 @@ export default function Dashboard({
                     placeholder={`Search in ${teacherViewTab === 'Directory' ? 'Profiles' : teacherViewTab}...`}
                     value={globalSearch}
                     onChange={(e) => setGlobalSearch(e.target.value)}
-                    className="pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 transition-all w-full font-medium border border-slate-200"
-                    style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
+ className={`pl-10 pr-4 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 transition-all w-full font-medium border`}
+                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
                   />
                   {globalSearch && (
                     <button 
@@ -1450,13 +1450,13 @@ export default function Dashboard({
             </div>
 
             {teacherViewTab === 'Directory' && (
-              <div className="rounded-2xl p-6 shadow-sm mb-6 hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>
                       {globalSearch || classFilter || ajktFilter ? 'Search Results' : 'All Teachers'}
                     </h3>
-                    <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
+                    <span className={`text-sm font-bold px-3 py-1 ${DT.radius.full} text-slate-600 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                       {filteredTeachers.length} Teachers
                     </span>
                   </div>
@@ -1470,7 +1470,7 @@ export default function Dashboard({
                       ];
                       exportToCSV(filteredTeachers, columns, `teachers-all-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-medium hover:bg-slate-50 transition-colors border whitespace-nowrap cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
                     Export Teachers
@@ -1482,9 +1482,9 @@ export default function Dashboard({
                   <>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                       {paginatedTeachers.map((teacher, idx) => (
-                        <div key={idx} className="rounded-2xl p-6 shadow-sm bg-white hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
-                          <div className="flex items-center gap-4 border-b pb-4" style={{ borderColor: tokens.colors.cardOuterBg }}>
-                            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0" style={{ color: tokens.colors.primaryRed }}>
+ <div key={idx} className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`}>
+                          <div className="flex items-center gap-4 border-b pb-4" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.cardOuterBg }}>
+                            <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ color: tokens.colors.primaryRed }}>
                               {getInitials(teacher.name)}
                             </div>
                             <div className="flex-1 min-w-0">
@@ -1509,7 +1509,7 @@ export default function Dashboard({
                                 originalName: teacher.name,
                                 data: JSON.parse(JSON.stringify(teacher))
                               })}
-                              className="p-2 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
+                              className={`p-2 ${DT.radius.full} bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100`}
                               style={{ color: tokens.colors.textNavy }}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -1623,11 +1623,11 @@ export default function Dashboard({
 
             {/* Senior Management Team */}
             {teacherViewTab === 'Management' && (
-              <div className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Senior Management Team</h3>
-                    <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
+                    <span className={`text-sm font-bold px-3 py-1 ${DT.radius.full} text-slate-600 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                       {filteredManagement.length} Members
                     </span>
                   </div>
@@ -1639,7 +1639,7 @@ export default function Dashboard({
                       ];
                       exportToCSV(filteredManagement, columns, `teachers-management-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-medium hover:bg-slate-50 transition-colors border whitespace-nowrap cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
                     Export Management
@@ -1647,8 +1647,8 @@ export default function Dashboard({
                 </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredManagement.map((member, idx) => (
-                  <div key={idx} className="rounded-2xl p-4 shadow-sm bg-white hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
-                    <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0" style={{ color: tokens.colors.primaryRed }}>
+ <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`}>
+                    <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.primaryRed }}>
                       {getInitials(member.name)}
                     </div>
                     <div className="flex-1 min-w-0 pr-8">
@@ -1658,7 +1658,7 @@ export default function Dashboard({
                     {isAdmin && (
                     <button 
                       onClick={() => setEditModal({ isOpen: true, type: 'management', index: idx, data: { ...member } })}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
+                      className={`absolute right-4 top-1/2 -translate-y-1/2 p-2 ${DT.radius.full} bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100`}
                       style={{ color: tokens.colors.textNavy }}
                     >
                       <Edit2 className="w-4 h-4" />
@@ -1672,11 +1672,11 @@ export default function Dashboard({
 
             {/* Form Teachers */}
             {teacherViewTab === 'Classes' && (
-              <div className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4">
                     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Form Teachers (Guru Kelas)</h3>
-                    <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
+                    <span className={`text-sm font-bold px-3 py-1 ${DT.radius.full} text-slate-600 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                       {filteredFormTeachers.length} Classes
                     </span>
                   </div>
@@ -1688,7 +1688,7 @@ export default function Dashboard({
                       ];
                       exportToCSV(filteredFormTeachers, columns, `teachers-form-classes-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-medium hover:bg-slate-50 transition-colors border whitespace-nowrap cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
                     Export Form Teachers
@@ -1696,7 +1696,7 @@ export default function Dashboard({
                 </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredFormTeachers.map((cls, idx) => (
-                  <div key={idx} className="rounded-2xl p-4 shadow-sm bg-white hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
+ <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                     <div>
                       <h4 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{cls.name}</h4>
                       <p className="text-xs font-medium mt-0.5" style={{ color: tokens.colors.textMuted }}>{cls.teacher}</p>
@@ -1716,7 +1716,7 @@ export default function Dashboard({
                           kokurikulum: { head: [], advisor: [] }
                         }
                       })}
-                      className="p-2 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
+                      className={`p-2 ${DT.radius.full} bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100`}
                       style={{ color: tokens.colors.textNavy }}
                     >
                       <Edit2 className="w-4 h-4" />
@@ -1730,11 +1730,11 @@ export default function Dashboard({
 
             {/* Co-Curricular Advisors */}
             {teacherViewTab === 'Kokurikulum' && (
-              <div className="rounded-2xl p-6 shadow-sm hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Co-Curricular Units</h3>
-                    <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
+                    <span className={`text-sm font-bold px-3 py-1 ${DT.radius.full} text-slate-600 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                       {filteredUnits.length} Units
                     </span>
                   </div>
@@ -1752,7 +1752,7 @@ export default function Dashboard({
                       ];
                       exportToCSV(exportData, columns, `teachers-kokurikulum-${Date.now()}.csv`);
                     }}
-                    className="px-4 py-2 bg-white rounded-full text-sm font-medium hover:bg-slate-50 transition-colors border border-slate-200 whitespace-nowrap cursor-pointer" style={{ color: tokens.colors.textNavy }}
+ className={`px-4 py-2 ${DT.radius.full} text-sm font-medium hover:bg-slate-50 transition-colors border whitespace-nowrap cursor-pointer`} style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <Download className="w-4 h-4 inline-block mr-1.5" />
                     Export Kokurikulum
@@ -1768,13 +1768,13 @@ export default function Dashboard({
                         <h4 className="text-lg font-extrabold mb-4" style={{ color: tokens.colors.textNavy }}>{category}</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {unitsInCategory.map((unit, idx) => (
-                            <div key={idx} className="rounded-2xl p-5 shadow-sm bg-white flex flex-col gap-3 hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative">
+ <div key={idx} className={`${DT.radius.lg} p-5 ${DT.shadow.sm} flex flex-col gap-3 hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                               <div className="flex justify-between items-start">
                                 <h5 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{unit.name}</h5>
                                 {isAdmin && (
                                 <button 
                                   onClick={() => setEditModal({ isOpen: true, type: 'unit', index: coCurricularUnitsData.findIndex(u => u.name === unit.name), data: { ...unit, advisors: [...unit.advisors] } })}
-                                  className="p-1.5 rounded-full bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100"
+                                  className={`p-1.5 ${DT.radius.full} bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-100`}
                                   style={{ color: tokens.colors.textNavy }}
                                 >
                                   <Edit2 className="w-3.5 h-3.5" />
@@ -1803,20 +1803,20 @@ export default function Dashboard({
 
             {/* Pending Role Assignments */}
             {teacherViewTab === 'Pending Roles' && (
-              <div className="rounded-2xl p-6 shadow-sm mb-6 hover:bg-orange-100 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200" style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>
                       Pending Role Assignments
                     </h3>
-                    <span className="text-sm font-bold px-3 py-1 rounded-full bg-white text-slate-600 shadow-sm">
+                    <span className={`text-sm font-bold px-3 py-1 ${DT.radius.full} text-slate-600 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                       {pendingRoleAssignments.length} Pending
                     </span>
                   </div>
                 </div>
                 {pendingRoleAssignments.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+                    <div className={`w-16 h-16 mx-auto mb-4 ${DT.radius.full} bg-slate-100 flex items-center justify-center`}>
                       <CheckCircle className="w-8 h-8 text-slate-400" />
                     </div>
                     <p className="text-slate-500 font-medium">No pending role assignments</p>
@@ -1828,11 +1828,10 @@ export default function Dashboard({
                       return (
                       <div 
                         key={idx} 
-                        className="rounded-2xl p-6 shadow-sm bg-white hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-200 hover:-translate-y-1 transition-all duration-200 cursor-pointer group relative"
-                        title={`Pending since ${approvedDate} - awaiting form class or AJKT role`}
+ className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}                        title={`Pending since ${approvedDate} - awaiting form class or AJKT role`}
                       >
                         <div className="flex items-center gap-4 border-b pb-4" style={{ borderColor: tokens.colors.cardOuterBg }}>
-                          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0" style={{ color: tokens.colors.primaryRed }}>
+                          <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ color: tokens.colors.primaryRed }}>
                             {teacher.full_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || 'T'}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -1870,7 +1869,7 @@ export default function Dashboard({
                               } 
                             });
                           }}
-                          className="mt-4 w-full px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5 text-white whitespace-nowrap cursor-pointer"
+                          className={`mt-4 w-full px-4 py-2 ${DT.radius.full} text-sm font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5 text-white whitespace-nowrap cursor-pointer`}
                           style={{ backgroundColor: tokens.colors.primaryRed }}
                         >
                           <Plus className="w-4 h-4" />
@@ -1888,7 +1887,7 @@ export default function Dashboard({
 
         {/* My Class Sub-Tab Content */}
         {activeTab === 'Dashboard' && teacherSubTab === 'My Class' && isFormTeacher && (
-          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className={`px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             <StudentTable
               classId={formClassId}
               className={formClassName || ''}
@@ -1908,14 +1907,14 @@ export default function Dashboard({
 
         {/* My Units Sub-Tab Content */}
         {activeTab === 'Dashboard' && teacherSubTab === 'My Units' && isUnitAdvisor && (
-          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className={`px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             <div className="flex items-center gap-4 mb-4">
               <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>My Units</h2>
               <select
                 value={selectedUnitForAdvisor}
                 onChange={(e) => setSelectedUnitForAdvisor(e.target.value)}
-                className="text-sm font-medium bg-white border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer"
-                style={{ color: tokens.colors.textNavy }}
+ className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`}
+                style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
               >
                 {advisorData.advisorUnits.map((unitCode) => {
                   const unit = coCurricularUnitsData.find(u => u.unitCode === unitCode || u.name.toLowerCase().includes(unitCode));
@@ -1948,7 +1947,7 @@ export default function Dashboard({
 
         {/* Students Content - per design_tokens.md + ui-ux-pro-max rules */}
         {activeTab === 'Students' && (
-          <div className="px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in duration-500">
+          <div className={`px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             <StudentTable
               classId={selectedStudentClassId}
               className={studentClassFilter || 'All Students'}
@@ -1970,7 +1969,7 @@ export default function Dashboard({
         {activeTab !== 'Dashboard' && activeTab !== 'Teachers' && activeTab !== 'Students' && (
           <div className="p-4 sm:p-6 md:p-10 flex items-center justify-center min-h-[calc(100dvh-8rem)] animate-in fade-in">
             <div className="text-center max-w-md">
-              <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm" style={{ backgroundColor: tokens.colors.cardOuterBg, color: tokens.colors.textNavy }}>
+              <div className={`w-24 h-24 ${DT.radius.xl} flex items-center justify-center mx-auto mb-6 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardOuterBg, color: tokens.colors.textNavy }}>
                 {(() => {
                   const Icon = navItems.find(i => i.name === activeTab)?.icon;
                   return Icon ? <Icon className="w-10 h-10" /> : null;
@@ -2030,3 +2029,4 @@ export default function Dashboard({
   </div>
   );
 }
+

@@ -56,8 +56,23 @@ export const tokens = {
     ctaOrange: '#F97316',
     // #1E293B (dark text)
     darkText: '#1E293B',
+
+    // Chart colors
+    chartEliteRed: '#EE5D50',
+
+    // Utility colors (shared across all surfaces)
+    hoverBg: '#f8fafc',
+    focusRing: '#FECACA',
+    lightBorder: '#e2e8f0',
+    lighterBorder: '#f1f5f9',
+    selectionBg: '#FEE2E2',
+    selectionText: '#7f1d1d',
   }
 };
+
+// Stub exports for ThemeContext compatibility (dark mode not yet designed)
+export const lightTokens = tokens;
+export const darkTokens = tokens;
 
 // Design token constants for consistency
 export const DT = {
@@ -90,6 +105,7 @@ export const DT = {
     fast: 'duration-150',
     normal: 'duration-200',
     slow: 'duration-300',
+    slower: 'duration-500',
   },
   // Dropdown/Select component styles (professional dashboard standard)
   dropdown: {
