@@ -3,6 +3,7 @@ import { X, CheckCircle2, FileCheck, RefreshCw, Loader2, ChevronRight } from 'lu
 import { useNotification } from '../contexts/NotificationContext';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
+import { tokens, DT } from '../lib/designTokens';
 
 export default function NotificationPanel() {
   const {
@@ -46,11 +47,11 @@ export default function NotificationPanel() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'high':
-        return <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-bold rounded-full">URGENT</span>;
+        return <span className={`px-2 py-0.5 bg-red-100 text-red-600 text-xs font-bold ${DT.radius.full}`}>URGENT</span>;
       case 'medium':
-        return <span className="px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs font-bold rounded-full">MEDIUM</span>;
+        return <span className={`px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs font-bold ${DT.radius.full}`}>MEDIUM</span>;
       case 'low':
-        return <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-bold rounded-full">LOW</span>;
+        return <span className={`px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-bold ${DT.radius.full}`}>LOW</span>;
     }
   };
 
@@ -125,15 +126,16 @@ export default function NotificationPanel() {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/50 z-40 animate-in fade-in"
+        style={{ transitionDuration: '200ms' }}
         onClick={() => setIsPanelOpen(false)}
       />
 
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 animate-in slide-in-from-right duration-300">
+      <div className={`fixed right-0 top-0 h-full w-full max-w-md ${DT.shadow.modal} z-50 animate-in slide-in-from-right`} style={{ backgroundColor: tokens.colors.cardInnerBg, transitionDuration: '300ms' }}>
         <div className="flex flex-col h-full">
-          <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+          <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: tokens.colors.lightBorder }}>
             <div>
-              <h2 className="text-xl font-extrabold" style={{ color: '#2B3674' }}>Notifications</h2>
+              <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.accentNavy }}>Notifications</h2>
               <p className="text-sm text-slate-600">
                 {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
               </p>
@@ -149,7 +151,7 @@ export default function NotificationPanel() {
               )}
               <button
                 onClick={() => setIsPanelOpen(false)}
-                className="p-2 rounded-full hover:bg-slate-100 transition-colors"
+                className={`p-2 ${DT.radius.full} hover:bg-slate-50 transition-colors`}
               >
                 <X className="w-5 h-5 text-slate-600" />
               </button>
@@ -183,7 +185,8 @@ export default function NotificationPanel() {
                     <div className="flex gap-3">
                       <div
                         className={cn(
-                          'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                          'w-10 h-10 flex items-center justify-center flex-shrink-0',
+                          DT.radius.full,
                           getNotificationColor(notification.type)
                         )}
                       >
@@ -212,7 +215,7 @@ export default function NotificationPanel() {
                                   e.stopPropagation();
                                   handleApproveTeacher(notification.requestId!, notification.email!);
                                 }}
-                                className="px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full hover:bg-green-700 transition-colors"
+                                className={`px-3 py-1 bg-green-600 text-white text-xs font-bold ${DT.radius.full} hover:bg-green-700 transition-colors`}
                               >
                                 Approve
                               </button>
@@ -221,7 +224,7 @@ export default function NotificationPanel() {
                                   e.stopPropagation();
                                   handleRejectTeacher(notification.requestId!, notification.email!);
                                 }}
-                                className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full hover:bg-red-700 transition-colors"
+                                className={`px-3 py-1 bg-red-600 text-white text-xs font-bold ${DT.radius.full} hover:bg-red-700 transition-colors`}
                               >
                                 Reject
                               </button>
