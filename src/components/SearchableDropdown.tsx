@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, CSSProperties } from 'react';
 import { Search, ChevronDown, X } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { tokens, DT } from '../lib/designTokens';
 
 interface SearchableDropdownProps {
   value: string;
@@ -22,7 +23,7 @@ export default function SearchableDropdown({
   placeholder = 'Select...',
   allowCustom = true,
   className = '',
-  controlClassName = 'px-4 py-2.5 border-slate-200 bg-white rounded-xl',
+  controlClassName = `px-4 py-2.5 ${DT.radius.md}`,
   controlStyle,
   textSize = 'sm',
   disabled = false
@@ -74,7 +75,7 @@ export default function SearchableDropdown({
           'w-full border cursor-pointer transition-all',
           'focus-within:ring-2 focus-within:ring-red-200 focus-within:border-transparent',
           isOpen && 'ring-2 ring-red-200 border-transparent',
-          disabled && 'opacity-50 cursor-not-allowed bg-slate-50',
+          disabled && 'opacity-50 cursor-not-allowed',
           controlClassName
         )}
         style={controlStyle}
@@ -92,7 +93,7 @@ export default function SearchableDropdown({
                 'flex-1 font-semibold bg-transparent outline-none min-w-0',
                 textSize === 'xs' ? 'text-xs' : 'text-sm'
               )}
-              style={{ color: '#2B3674' }}
+              style={{ color: tokens.colors.accentNavy }}
               autoFocus
             />
           </div>
@@ -103,8 +104,9 @@ export default function SearchableDropdown({
                 'truncate min-w-0',
                 'font-semibold',
                 textSize === 'xs' ? 'text-xs' : 'text-sm',
-                value ? 'text-[#2B3674]' : 'text-slate-400'
+                value ? '' : 'text-slate-400'
               )}
+              style={value ? { color: tokens.colors.accentNavy } : {}}
             >
               {value || placeholder}
             </span>
@@ -123,7 +125,8 @@ export default function SearchableDropdown({
 
       {isOpen && (
         <div 
-          className="absolute z-50 w-full mt-1 bg-white rounded-xl border border-slate-200 shadow-lg max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-150"
+          className={`absolute z-50 w-full mt-1 ${DT.radius.md} border ${DT.shadow.lg} max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-1 ${DT.transition.fast}`}
+          style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}
         >
           {filteredOptions.length === 0 && !allowCustom ? (
             <div className={cn('px-4 py-3 text-slate-400 italic', textSize === 'xs' ? 'text-xs' : 'text-sm')}>
@@ -140,7 +143,9 @@ export default function SearchableDropdown({
                     textSize === 'xs' ? 'text-xs font-medium' : 'text-sm font-medium',
                     option === value 
                       ? 'bg-red-50 text-red-600 font-bold' 
-                      : 'hover:bg-slate-50 text-[#2B3674]'
+                      : 'hover:bg-slate-50'
+                  )}
+                  style={option !== value ? { color: tokens.colors.accentNavy } : {}}
                   )}
                 >
                   {option}
@@ -150,10 +155,11 @@ export default function SearchableDropdown({
               {allowCustom && searchTerm && !filteredOptions.includes(searchTerm) && (
                 <div
                   onClick={() => handleSelect(searchTerm)}
-                  className="px-4 py-2.5 cursor-pointer hover:bg-slate-50 border-t border-slate-100"
+                  className="px-4 py-2.5 cursor-pointer hover:bg-slate-50 border-t"
+                  style={{ borderColor: tokens.colors.lighterBorder }}
                 >
                   <span className={cn(textSize === 'xs' ? 'text-xs text-slate-500' : 'text-sm text-slate-500')}>
-                    Add: <span className="font-bold text-[#2B3674]">"{searchTerm}"</span>
+                    Add: <span className="font-bold" style={{ color: tokens.colors.accentNavy }}>"{searchTerm}"</span>
                   </span>
                 </div>
               )}
