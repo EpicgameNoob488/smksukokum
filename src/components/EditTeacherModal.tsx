@@ -3,6 +3,7 @@ import { X, Plus, Trash2, Save, AlertTriangle, Settings, Loader2 } from 'lucide-
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { cn } from '../lib/utils';
 import { getRestrictedFields, FieldPermissions } from '../lib/restrictedEditUtils';
+import { DT } from '../lib/designTokens';
 import SearchableDropdown from './SearchableDropdown';
 import { useSchoolData } from '../contexts/DataContext';
 import { saveUnitAdvisors } from '../lib/dataService';
@@ -154,9 +155,9 @@ export default function EditTeacherModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-2 animate-in fade-in">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-          <h3 className="text-lg font-extrabold truncate" style={{ color: tokens.colors.textNavy }}>
+      <div className={`${DT.radius.lg} ${DT.shadow.modal} w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+        <div className="px-6 py-4 border-b flex justify-between items-center" style={{ backgroundColor: tokens.colors.hoverBg, borderColor: tokens.colors.lighterBorder }}>
+          <h3 className="text-lg font-extrabold truncate" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}>
             {editModal.type === 'management' && (editModal.index === -1 ? 'Add Management Role' : 'Edit Management Role')}
             {editModal.type === 'unit' && (editModal.index === -1 ? 'Add Co-Curricular Unit' : 'Edit Co-Curricular Unit')}
             {editModal.type === 'student' && (editModal.index === -1 ? 'Add Student Details' : 'Edit Student Details')}
@@ -168,7 +169,7 @@ export default function EditTeacherModal({
           </h3>
           <button 
             onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined })}
-            className="p-2 rounded-full hover:bg-slate-200 transition-colors"
+            className={`p-2 ${DT.radius.full} hover:bg-slate-200 transition-colors`}
             style={{ color: tokens.colors.textMuted }}
           >
             <X className="w-5 h-5" />
@@ -183,8 +184,8 @@ export default function EditTeacherModal({
                   <select 
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                    style={{ color: tokens.colors.textNavy }}
+                    className={`w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium`}
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <option value={2025}>2025</option>
                     <option value={2026}>2026</option>
@@ -195,8 +196,8 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.role}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, role: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className={`w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium`}
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="Pengetua">Pengetua</option>
                   <option value="Penolong Kanan Pentadbiran">Penolong Kanan Pentadbiran</option>
@@ -223,8 +224,8 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   />
                 </div>
                 <div>
@@ -237,8 +238,8 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   />
                 </div>
               </div>
@@ -252,8 +253,8 @@ export default function EditTeacherModal({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value={2025}>2025</option>
                   <option value={2026}>2026</option>
@@ -265,8 +266,8 @@ export default function EditTeacherModal({
                   <select 
                     value={editModal.data.name}
                     onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, name: e.target.value } })}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     <option value="" disabled>Select a unit</option>
                     {allUnits.length > 0 ? allUnits.map((unit, idx) => (
@@ -291,11 +292,11 @@ export default function EditTeacherModal({
                       value={editModal.data.code || ''}
                       onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, code: e.target.value } })}
                       disabled={!isAdmin}
-                      className={cn(
-                        "w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold font-mono transition-all duration-200",
-                        !isAdmin && "bg-slate-50 cursor-not-allowed opacity-70 border-slate-100"
-                      )}
-                      style={{ color: tokens.colors.textNavy }}
+                       className={cn(
+                         `w-full px-4 py-3 ${DT.radius.md} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-bold font-mono transition-all ${DT.transition.normal}`,
+                         !isAdmin && "bg-slate-50 cursor-not-allowed opacity-70"
+                       )}
+                       style={{ color: tokens.colors.textNavy, borderColor: tokens.colors.lightBorder }}
                     />
                     {!isAdmin && (
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
@@ -311,8 +312,8 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.category}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, category: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="Kelab & Persatuan">Kelab & Persatuan</option>
                   <option value="Badan Beruniform">Badan Beruniform</option>
@@ -364,7 +365,7 @@ export default function EditTeacherModal({
                           const newAdvisors = editModal.data.advisors.filter((_: any, idx: number) => idx !== i);
                           setEditModal({ ...editModal, data: { ...editModal.data, advisors: newAdvisors } });
                         }}
-                        className="p-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                        className="p-2.5 ${DT.radius.md} bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -380,11 +381,11 @@ export default function EditTeacherModal({
                <div>
                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Year</label>
                  {editModal.index === -1 ? (
-                   <div className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-sm font-bold" style={{ color: tokens.colors.primaryRed }}>
+                   <div className="w-full px-4 py-2.5 ${DT.radius.md} border bg-slate-100 text-sm font-bold" style={{ color: tokens.colors.primaryRed }}>
                      {currentYear}
                    </div>
                  ) : (
-                   <div className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-sm font-bold" style={{ color: tokens.colors.primaryRed }}>
+                   <div className="w-full px-4 py-2.5 ${DT.radius.md} border bg-slate-100 text-sm font-bold" style={{ color: tokens.colors.primaryRed }}>
                      {selectedYear}
                    </div>
                  )}
@@ -402,10 +403,10 @@ export default function EditTeacherModal({
                      }}
                      disabled={!fieldPermissions.personalDetails}
                      className={cn(
-                       "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
+                       "w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
                        !fieldPermissions.personalDetails && "bg-slate-100 cursor-not-allowed opacity-60"
                      )}
-                     style={{ color: tokens.colors.textNavy }}
+                     style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                    />
                  </div>
                  <div>
@@ -420,10 +421,10 @@ export default function EditTeacherModal({
                      }}
                      disabled={!fieldPermissions.personalDetails}
                      className={cn(
-                       "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
+                       "w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
                        !fieldPermissions.personalDetails && "bg-slate-100 cursor-not-allowed opacity-60"
                      )}
-                     style={{ color: tokens.colors.textNavy }}
+                     style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                    />
                  </div>
                </div>
@@ -435,10 +436,10 @@ export default function EditTeacherModal({
                    onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classId: e.target.value } })}
                    disabled={!fieldPermissions.classAssignment}
                    className={cn(
-                     "w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white",
+                     "w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium",
                      !fieldPermissions.classAssignment && "bg-slate-100 cursor-not-allowed opacity-60"
                    )}
-                   style={{ color: tokens.colors.textNavy }}
+                   style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                  >
                   {allFormClasses.length > 0 ? allFormClasses.map((cls) => (
                     <option key={cls.id} value={cls.id}>{cls.nama_kelas}</option>
@@ -452,8 +453,8 @@ export default function EditTeacherModal({
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>PAJSK Score (Auto)</label>
                   <div 
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold bg-slate-50"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-bold bg-slate-50"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     {editModal.data.pajskScore}
                   </div>
@@ -461,15 +462,15 @@ export default function EditTeacherModal({
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: tokens.colors.textMuted }}>Attendance % (Auto)</label>
                   <div 
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold bg-slate-50"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.md} border text-sm font-bold bg-slate-50"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   >
                     {editModal.data.attendance}%
                   </div>
                 </div>
               </div>
 
-              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.uniformUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.uniformUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
+              <div className={cn(`p-4 ${DT.radius.md} border space-y-3`, !fieldPermissions.uniformUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.uniformUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9', borderColor: tokens.colors.lighterBorder }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Uniform Unit</label>
                 <select 
                   value={editModal.data.uniformUnit || 'Tiada'}
@@ -498,8 +499,8 @@ export default function EditTeacherModal({
                     });
                   }}
                   disabled={!fieldPermissions.uniformUnit}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
                   {coCurricularUnitsData.filter(u => u.category === 'Badan Beruniform').map((unit, idx) => (
@@ -512,8 +513,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.badan_beruniform?.jawatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, badan_beruniform: {...editModal.data.rawPenglibatan?.badan_beruniform, jawatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {roleOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -524,8 +525,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.badan_beruniform?.peringkat || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, badan_beruniform: {...editModal.data.rawPenglibatan?.badan_beruniform, peringkat: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {levelOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -536,8 +537,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.badan_beruniform?.pencapaian || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, badan_beruniform: {...editModal.data.rawPenglibatan?.badan_beruniform, pencapaian: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {achievementOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -567,8 +568,8 @@ export default function EditTeacherModal({
                           }
                         });
                       }} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                     </select>
@@ -578,8 +579,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.badan_beruniform?.jenisSkorPenglibatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, badan_beruniform: {...editModal.data.rawPenglibatan?.badan_beruniform, jenisSkorPenglibatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       <option value="Penglibatan 1">Penglibatan 1</option>
@@ -590,7 +591,7 @@ export default function EditTeacherModal({
                 </div>
               </div>
 
-              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.clubUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.clubUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
+              <div className={cn(`p-4 ${DT.radius.md} border space-y-3`, !fieldPermissions.clubUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.clubUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9', borderColor: tokens.colors.lighterBorder }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Club / Association</label>
                 <select 
                   value={editModal.data.club || 'Tiada'}
@@ -619,8 +620,8 @@ export default function EditTeacherModal({
                     });
                   }}
                   disabled={!fieldPermissions.clubUnit}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
                   {coCurricularUnitsData.filter(u => u.category === 'Kelab & Persatuan').map((unit, idx) => (
@@ -633,8 +634,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.kelab_dan_persatuan?.jawatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, kelab_dan_persatuan: {...editModal.data.rawPenglibatan?.kelab_dan_persatuan, jawatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {roleOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -645,8 +646,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.kelab_dan_persatuan?.peringkat || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, kelab_dan_persatuan: {...editModal.data.rawPenglibatan?.kelab_dan_persatuan, peringkat: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {levelOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -657,8 +658,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.kelab_dan_persatuan?.pencapaian || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, kelab_dan_persatuan: {...editModal.data.rawPenglibatan?.kelab_dan_persatuan, pencapaian: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {achievementOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -688,8 +689,8 @@ export default function EditTeacherModal({
                           }
                         });
                       }} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                     </select>
@@ -699,8 +700,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.kelab_dan_persatuan?.jenisSkorPenglibatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, kelab_dan_persatuan: {...editModal.data.rawPenglibatan?.kelab_dan_persatuan, jenisSkorPenglibatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       <option value="Penglibatan 1">Penglibatan 1</option>
@@ -711,7 +712,7 @@ export default function EditTeacherModal({
                 </div>
               </div>
 
-              <div className={cn("p-4 rounded-xl border border-slate-100 space-y-3", !fieldPermissions.sportUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.sportUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9' }}>
+              <div className={cn(`p-4 ${DT.radius.md} border space-y-3`, !fieldPermissions.sportUnit && "opacity-50 pointer-events-none")} style={{ backgroundColor: fieldPermissions.sportUnit ? 'rgba(248, 250, 252, 0.5)' : '#f1f5f9', borderColor: tokens.colors.lighterBorder }}>
                 <label className="block text-[10px] font-bold uppercase tracking-wider" style={{ color: tokens.colors.textMuted }}>Sport / Game</label>
                 <select 
                   value={editModal.data.sport || 'Tiada'}
@@ -740,8 +741,8 @@ export default function EditTeacherModal({
                     });
                   }}
                   disabled={!fieldPermissions.sportUnit}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="Tiada">Tiada</option>
                   {coCurricularUnitsData.filter(u => u.category === 'Sukan dan Permainan').map((unit, idx) => (
@@ -754,8 +755,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.sukan_dan_permainan?.jawatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, sukan_dan_permainan: {...editModal.data.rawPenglibatan?.sukan_dan_permainan, jawatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {roleOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -766,8 +767,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.sukan_dan_permainan?.peringkat || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, sukan_dan_permainan: {...editModal.data.rawPenglibatan?.sukan_dan_permainan, peringkat: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {levelOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -778,8 +779,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.sukan_dan_permainan?.pencapaian || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, sukan_dan_permainan: {...editModal.data.rawPenglibatan?.sukan_dan_permainan, pencapaian: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       {achievementOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
@@ -809,8 +810,8 @@ export default function EditTeacherModal({
                           }
                         });
                       }} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       {attendanceOptions.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                     </select>
@@ -820,8 +821,8 @@ export default function EditTeacherModal({
                     <select 
                       value={editModal.data.rawPenglibatan?.sukan_dan_permainan?.jenisSkorPenglibatan || ''} 
                       onChange={(e) => setEditModal({...editModal, data: {...editModal.data, rawPenglibatan: {...editModal.data.rawPenglibatan, sukan_dan_permainan: {...editModal.data.rawPenglibatan?.sukan_dan_permainan, jenisSkorPenglibatan: e.target.value}}}})} 
-                      className="w-full px-2 py-2 rounded-lg border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-                      style={{ color: tokens.colors.textNavy }}
+                      className="w-full px-2 py-2 ${DT.radius.sm} border text-xs font-bold focus:outline-none focus:ring-2 focus:border-transparent"
+                      style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                     >
                       <option value="">-</option>
                       <option value="Penglibatan 1">Penglibatan 1</option>
@@ -841,8 +842,8 @@ export default function EditTeacherModal({
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value={2025}>2025</option>
                   <option value={2026}>2026</option>
@@ -859,8 +860,8 @@ export default function EditTeacherModal({
                       const givenName = editModal.data.givenName || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, surname, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   />
                 </div>
                 <div>
@@ -873,8 +874,8 @@ export default function EditTeacherModal({
                       const surname = editModal.data.surname || '';
                       setEditModal({ ...editModal, data: { ...editModal.data, givenName, name: `${givenName} ${surname}`.trim() } });
                     }}
-                    className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                    style={{ color: tokens.colors.textNavy }}
+                    className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                    style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   />
                 </div>
               </div>
@@ -885,8 +886,8 @@ export default function EditTeacherModal({
                   type="email" 
                   value={editModal.data.email || ''}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, email: e.target.value } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                   placeholder="teacher@school.edu.my"
                 />
               </div>
@@ -934,8 +935,8 @@ export default function EditTeacherModal({
                           newRoles[i] = e.target.value;
                           setEditModal({ ...editModal, data: { ...editModal.data, managementRoles: newRoles } });
                         }}
-                        className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                        style={{ color: tokens.colors.textNavy }}
+                        className="flex-1 px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                        style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                       >
                         <option value="" disabled>Select Role</option>
                         <option value="Pengetua">Pengetua</option>
@@ -956,7 +957,7 @@ export default function EditTeacherModal({
                           const newRoles = editModal.data.managementRoles.filter((_: any, idx: number) => idx !== i);
                           setEditModal({ ...editModal, data: { ...editModal.data, managementRoles: newRoles } });
                         }}
-                        className="p-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                        className="p-2.5 ${DT.radius.md} bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -970,8 +971,8 @@ export default function EditTeacherModal({
                 <select 
                   value={editModal.data.classes[0] || ''}
                   onChange={(e) => setEditModal({ ...editModal, data: { ...editModal.data, classes: e.target.value ? [e.target.value] : [] } })}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium bg-white"
-                  style={{ color: tokens.colors.textNavy }}
+                  className="w-full px-4 py-2.5 ${DT.radius.full} border focus:outline-none focus:ring-2 focus:border-transparent text-sm font-medium"
+                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                 >
                   <option value="">None</option>
                   {allFormClasses.length > 0 ? allFormClasses.map((cls) => (
@@ -1016,14 +1017,14 @@ export default function EditTeacherModal({
                     const unit = (allUnits.length > 0 ? allUnits : coCurricularUnitsData).find(u => (u.unit_code || u.code) === unitCode);
                     const unitName = unit ? (unit.nama_rasmi || unit.name) : unitCode;
                     return (
-                      <div key={`ua-${i}`} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                        <span className="text-sm font-medium" style={{ color: tokens.colors.textNavy }}>{unitName}</span>
+                      <div key={`ua-${i}`} className={`flex items-center justify-between p-3 ${DT.radius.md} border`} style={{ backgroundColor: tokens.colors.hoverBg, borderColor: tokens.colors.lighterBorder }}>
+                        <span className="text-sm font-medium" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}>{unitName}</span>
                         <button 
                           onClick={() => {
                             const newUnits = (editModal.data.unitAdvisorUnits || []).filter((_: any, idx: number) => idx !== i);
                             setEditModal({ ...editModal, data: { ...editModal.data, unitAdvisorUnits: newUnits } });
                           }}
-                          className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                          className="p-2 ${DT.radius.md} bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -1064,7 +1065,7 @@ export default function EditTeacherModal({
                 </label>
                 <div className="space-y-2 mb-6">
                   {editModal.data.kokurikulum.head.map((unit: any, i: number) => (
-                    <div key={`h-${i}`} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 group">
+                    <div key={`h-${i}`} className={`flex items-center justify-between p-3 ${DT.radius.md} border group`} style={{ backgroundColor: tokens.colors.hoverBg, borderColor: tokens.colors.lighterBorder }}>
                       <div>
                         <select 
                           value={unit.name}
@@ -1078,7 +1079,7 @@ export default function EditTeacherModal({
                             }
                           }}
                           className="text-xs font-bold bg-transparent border-none focus:ring-0 cursor-pointer p-0 w-full"
-                          style={{ color: tokens.colors.textNavy }}
+                          style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                         >
                           {allUnits.length > 0 ? allUnits.map((u, idx) => (
                             <option key={idx} value={u.nama_rasmi}>{u.nama_rasmi}</option>
@@ -1139,7 +1140,7 @@ export default function EditTeacherModal({
                 </label>
                 <div className="space-y-2">
                   {editModal.data.kokurikulum.advisor.map((unit: any, i: number) => (
-                    <div key={`a-${i}`} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 group">
+                    <div key={`a-${i}`} className={`flex items-center justify-between p-3 ${DT.radius.md} border group`} style={{ backgroundColor: tokens.colors.hoverBg, borderColor: tokens.colors.lighterBorder }}>
                       <div>
                         <select 
                           value={unit.name}
@@ -1153,7 +1154,7 @@ export default function EditTeacherModal({
                             }
                           }}
                           className="text-xs font-bold bg-transparent border-none focus:ring-0 cursor-pointer p-0 w-full"
-                          style={{ color: tokens.colors.textNavy }}
+                          style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
                         >
                           {allUnits.length > 0 ? allUnits.map((u, idx) => (
                             <option key={idx} value={u.nama_rasmi}>{u.nama_rasmi}</option>
@@ -1188,7 +1189,7 @@ export default function EditTeacherModal({
           )}
         </div>
         
-        <div className="px-5 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between">
+        <div className="px-5 py-4 border-t flex justify-between" style={{ backgroundColor: 'rgba(248, 250, 252, 0.5)', borderColor: tokens.colors.lighterBorder }}>
           <div>
             {isAdmin && editModal.index !== -1 && (
               <button
@@ -1278,7 +1279,7 @@ export default function EditTeacherModal({
             <button 
               onClick={() => setEditModal({ isOpen: false, type: null, index: -1, data: null, source: undefined })}
               className="px-6 py-2.5 rounded-full text-sm font-bold transition-colors hover:bg-slate-200"
-              style={{ color: tokens.colors.textNavy }}
+              style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
             >
               Cancel
             </button>
