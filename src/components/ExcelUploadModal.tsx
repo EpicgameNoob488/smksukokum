@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { matchExcelTeachers, ExcelTeacherRow, MatchedTeacher, UnmatchedRow } from '../lib/excelUploadUtils';
 import { bulkSaveUnitAdvisors } from '../lib/dataService';
 import { cn } from '../lib/utils';
+import { DT } from '../lib/designTokens';
 
 interface ExcelUploadModalProps {
   isOpen: boolean;
@@ -110,13 +111,13 @@ export default function ExcelUploadModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col" style={{ margin: '1rem' }}>
+      <div className={`${DT.radius.lg} ${DT.shadow.modal} w-full max-w-3xl max-h-[80vh] flex flex-col`} style={{ margin: '1rem', backgroundColor: tokens.colors.cardInnerBg }}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: tokens.colors.lightBorder }}>
           <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>
             Bulk Upload Unit Advisors
           </h2>
-          <button onClick={handleClose} className="p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
+          <button onClick={handleClose} className={`p-2 ${DT.radius.full} hover:bg-slate-50 transition-colors cursor-pointer`}>
             <X className="w-5 h-5" style={{ color: tokens.colors.textMuted }} />
           </button>
         </div>
@@ -126,8 +127,8 @@ export default function ExcelUploadModal({
           {/* Upload Area */}
           <div
             className={cn(
-              "border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer",
-              file ? "border-green-400 bg-green-50" : "border-slate-300 hover:border-red-300 hover:bg-slate-50"
+              "border-2 border-dashed p-8 text-center transition-colors cursor-pointer",
+              file ? `border-green-400 bg-green-50 ${DT.radius.md}` : `border-slate-300 hover:border-red-300 hover:bg-slate-50 ${DT.radius.md}`
             )}
             onClick={() => fileInputRef.current?.click()}
           >
@@ -182,9 +183,10 @@ export default function ExcelUploadModal({
 
               {/* Matched Table */}
               {matched.length > 0 && (
-                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                <div className={`${DT.radius.md} border overflow-hidden`} style={{ borderColor: tokens.colors.lightBorder }}>
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-50">
+                    <thead>
+                      <tr style={{ backgroundColor: tokens.colors.hoverBg }}>
                       <tr>
                         <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Excel Name</th>
                         <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Matched Teacher</th>
@@ -194,7 +196,7 @@ export default function ExcelUploadModal({
                     </thead>
                     <tbody>
                       {matched.map((m, i) => (
-                        <tr key={i} className="border-t border-slate-100">
+                          <tr key={i} className="border-t" style={{ borderColor: tokens.colors.lighterBorder }}>
                           <td className="px-4 py-2 font-medium" style={{ color: tokens.colors.textNavy }}>{m.teacherName}</td>
                           <td className="px-4 py-2" style={{ color: tokens.colors.textNavy }}>{m.matchedName}</td>
                           <td className="px-4 py-2" style={{ color: tokens.colors.textNavy }}>{m.unitName}</td>
@@ -222,9 +224,10 @@ export default function ExcelUploadModal({
                       {unmatched.length} row(s) skipped - assign manually after teachers register
                     </p>
                   </div>
-                  <div className="rounded-xl border border-slate-200 overflow-hidden">
+                  <div className={`${DT.radius.md} border overflow-hidden`} style={{ borderColor: tokens.colors.lightBorder }}>
                     <table className="w-full text-sm">
-                      <thead className="bg-slate-50">
+                      <thead>
+                        <tr style={{ backgroundColor: tokens.colors.hoverBg }}>
                         <tr>
                           <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Teacher Name</th>
                           <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Unit</th>
@@ -233,7 +236,7 @@ export default function ExcelUploadModal({
                       </thead>
                       <tbody>
                         {unmatched.map((u, i) => (
-                          <tr key={i} className="border-t border-slate-100">
+                        <tr key={i} className="border-t" style={{ borderColor: tokens.colors.lighterBorder }}>
                             <td className="px-4 py-2 font-medium" style={{ color: tokens.colors.textNavy }}>{u.teacherName}</td>
                             <td className="px-4 py-2" style={{ color: tokens.colors.textNavy }}>{u.unitName}</td>
                             <td className="px-4 py-2 text-xs" style={{ color: tokens.colors.textMuted }}>
@@ -251,11 +254,11 @@ export default function ExcelUploadModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-200">
+        <div className="flex items-center justify-end gap-3 p-6 border-t" style={{ borderColor: tokens.colors.lightBorder }}>
           <button
             onClick={handleClose}
-            className="px-6 py-2.5 rounded-full text-sm font-bold border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
-            style={{ color: tokens.colors.textNavy }}
+            className={`px-6 py-2.5 ${DT.radius.full} text-sm font-bold border hover:bg-slate-50 transition-colors cursor-pointer`}
+            style={{ borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
           >
             Cancel
           </button>
