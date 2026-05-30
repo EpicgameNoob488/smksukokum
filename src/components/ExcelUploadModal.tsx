@@ -187,7 +187,6 @@ export default function ExcelUploadModal({
                   <table className="w-full text-sm">
                     <thead>
                       <tr style={{ backgroundColor: tokens.colors.hoverBg }}>
-                      <tr>
                         <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Excel Name</th>
                         <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Matched Teacher</th>
                         <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Unit</th>
@@ -228,7 +227,6 @@ export default function ExcelUploadModal({
                     <table className="w-full text-sm">
                       <thead>
                         <tr style={{ backgroundColor: tokens.colors.hoverBg }}>
-                        <tr>
                           <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Teacher Name</th>
                           <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Unit</th>
                           <th className="px-4 py-2 text-left font-bold" style={{ color: tokens.colors.textMuted }}>Reason</th>

@@ -271,7 +271,6 @@ export default function StudentTable({ classId, className, onBack, tokens, stude
             <button 
               onClick={() => {
                 const columns: CSVColumn<Student>[] = [
-                const columns: CSVColumn<Student>[] = [
                   { key: 'id', label: 'ID' },
                   { key: 'name', label: 'Name' },
                   { key: 'estimatedPAJSK', label: 'PAJSK Score' },

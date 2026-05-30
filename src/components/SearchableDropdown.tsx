@@ -146,7 +146,6 @@ export default function SearchableDropdown({
                       : 'hover:bg-slate-50'
                   )}
                   style={option !== value ? { color: tokens.colors.accentNavy } : {}}
-                  )}
                 >
                   {option}
                 </div>
