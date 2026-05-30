@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bell, FileCheck, CheckCircle2, RefreshCw, Loader2, ChevronRight } from 'lucide-react';
 import { useNotification, type Notification } from '../contexts/NotificationContext';
-import { tokens } from '../lib/designTokens';
+import { tokens, DT } from '../lib/designTokens';
 import { api } from '../lib/api';
 
 export default function NotificationBell() {
@@ -154,7 +154,8 @@ export default function NotificationBell() {
         onClick={handleOpenPanel}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm relative hover:bg-slate-50 transition-all duration-200 cursor-pointer border border-slate-200 group"
+        className={`w-10 h-10 ${DT.radius.full} flex items-center justify-center ${DT.shadow.sm} hover:bg-slate-50 transition-all ${DT.transition.normal} cursor-pointer border group`}
+        style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}
         title="Notifications"
       >
         <Bell className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" style={{ color: tokens.colors.textMuted }} />
@@ -174,11 +175,12 @@ export default function NotificationBell() {
       {isHovered && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 top-full mt-2 w-80 bg-white/95 backdrop-blur-xl shadow-2xl rounded-xl border border-slate-200 animate-in fade-in slide-in-from-top-2 duration-200 z-50"
+          className={`absolute right-0 top-full mt-2 w-80 backdrop-blur-xl ${DT.shadow.modal} ${DT.radius.md} border animate-in fade-in slide-in-from-top-2 ${DT.transition.normal} z-50`}
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', borderColor: tokens.colors.lightBorder }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="px-4 py-3 border-b border-slate-100">
+          <div className="px-4 py-3 border-b" style={{ borderColor: tokens.colors.lighterBorder }}>
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold" style={{ color: tokens.colors.textNavy }}>
@@ -223,9 +225,10 @@ export default function NotificationBell() {
                   <div
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
-                    className={`px-4 py-3 cursor-pointer transition-all hover:bg-slate-50 border-b border-slate-50 last:border-b-0 ${
+                    className={`px-4 py-3 cursor-pointer transition-all hover:bg-slate-50 border-b last:border-b-0 ${
                       !notification.isRead ? 'bg-amber-50/50' : ''
                     }`}
+                    style={{ borderColor: tokens.colors.lighterBorder }}
                   >
                     <div className="flex gap-3">
                       <div
@@ -281,7 +284,7 @@ export default function NotificationBell() {
                 ))}
 
                 {hasMore && (
-                  <div className="px-4 py-3 border-t border-slate-100 bg-slate-50/50">
+                  <div className="px-4 py-3 border-t bg-slate-50/50" style={{ borderColor: tokens.colors.lighterBorder }}>
                     <button
                       onClick={handleOpenPanel}
                       className="w-full text-center text-xs font-bold hover:underline transition-all"
