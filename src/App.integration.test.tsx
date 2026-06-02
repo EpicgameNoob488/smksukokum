@@ -77,7 +77,7 @@ describe('App & LoginPage Integration Flow (Functional Test)', () => {
 
     // 2. Select "Teacher" box to go to Teacher Login Page
     const teacherHeading = screen.getByText('Teacher');
-    const teacherBox = teacherHeading.closest('div');
+    const teacherBox = teacherHeading.closest('button');
     expect(teacherBox).toBeInTheDocument();
     fireEvent.click(teacherBox!);
 

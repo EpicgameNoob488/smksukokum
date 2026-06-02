@@ -83,8 +83,11 @@ export default function RegisterPage({ onCancel, onLoginRedirect }: RegisterPage
   }, [onCancel]);
 
   const validateEmail = (email: string) => {
-    // Allow any email (gmail, school email, etc.)
-    return email.includes('@') && email.includes('.');
+    // Reject consecutive dots anywhere
+    if (email.includes('..')) return false;
+    // Proper email regex: local@domain.tld, TLD must be >= 2 chars
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return emailRegex.test(email);
   };
 
   const handleConfirmDuplicate = async () => {
@@ -298,6 +301,7 @@ return (
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                   <input
                     type="text"
+                    autoComplete="name"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
@@ -387,6 +391,7 @@ return (
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                 <input
                   type="email"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

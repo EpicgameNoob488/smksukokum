@@ -83,7 +83,7 @@ describe('LoginPage', () => {
     expect(passwordInput.value).toBe('password123');
   });
 
-  it('triggers cancel on Escape key press', () => {
+  it('does not trigger cancel on Escape key press', () => {
     render(
       <LoginPage
         role="teacher"
@@ -93,7 +93,7 @@ describe('LoginPage', () => {
     );
 
     fireEvent.keyDown(window, { key: 'Escape', code: 'Escape' });
-    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    expect(mockOnCancel).not.toHaveBeenCalled();
   });
 
   it('handles successful login with Supabase', async () => {
@@ -126,7 +126,7 @@ describe('LoginPage', () => {
     });
   });
 
-  it('displays error message on failed login', async () => {
+  it('displays friendly error message for invalid credentials', async () => {
     vi.mocked(supabase.auth.signInWithPassword).mockResolvedValueOnce({
       data: { user: null, session: null },
       error: { message: 'Invalid login credentials' } as any,
@@ -149,7 +149,33 @@ describe('LoginPage', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid login credentials')).toBeInTheDocument();
+      expect(screen.getByText('Incorrect email or password. Please try again.')).toBeInTheDocument();
+    });
+  });
+
+  it('displays friendly error message for network failure', async () => {
+    vi.mocked(supabase.auth.signInWithPassword).mockRejectedValueOnce(
+      new Error('Network failure exception')
+    );
+
+    render(
+      <LoginPage
+        role="teacher"
+        onOfflineBypass={mockOnOfflineBypass}
+        onCancel={mockOnCancel}
+      />
+    );
+
+    const emailInput = screen.getByPlaceholderText('teacher@smkstursula.edu.my');
+    const passwordInput = screen.getByPlaceholderText('••••••••');
+    const submitButton = screen.getByRole('button', { name: /Secure Login/i });
+
+    fireEvent.change(emailInput, { target: { value: 'teacher@test.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Cannot connect to the server. Please check your internet and try again.')).toBeInTheDocument();
     });
   });
 
@@ -259,12 +285,7 @@ describe('LoginPage', () => {
     });
   });
 
-  it('catches and handles unexpected exceptions in login submit', async () => {
-    mockIsOfflineMode = false;
-    vi.mocked(supabase.auth.signInWithPassword).mockRejectedValueOnce(
-      new Error('Network failure exception')
-    );
-
+  it('has autocomplete attributes on email and password inputs', () => {
     render(
       <LoginPage
         role="teacher"
@@ -275,15 +296,9 @@ describe('LoginPage', () => {
 
     const emailInput = screen.getByPlaceholderText('teacher@smkstursula.edu.my');
     const passwordInput = screen.getByPlaceholderText('••••••••');
-    const submitButton = screen.getByRole('button', { name: /Secure Login/i });
 
-    fireEvent.change(emailInput, { target: { value: 'teacher@test.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Network failure exception')).toBeInTheDocument();
-    });
+    expect(emailInput).toHaveAttribute('autoComplete', 'email');
+    expect(passwordInput).toHaveAttribute('autoComplete', 'current-password');
   });
 
   it('displays loading state and disables submit button during login', async () => {

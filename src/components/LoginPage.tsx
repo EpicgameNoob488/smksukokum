@@ -22,16 +22,22 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
   const [resetError, setResetError] = useState('');
   const [isResetLoading, setIsResetLoading] = useState(false);
 
-  // Handle Escape key to go back home
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onCancel();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onCancel]);
+  const getFriendlyLoginError = (rawError: string): string => {
+    const lower = rawError.toLowerCase();
+    if (lower.includes('invalid login credentials')) {
+      return 'Incorrect email or password. Please try again.';
+    }
+    if (lower.includes('network') || lower.includes('fetch') || lower.includes('failed to fetch')) {
+      return 'Cannot connect to the server. Please check your internet and try again.';
+    }
+    if (lower.includes('rate limit') || lower.includes('over rate limit')) {
+      return 'Too many login attempts. Please wait a few minutes.';
+    }
+    if (lower.includes('email not confirmed')) {
+      return 'Please confirm your email address before logging in.';
+    }
+    return rawError;
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,10 +59,10 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
       });
 
       if (error) {
-        setErrorMsg(error.message);
+        setErrorMsg(getFriendlyLoginError(error.message));
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred during login.');
+      setErrorMsg(getFriendlyLoginError(err.message || 'An unexpected error occurred during login.'));
     } finally {
       setIsLoading(false);
     }
@@ -241,6 +247,7 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                 <input
                   type="email"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -270,6 +277,7 @@ export default function LoginPage({ role, onOfflineBypass, onCancel }: LoginPage
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3" style={{ color: tokens.colors.textMuted }} />
                 <input
                   type="password"
+                  autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

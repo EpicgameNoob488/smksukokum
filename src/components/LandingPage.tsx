@@ -12,12 +12,6 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-red-100 selection:text-red-900" style={{ backgroundColor: tokens.colors.mainBg }}>
-      {/* Dynamic Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-5%] right-[-2%] w-[20%] h-[30%] rounded-full blur-[60px] opacity-20" style={{ backgroundColor: tokens.colors.primaryRed }}></div>
-        <div className="absolute bottom-[-5%] left-[-2%] w-[20%] h-[30%] rounded-full blur-[60px] opacity-10" style={{ backgroundColor: tokens.colors.textNavy }}></div>
-      </div>
-
       {/* Header / Nav */}
       <nav className="relative z-20 px-6 py-4 flex justify-between items-center max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
@@ -46,7 +40,7 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
             </div>
 
            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black leading-[1.1] mb-3 tracking-tight" style={{ color: tokens.colors.textNavy }}>
-             Kokurikulum <span style={{ color: tokens.colors.primaryRed }}>Management</span> System
+             Kokurikulum Management System
            </h1>
 
            <p className="text-sm md:text-base font-medium max-w-xl mx-auto mb-6 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
@@ -54,10 +48,11 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
            </p>
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-3xl mx-auto">
-               {/* Admin Box */}
+                {/* Admin Box */}
 <button
+  aria-label="Administrator"
   onClick={() => onSelectRole('admin')}
-  className={`group relative p-5 md:p-6 ${DT.radius.xl} ${DT.shadow.xl} hover:${DT.shadow.modal} transition-all hover:-translate-y-1 text-left overflow-hidden cursor-pointer`}
+  className={`group relative p-5 md:p-6 ${DT.radius.xl} ${DT.shadow.xl} hover:${DT.shadow.modal} transition-all text-left overflow-hidden cursor-pointer`}
   style={{ backgroundColor: tokens.colors.cardInnerBg, border: `1px solid ${tokens.colors.lighterBorder}` }}
 >
                    <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-[80px] -mr-6 -mt-6 transition-transform group-hover:scale-110" style={{ backgroundColor: tokens.colors.hoverBg }}></div>
@@ -73,9 +68,11 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
                    </div>
                </button>
 
-               {/* Teacher Box */}
-<div
-  className={`group relative p-5 md:p-6 ${DT.radius.xl} ${DT.shadow.xl} hover:${DT.shadow.modal} transition-all hover:-translate-y-1 text-left overflow-hidden cursor-pointer`}
+                {/* Teacher Box */}
+<button
+  aria-label="Teacher"
+  type="button"
+  className={`group relative p-5 md:p-6 ${DT.radius.xl} ${DT.shadow.xl} hover:${DT.shadow.modal} transition-all text-left overflow-hidden cursor-pointer`}
   style={{ backgroundColor: tokens.colors.textNavy, border: `1px solid ${tokens.colors.lighterBorder}` }}
   onClick={() => onSelectRole('teacher')}
 >
@@ -87,23 +84,10 @@ export default function LandingPage({ onSelectRole, onRegister }: LandingPagePro
                     <p className="relative z-10 text-sm md:text-base font-medium leading-relaxed mb-4 text-white/60">
                      Record attendance, track participation, and manage your class activities.
                    </p>
-                  <div className="relative z-10 flex flex-col gap-1">
-                    <div className="flex items-center gap-1 text-sm font-extrabold uppercase tracking-widest group-hover:gap-2 transition-all text-red-400 group-hover:text-red-300">
-                       Continue <ArrowRight className="w-4 h-4" />
-                    </div>
-                     {onRegister && (
-                       <button
-                         onClick={(e) => {
-                           e.stopPropagation();
-                           onRegister();
-                         }}
-                         className="text-sm font-bold text-white/60 hover:text-white transition-colors underline text-left cursor-pointer"
-                       >
-                         Don't have an account? Request Access
-                       </button>
-                     )}
-                  </div>
-               </div>
+                   <div className="relative z-10 flex items-center gap-1 text-sm font-extrabold uppercase tracking-widest group-hover:gap-2 transition-all text-red-400 group-hover:text-red-300">
+                        Continue <ArrowRight className="w-4 h-4" />
+                     </div>
+                </button>
              </div>
         </div>
       </main>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { api } from '../lib/api';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 import { 
   Search, Settings, LayoutDashboard, Users, UserCircle2, Menu,
-  Activity, GraduationCap, TrendingUp, AlertTriangle, Download, Filter, X, Edit2, Save, Plus, Trash2, ChevronDown, LogOut, CheckCircle, Upload
+  Activity, GraduationCap, TrendingUp, AlertTriangle, Download, X, Edit2, Save, Plus, Trash2, ChevronDown, LogOut, CheckCircle, Upload
 } from 'lucide-react';
 import { supabase, isOfflineMode } from '../lib/supabase';
 import { calculateKPIs } from '../lib/kpiCalculations';
@@ -42,6 +42,44 @@ const navItems = [
   { name: 'Teachers', icon: Users },
   { name: 'Students', icon: UserCircle2 },
 ];
+
+const FilterPill = ({ value, onChange, options, label }: {
+  value: string | number;
+  onChange: (v: string | number) => void;
+  options: { value: string | number; label: string }[];
+  label?: string;
+}) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    if (open) document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+  const display = options.find(o => String(o.value) === String(value))?.label ?? String(value);
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)}
+        className="text-sm font-medium border rounded-full px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all bg-white"
+        style={{ borderColor: tokens.colors.lightBorder, color: label ? tokens.colors.primaryRed : tokens.colors.textNavy }}>
+        {label && <span style={{ color: tokens.colors.textMuted }}>{label}:</span>}
+        <span>{display}</span>
+        <ChevronDown className="w-3.5 h-3.5" style={{ color: tokens.colors.textMuted }} />
+      </button>
+      {open && (
+        <div className="absolute z-50 mt-1 rounded-xl bg-white border border-slate-200 shadow-lg py-1 min-w-full max-h-60 overflow-y-auto">
+          {options.map(opt => (
+            <button key={String(opt.value)} type="button" onClick={() => { onChange(opt.value); setOpen(false); }}
+              className="w-full text-left px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              style={{ color: String(value) === String(opt.value) ? tokens.colors.primaryRed : tokens.colors.textNavy }}>
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 import { Session } from '@supabase/supabase-js';
 
@@ -605,7 +643,8 @@ export default function Dashboard({
       {/* Mobile sidebar overlay backdrop */}
       {mobileSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ backgroundColor: 'rgba(19,31,93,0.4)' }}
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
@@ -628,33 +667,21 @@ export default function Dashboard({
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-y-auto relative z-10 px-4 sm:px-6">
          
-         {/* Floating Action Panel (Alert) */}
-         {showAlert && (
-           <div className="bg-red-50 border-b border-red-100 px-4 sm:px-6 md:px-10 py-3 flex items-center justify-between animate-in slide-in-from-top">
-             <div className="flex items-center gap-3">
-               <AlertTriangle className="w-5 h-5 text-red-600" />
-               <div>
-                 <h3 className="text-sm font-bold text-red-900">KRS Administrative Red Flag</h3>
-                 <p className="text-xs font-medium text-red-700 mt-0.5">Dozens of students missing Kehadiran and Pencapaian data. PAJSK closure imminent.</p>
-               </div>
-             </div>
-             <div className="flex items-center gap-4">
-               <button className={`px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold ${DT.radius.full} ${DT.shadow.sm} transition-colors`}>
-                 Send Memo to Advisor
-               </button>
-               <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600">
-                 <X className="w-4 h-4" />
-               </button>
-             </div>
-           </div>
-         )}
-         
-         {/* PAJSK Disclaimer Banner */}
-          <div className="bg-amber-50 border-b border-amber-100 px-4 sm:px-6 md:px-10 py-2 flex items-center justify-center gap-2">
-           <p className="text-xs font-medium text-amber-800">
-             <span className="font-bold">Note:</span> PAJSK scores shown are <span className="italic">estimates</span> based on available data. Official PAJSK scores may differ from KPM's official calculation.
-           </p>
-         </div>
+          {/* Alert Toast */}
+          {showAlert && (
+            <div className={`${DT.radius.lg} ${DT.shadow.lg} bg-red-50 border border-red-100 px-4 py-3 flex items-start justify-between gap-3 mx-auto mt-3 max-w-3xl`}>
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-sm font-bold text-red-900">KRS Administrative Red Flag</span>
+                  <span className="text-xs font-medium text-red-700 ml-2">Dozens of students missing Kehadiran and Pencapaian data.</span>
+                </div>
+              </div>
+              <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600 shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
 
          {/* Global Header & Filters (The Control Deck) - per design_tokens.md */}
           <header className="px-4 sm:px-6 md:px-8 py-4 sm:py-5 flex flex-col gap-4 sm:gap-5 border-b sticky top-0 z-10" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder }}>
@@ -744,52 +771,26 @@ export default function Dashboard({
                     style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy, caretColor: tokens.colors.primaryRed }}
                   />
                 </div>
-                <select 
+                <FilterPill
                   value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`} 
-                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
-                >
-                  {availableYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-                <Filter className="w-4 h-4 mr-1" style={{ color: tokens.colors.textMuted }} />
-                <select 
+                  onChange={(v) => setSelectedYear(Number(v))}
+                  options={availableYears.map(y => ({ value: y, label: String(y) }))}
+                />
+                <FilterPill
                   value={dashboardFormFilter}
-                  onChange={(e) => setDashboardFormFilter(e.target.value)}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[180px]`} 
-                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
-                >
-                  <option>All Forms</option>
-                  <option>Form 1</option>
-                  <option>Form 2</option>
-                  <option>Form 3</option>
-                  <option>Form 4</option>
-                  <option>Form 5</option>
-                </select>
-                <select 
+                  onChange={(v) => setDashboardFormFilter(v as string)}
+                  options={[ 'All Forms', 'Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5' ].map(f => ({ value: f, label: f }))}
+                />
+                <FilterPill
                   value={dashboardClassFilter}
-                  onChange={(e) => setDashboardClassFilter(e.target.value)}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[120px] max-w-[200px] truncate`} 
-                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
-                >
-                  <option value="">All Classes</option>
-                  {formTeachersData.map((cls, idx) => (
-                    <option key={idx} value={cls.name}>{cls.name}</option>
-                  ))}
-                </select>
-                <select 
+                  onChange={(v) => setDashboardClassFilter(v as string)}
+                  options={[{ value: '', label: 'All Classes' }, ...formTeachersData.map((cls) => ({ value: cls.name, label: cls.name }))]}
+                />
+                <FilterPill
                   value={dashboardPillarFilter}
-                  onChange={(e) => setDashboardPillarFilter(e.target.value)}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer min-w-[140px] max-w-[220px]`} 
-                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
-                >
-                  <option value="">All Pillars</option>
-                  <option>Kelab & Persatuan</option>
-                  <option>Badan Beruniform</option>
-                  <option>Sukan dan Permainan</option>
-                </select>
+                  onChange={(v) => setDashboardPillarFilter(v as string)}
+                  options={[{ value: '', label: 'All Pillars' }, { value: 'Kelab & Persatuan', label: 'Kelab & Persatuan' }, { value: 'Badan Beruniform', label: 'Badan Beruniform' }, { value: 'Sukan dan Permainan', label: 'Sukan dan Permainan' }]}
+                />
                 <button 
                   onClick={() => {
                     setDashboardFormFilter('All Forms');
@@ -839,42 +840,32 @@ export default function Dashboard({
               </div>
             )}
             
-            {/* Hero KPI Strip (The Pulse) - per design_tokens.md */}
+            {/* KPI Summary Bar */}
             {!hasDataForYear ? (
               <div className={`bg-amber-50 border border-amber-200 ${DT.radius.md} p-4 text-center`}>
                 <p className="text-amber-800 font-bold">No data available for {selectedYear}</p>
                 <p className="text-amber-600 text-sm">Please select a different year or add data for {selectedYear}</p>
               </div>
             ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className={`${DT.radius.lg} p-4 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 ${DT.shadow.sm}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
               {kpis.map((kpi, idx) => (
-                <div key={idx} className={`${DT.radius.lg} p-5 ${DT.shadow.sm} flex flex-col relative overflow-hidden group cursor-pointer hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-[10px] font-extrabold uppercase tracking-widest w-2/3 leading-tight" style={{ color: tokens.colors.textMuted }}>{kpi.title}</h3>
-                    {kpi.isWarning ? (
-                      <AlertTriangle className="w-5 h-5 animate-pulse" style={{ color: tokens.colors.primaryRed }} />
-                    ) : (
-                      <div className={`w-2 h-2 ${DT.radius.full} mt-1`} style={{ backgroundColor: kpi.color }}></div>
-                    )}
-                  </div>
-                  <div className="flex items-baseline gap-1 mt-auto">
-                    <span className="text-2xl font-extrabold" style={{ color: tokens.colors.textNavy }}>{kpi.value}</span>
-                    <span className="text-xs font-bold" style={{ color: tokens.colors.textMuted }}>{kpi.unit}</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 ${DT.radius.full} flex items-center`}
-                      style={{
-                        backgroundColor: kpi.trend.startsWith('+') && !kpi.isWarning ? tokens.colors.trendGreenBg : tokens.colors.trendRedBg,
-                        color: kpi.trend.startsWith('+') && !kpi.isWarning ? tokens.colors.trendGreenText : tokens.colors.trendRedText
-                      }}>
-                      {kpi.trend}
-                    </span>
-                  </div>
+                <div key={idx} className="flex items-baseline gap-2">
+                  <span className="text-lg font-extrabold tracking-tight" style={{ color: tokens.colors.textNavy }}>{kpi.value}</span>
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: tokens.colors.textMuted }}>
+                    {kpi.unit ? `${kpi.unit} ` : ''}{kpi.title}
+                  </span>
                   {kpi.subtitle && (
-                    <p className="text-[10px] font-medium mt-1" style={{ color: tokens.colors.textMuted }}>{kpi.subtitle}</p>
+                    <span className="text-[10px] font-medium ml-1" style={{ color: tokens.colors.textMuted }}>({kpi.subtitle})</span>
                   )}
                 </div>
               ))}
             </div>
-)}
+            )}
+            {hasDataForYear && (
+              <p className="text-[10px] font-medium mt-2 text-center" style={{ color: tokens.colors.textMuted }}>
+                Note: PAJSK scores shown are estimates based on available data. Official scores may differ from KPM's calculation.
+              </p>
+            )}
 
 {/* Main Analytical Canvas (Activities Overview) */}
 {hasDataForYear && (
@@ -932,7 +923,7 @@ export default function Dashboard({
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
 {/* Zone A: Tri-Pillar Balance - per design_tokens.md */}
-<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Tri-Pillar Balance</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Distribution of student participation across the three main pillars.</p>
@@ -942,7 +933,7 @@ export default function Dashboard({
       </p>
     )}
   </div>
-  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm} relative group`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
+  <div className={`flex-1 ${DT.radius.lg} p-4 ${DT.shadow.sm} relative`} style={{ backgroundColor: tokens.colors.cardInnerBg, minHeight: '280px' }}>
     <ResponsiveContainer width="100%" height="100%">
       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={chartData.triPillarData}>
         <PolarGrid stroke={tokens.colors.cardOuterBg} />
@@ -995,17 +986,11 @@ export default function Dashboard({
         />
       </RadarChart>
     </ResponsiveContainer>
-                  {/* Action Tooltip Simulation - per ui-ux-pro-max: no scale transforms */}
-                    <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity ${DT.transition.normal}`}>
-                      <button className={`px-4 py-2 bg-red-600 text-white text-xs font-bold ${DT.radius.full} ${DT.shadow.lg} whitespace-nowrap cursor-pointer hover:bg-red-700 transition-colors`}>
-                        Trigger Engagement Campaign
-                      </button>
-                    </div>
                 </div>
               </div>
 
 {/* Zone B: Leadership Pipeline */}
-<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Leadership Pipeline</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Ratio of leadership roles to regular members.</p>
@@ -1104,7 +1089,7 @@ export default function Dashboard({
 </div>
 
 {/* Zone C: The "Passive" vs. "Active" Matrix - per design_tokens.md */}
-<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Passive vs. Active Matrix</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Comparison of active participants vs passive members.</p>
@@ -1208,7 +1193,7 @@ export default function Dashboard({
 </div>
 
 {/* Zone D: Elite Conversion Funnel */}
-<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+<div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} flex flex-col hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
   <div className="mb-4">
     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Elite Conversion Funnel</h3>
     <p className="text-xs font-bold mt-1" style={{ color: tokens.colors.textMuted }}>Number of students achieving elite status (Johan, Naib Johan, dll).</p>
@@ -1301,57 +1286,27 @@ export default function Dashboard({
                 <p className="text-sm font-medium mt-1" style={{ color: tokens.colors.textMuted }}>Manage and view teacher co-curricular assignments.</p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <select 
+                <FilterPill
                   value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`} 
-                  style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.primaryRed }}
-                >
-                  {availableYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-                <div className="relative">
-                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                  <select 
-                    value={classFilter}
-                    onChange={(e) => {
-                      setClassFilter(e.target.value);
-                      if (e.target.value === "") {
-                        setAjktFilter("");
-                      }
-                    }}
- className={`pl-10 pr-10 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-36 font-medium border appearance-none cursor-pointer`}
-                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
-                  >
-                    <option value="">All Classes</option>
-                    {availableTeacherClasses.map((cls) => (
-                      <option key={cls} value={cls}>{cls}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                </div>
-
-                <div className="relative">
-                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: tokens.colors.textMuted }} />
-                  <select 
-                    value={ajktFilter}
-                    onChange={(e) => {
-                      setAjktFilter(e.target.value);
-                      if (e.target.value === "") {
-                        setClassFilter("");
-                      }
-                    }}
- className={`pl-10 pr-10 py-2 ${DT.radius.full} text-sm focus:outline-none focus:ring-2 focus:ring-red-200 transition-all w-full sm:w-40 font-medium border appearance-none cursor-pointer`}
-                    style={{ borderColor: tokens.colors.lightBorder, backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.textNavy }}
-                  >
-                    <option value="">All Roles</option>
-                    {availableTeacherRoles.map((role) => (
-                      <option key={role} value={role}>{role}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: tokens.colors.textMuted }} />
-                </div>
+                  onChange={(v) => setSelectedYear(Number(v))}
+                  options={availableYears.map(y => ({ value: y, label: String(y) }))}
+                />
+                <FilterPill
+                  value={classFilter}
+                  onChange={(v) => {
+                    setClassFilter(v as string);
+                    if (v === '') setAjktFilter('');
+                  }}
+                  options={[{ value: '', label: 'All Classes' }, ...availableTeacherClasses.map((cls) => ({ value: cls, label: cls }))]}
+                />
+                <FilterPill
+                  value={ajktFilter}
+                  onChange={(v) => {
+                    setAjktFilter(v as string);
+                    if (v === '') setClassFilter('');
+                  }}
+                  options={[{ value: '', label: 'All Roles' }, ...availableTeacherRoles.map((role) => ({ value: role, label: role }))]}
+                />
                 <button 
                   onClick={() => {
                     setTeacherSearchQuery('');
@@ -1450,7 +1405,7 @@ export default function Dashboard({
             </div>
 
             {teacherViewTab === 'Directory' && (
-              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>
@@ -1482,7 +1437,7 @@ export default function Dashboard({
                   <>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                       {paginatedTeachers.map((teacher, idx) => (
- <div key={idx} className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`}>
+ <div key={idx} className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer group relative`}>
                           <div className="flex items-center gap-4 border-b pb-4" style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.cardOuterBg }}>
                             <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ color: tokens.colors.primaryRed }}>
                               {getInitials(teacher.name)}
@@ -1623,7 +1578,7 @@ export default function Dashboard({
 
             {/* Senior Management Team */}
             {teacherViewTab === 'Management' && (
-              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Senior Management Team</h3>
@@ -1647,7 +1602,7 @@ export default function Dashboard({
                 </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredManagement.map((member, idx) => (
- <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`}>
+ <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer group relative`}>
                     <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ backgroundColor: tokens.colors.cardInnerBg, color: tokens.colors.primaryRed }}>
                       {getInitials(member.name)}
                     </div>
@@ -1672,7 +1627,7 @@ export default function Dashboard({
 
             {/* Form Teachers */}
             {teacherViewTab === 'Classes' && (
-              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4">
                     <h3 className="text-lg font-extrabold" style={{ color: tokens.colors.textNavy }}>Form Teachers (Guru Kelas)</h3>
@@ -1696,7 +1651,7 @@ export default function Dashboard({
                 </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredFormTeachers.map((cls, idx) => (
- <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+ <div key={idx} className={`${DT.radius.lg} p-4 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                     <div>
                       <h4 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{cls.name}</h4>
                       <p className="text-xs font-medium mt-0.5" style={{ color: tokens.colors.textMuted }}>{cls.teacher}</p>
@@ -1730,7 +1685,7 @@ export default function Dashboard({
 
             {/* Co-Curricular Advisors */}
             {teacherViewTab === 'Kokurikulum' && (
-              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>Co-Curricular Units</h3>
@@ -1768,7 +1723,7 @@ export default function Dashboard({
                         <h4 className="text-lg font-extrabold mb-4" style={{ color: tokens.colors.textNavy }}>{category}</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {unitsInCategory.map((unit, idx) => (
- <div key={idx} className={`${DT.radius.lg} p-5 ${DT.shadow.sm} flex flex-col gap-3 hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
+ <div key={idx} className={`${DT.radius.lg} p-5 ${DT.shadow.sm} flex flex-col gap-3 hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}>
                               <div className="flex justify-between items-start">
                                 <h5 className="font-extrabold text-sm" style={{ color: tokens.colors.textNavy }}>{unit.name}</h5>
                                 {isAdmin && (
@@ -1803,7 +1758,7 @@ export default function Dashboard({
 
             {/* Pending Role Assignments */}
             {teacherViewTab === 'Pending Roles' && (
-              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-orange-100 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
+              <div className={`${DT.radius.lg} p-6 ${DT.shadow.sm} mb-6 hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal}`} style={{ backgroundColor: tokens.colors.cardOuterBg }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>
@@ -1828,7 +1783,7 @@ export default function Dashboard({
                       return (
                       <div 
                         key={idx} 
- className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-orange-50 hover:${DT.shadow.lg} hover:shadow-orange-200 hover:-translate-y-1 transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}                        title={`Pending since ${approvedDate} - awaiting form class or AJKT role`}
+ className={`${DT.radius.lg} p-6 ${DT.shadow.sm} hover:bg-slate-50 hover:${DT.shadow.lg} transition-all ${DT.transition.normal} cursor-pointer group relative`} style={{ backgroundColor: tokens.colors.cardInnerBg }}                        title={`Pending since ${approvedDate} - awaiting form class or AJKT role`}
                       >
                         <div className="flex items-center gap-4 border-b pb-4" style={{ borderColor: tokens.colors.cardOuterBg }}>
                           <div className={`w-12 h-12 ${DT.radius.full} bg-slate-100 flex items-center justify-center text-lg font-bold flex-shrink-0`} style={{ color: tokens.colors.primaryRed }}>
@@ -1910,21 +1865,14 @@ export default function Dashboard({
           <div className={`px-4 sm:px-6 md:px-8 pb-10 space-y-6 mt-6 animate-in fade-in ${DT.transition.slower}`}>
             <div className="flex items-center gap-4 mb-4">
               <h2 className="text-xl font-extrabold" style={{ color: tokens.colors.textNavy }}>My Units</h2>
-              <select
+              <FilterPill
                 value={selectedUnitForAdvisor}
-                onChange={(e) => setSelectedUnitForAdvisor(e.target.value)}
- className={`text-sm font-medium border ${DT.radius.full} px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all cursor-pointer`}
-                style={{ backgroundColor: tokens.colors.cardInnerBg, borderColor: tokens.colors.lightBorder, color: tokens.colors.textNavy }}
-              >
-                {advisorData.advisorUnits.map((unitCode) => {
+                onChange={(v) => setSelectedUnitForAdvisor(v as string)}
+                options={advisorData.advisorUnits.map((unitCode) => {
                   const unit = coCurricularUnitsData.find(u => u.unitCode === unitCode || u.name.toLowerCase().includes(unitCode));
-                  return (
-                    <option key={unitCode} value={unitCode}>
-                      {unit ? unit.name : unitCode}
-                    </option>
-                  );
+                  return { value: unitCode, label: unit ? unit.name : unitCode };
                 })}
-              </select>
+              />
             </div>
             <StudentTable
               classId={null}

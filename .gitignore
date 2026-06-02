@@ -29,6 +29,17 @@ supabase/.temp/
 *.bak
 *.backup
 *.backup-*
+smksukokum-fix-backup-*/
+smksukokum-fix/
+
+# Editor/IDE
+.vscode/
+
+# Other projects
+.antigravitycli/
+UX/
+plan/
+plans/
 
 # Windows artifacts
 *:Zone.Identifier
